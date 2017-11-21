@@ -17,20 +17,22 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.run;
+package masterThesis.dynagent.run;
 
-import java.util.*;
-
+import com.google.inject.Provides;
 import org.matsim.core.config.Config;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.mobsim.framework.Mobsim;
-import org.matsim.core.mobsim.qsim.*;
+import org.matsim.core.mobsim.qsim.AbstractQSimPlugin;
+import org.matsim.core.mobsim.qsim.PopulationPlugin;
+import org.matsim.core.mobsim.qsim.TeleportationPlugin;
 import org.matsim.core.mobsim.qsim.changeeventsengine.NetworkChangeEventsPlugin;
 import org.matsim.core.mobsim.qsim.messagequeueengine.MessageQueuePlugin;
 import org.matsim.core.mobsim.qsim.pt.TransitEnginePlugin;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QNetsimEnginePlugin;
 
-import com.google.inject.Provides;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DynQSimModule<T extends Mobsim> extends AbstractModule {
 	private final Class<? extends javax.inject.Provider<? extends T>> providerClass;

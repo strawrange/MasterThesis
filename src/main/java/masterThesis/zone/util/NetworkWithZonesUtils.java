@@ -17,13 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone.util;
+package masterThesis.zone.util;
 
-import java.util.*;
-
+import masterThesis.zone.Zone;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.zone.Zone;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkWithZonesUtils {
 	// if SRSs of the network and zones are different, zoneFinder should convert between CRSs

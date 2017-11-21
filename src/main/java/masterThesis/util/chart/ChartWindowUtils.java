@@ -17,13 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.chart;
+package masterThesis.util.chart;
 
-import java.awt.Dimension;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
-
-import org.jfree.chart.*;
+import java.awt.*;
 
 public class ChartWindowUtils {
 	public static void showFrame(JFreeChart chart) {

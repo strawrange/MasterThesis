@@ -17,20 +17,25 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.run;
+package masterThesis.dynagent.run;
 
-import java.util.*;
-
-import javax.inject.Inject;
-
+import masterThesis.drt.data.DrtGenerator;
+import masterThesis.drt.data.OnDemandDrtGenerator;
+import masterThesis.dynagent.DynAgent;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.dynagent.DynAgent;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.MobsimAgent;
 import org.matsim.core.mobsim.framework.MobsimAgent.State;
-import org.matsim.core.mobsim.qsim.*;
+import org.matsim.core.mobsim.qsim.ActivityEngine;
+import org.matsim.core.mobsim.qsim.InternalInterface;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * It might be nicer to have ActivityEngine as a delegate, not as the superclass. But there is a hardcoded
@@ -39,7 +44,7 @@ import org.matsim.core.mobsim.qsim.*;
  * DynActivityEngine and ActivityEngine could be decoupled (if we can ensure DynActivityEngine's handleActivity() is
  * called before that of ActivityEngine)
  */
-public class DynActivityEngine extends ActivityEngine {
+public class DynActivityEngine extends masterThesis.dynagent.run.ActivityEngine {
 	private InternalInterface internalInterface;
 
 	private final List<DynAgent> dynAgents = new LinkedList<>();
@@ -56,6 +61,7 @@ public class DynActivityEngine extends ActivityEngine {
 	@Override
 	public void doSimStep(double time) {
 		beforeFirstSimStep = false;
+		newDynAgents.addAll(DrtGenerator.getNewDynAgents());
 		dynAgents.addAll(newDynAgents);
 		newDynAgents.clear();
 
@@ -135,4 +141,5 @@ public class DynActivityEngine extends ActivityEngine {
 			internalInterface.unregisterAdditionalAgentOnLink(agentId, linkId);
 		}
 	}
+
 }

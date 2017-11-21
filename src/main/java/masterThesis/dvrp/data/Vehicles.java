@@ -17,11 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
+package masterThesis.dvrp.data;
+
+import masterThesis.dvrp.schedule.Schedules;
 
 import java.util.Comparator;
-
-import org.matsim.contrib.dvrp.schedule.Schedules;
 
 /**
  * @author michalm

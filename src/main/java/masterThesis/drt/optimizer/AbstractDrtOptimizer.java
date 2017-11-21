@@ -17,28 +17,35 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer;
+package masterThesis.drt.optimizer;
+
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.drt.schedule.DrtTask;
+import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.events.PersonStuckEvent;
+import org.matsim.api.core.v01.network.Link;
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.schedule.Task;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.mobsim.framework.events.MobsimBeforeSimStepEvent;
 
 import java.util.Collection;
-
-import org.apache.log4j.Logger;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.schedule.DrtTask;
-import org.matsim.contrib.dvrp.data.*;
-import org.matsim.contrib.dvrp.schedule.Task;
-import org.matsim.core.mobsim.framework.events.MobsimBeforeSimStepEvent;
+import java.util.PriorityQueue;
 
 /**
  * @author michalm
  */
 public abstract class AbstractDrtOptimizer implements DrtOptimizer {
 	private final DrtOptimizerContext optimContext;
-	private final Collection<DrtRequest> unplannedRequests;
+	private final PriorityQueue<DrtRequest> unplannedRequests;
+;
+
 
 	private boolean requiresReoptimization = false;
 
-	public AbstractDrtOptimizer(DrtOptimizerContext optimContext, Collection<DrtRequest> unplannedRequests) {
+	public AbstractDrtOptimizer(DrtOptimizerContext optimContext, PriorityQueue<DrtRequest> unplannedRequests) {
 		this.optimContext = optimContext;
 		this.unplannedRequests = unplannedRequests;
 	}
@@ -46,16 +53,16 @@ public abstract class AbstractDrtOptimizer implements DrtOptimizer {
 	@Override
 	public void notifyMobsimBeforeSimStep(@SuppressWarnings("rawtypes") MobsimBeforeSimStepEvent e) {
 		if (requiresReoptimization) {
-			for (Vehicle v : optimContext.fleet.getVehicles().values()) {
-				optimContext.scheduler.updateTimeline(v);
-			}
-
-			scheduleUnplannedRequests();
-			requiresReoptimization = false;
-		}
+            for (Vehicle v : optimContext.fleet.getVehicles().values()) {
+                optimContext.scheduler.updateTimeline(v);
+            }
+        }
+        scheduleUnplannedRequests();
+        requiresReoptimization = false;
 	}
 
 	protected abstract void scheduleUnplannedRequests();
+
 
 	@Override
 	public void requestSubmitted(Request request) {
@@ -67,7 +74,7 @@ public abstract class AbstractDrtOptimizer implements DrtOptimizer {
 			return;
 		}
 		unplannedRequests.add(drtRequest);
-		requiresReoptimization = true;
+		requiresReoptimization = false;
 	}
 
 	@Override
@@ -93,11 +100,18 @@ public abstract class AbstractDrtOptimizer implements DrtOptimizer {
 		// if (delays/speedups encountered) {requiresReoptimization = true;}
 	}
 
-	protected Collection<DrtRequest> getUnplannedRequests() {
+	protected PriorityQueue<DrtRequest> getUnplannedRequests() {
 		return unplannedRequests;
 	}
 
 	protected DrtOptimizerContext getOptimContext() {
 		return optimContext;
 	}
+
+	public void abortUnplannedRequests(EventsManager eventsManager){
+		for (DrtRequest request:getUnplannedRequests()){
+			eventsManager.processEvent(new PersonStuckEvent(optimContext.qSim.getSimTimer().getTimeOfDay(),request.getPassenger().getId(),request.getFromLink().getId(),request.getPassenger().getMode()));
+		}
+	}
+
 }

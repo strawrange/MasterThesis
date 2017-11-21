@@ -17,22 +17,27 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent;
-
-import java.util.List;
+package masterThesis.dynagent;
 
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.events.*;
+import org.matsim.api.core.v01.events.ActivityEndEvent;
+import org.matsim.api.core.v01.events.ActivityStartEvent;
+import org.matsim.api.core.v01.events.PersonArrivalEvent;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.mobsim.framework.MobsimAgent;
 import org.matsim.core.mobsim.qsim.interfaces.MobsimVehicle;
-import org.matsim.core.mobsim.qsim.pt.*;
+import org.matsim.core.mobsim.qsim.pt.MobsimDriverPassengerAgent;
+import org.matsim.core.mobsim.qsim.pt.TransitVehicle;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.facilities.Facility;
-import org.matsim.pt.transitSchedule.api.*;
+import org.matsim.pt.transitSchedule.api.TransitLine;
+import org.matsim.pt.transitSchedule.api.TransitRoute;
+import org.matsim.pt.transitSchedule.api.TransitRouteStop;
+import org.matsim.pt.transitSchedule.api.TransitStopFacility;
 import org.matsim.vehicles.Vehicle;
+
+import java.util.List;
 
 public final class DynAgent implements MobsimDriverPassengerAgent {
 	private DynAgentLogic agentLogic;
@@ -43,7 +48,7 @@ public final class DynAgent implements MobsimDriverPassengerAgent {
 
 	private EventsManager events;
 
-	private MobsimAgent.State state;
+	private State state;
 
 	// =====
 
@@ -65,7 +70,7 @@ public final class DynAgent implements MobsimDriverPassengerAgent {
 		// initial activity
 		dynActivity = this.agentLogic.computeInitialActivity(this);
 		state = dynActivity.getEndTime() != Time.UNDEFINED_TIME ? //
-				MobsimAgent.State.ACTIVITY : MobsimAgent.State.ABORT;
+				State.ACTIVITY : State.ABORT;
 	}
 
 	private void computeNextAction(DynAction oldDynAction, double now) {
@@ -79,12 +84,12 @@ public final class DynAgent implements MobsimDriverPassengerAgent {
 
 		if (nextDynAction instanceof DynActivity) {
 			dynActivity = (DynActivity)nextDynAction;
-			state = MobsimAgent.State.ACTIVITY;
+			state = State.ACTIVITY;
 
 			events.processEvent(new ActivityStartEvent(now, id, currentLinkId, null, dynActivity.getActivityType()));
 		} else {
 			dynLeg = (DynLeg)nextDynAction;
-			state = MobsimAgent.State.LEG;
+			state = State.LEG;
 		}
 	}
 
@@ -102,7 +107,7 @@ public final class DynAgent implements MobsimDriverPassengerAgent {
 
 	@Override
 	public void setStateToAbort(double now) {
-		this.state = MobsimAgent.State.ABORT;
+		this.state = State.ABORT;
 	}
 
 	public DynAgentLogic getAgentLogic() {
@@ -128,7 +133,7 @@ public final class DynAgent implements MobsimDriverPassengerAgent {
 	}
 
 	@Override
-	public MobsimAgent.State getState() {
+	public State getState() {
 		return this.state;
 	}
 

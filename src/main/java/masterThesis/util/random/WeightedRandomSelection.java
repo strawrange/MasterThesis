@@ -17,9 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.random;
+package masterThesis.util.random;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class WeightedRandomSelection<T> {
 	private List<Entry<T>> entryList = new ArrayList<>();

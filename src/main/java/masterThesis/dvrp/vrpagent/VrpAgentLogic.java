@@ -17,13 +17,13 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.vrpagent;
+package masterThesis.dvrp.vrpagent;
 
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
-import org.matsim.contrib.dvrp.schedule.Schedule;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
-import org.matsim.contrib.dynagent.*;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import masterThesis.dvrp.schedule.Schedule;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
+import masterThesis.dynagent.*;
 
 /**
  * @author michalm

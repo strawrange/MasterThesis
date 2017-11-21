@@ -17,18 +17,22 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer;
+package masterThesis.drt.optimizer;
 
-import java.util.*;
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.schedule.DrtDriveTask;
+import masterThesis.drt.schedule.DrtStayTask;
+import masterThesis.drt.schedule.DrtStopTask;
+import masterThesis.drt.schedule.DrtTask;
+import masterThesis.drt.schedule.DrtTask.DrtTaskType;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.schedule.Schedule;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
+import masterThesis.dvrp.tracker.OnlineDriveTaskTracker;
+import masterThesis.dvrp.util.LinkTimePair;
 
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.schedule.*;
-import org.matsim.contrib.drt.schedule.DrtTask.DrtTaskType;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.schedule.Schedule;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
-import org.matsim.contrib.dvrp.tracker.OnlineDriveTaskTracker;
-import org.matsim.contrib.dvrp.util.LinkTimePair;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author michalm
@@ -88,7 +92,7 @@ public class VehicleData {
 	private final double currTime;
 
 	public VehicleData(DrtOptimizerContext optimContext, Iterable<? extends Vehicle> vehicles) {
-		currTime = optimContext.timer.getTimeOfDay();
+		currTime = optimContext.qSim.getSimTimer().getTimeOfDay();
 
 		for (Vehicle v : vehicles) {
 			Entry e = createVehicleData(v);
@@ -101,6 +105,10 @@ public class VehicleData {
 	public void updateEntry(Entry vEntry) {
 		int idx = entries.indexOf(vEntry);// TODO inefficient! ==> use map instead of list for storing entries...
 		entries.set(idx, createVehicleData(vEntry.vehicle));
+	}
+
+	public void addEntry(Entry vEntry){
+		entries.add(vEntry);
 	}
 
 	private Entry createVehicleData(Vehicle vehicle) {

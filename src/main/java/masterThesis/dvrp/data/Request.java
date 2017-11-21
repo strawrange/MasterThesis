@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
+package masterThesis.dvrp.data;
 
 import org.matsim.api.core.v01.Identifiable;
 
@@ -45,6 +45,10 @@ public interface Request extends Identifiable<Request> {
 	 * @return time at which the request was submitted
 	 */
 	double getSubmissionTime();
+
+	void setUpdateTime(double time);
+
+	double getUpdateTime();
 
 	/**
 	 * @return indicates whether the request has been rejected by the service provider (optimizer/dispatcher)

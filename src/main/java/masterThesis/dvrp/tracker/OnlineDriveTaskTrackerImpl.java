@@ -17,15 +17,17 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.tracker;
+package masterThesis.dvrp.tracker;
 
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.optimizer.VrpOptimizerWithOnlineTracking;
+import masterThesis.dvrp.path.DivertedVrpPath;
+import masterThesis.dvrp.path.VrpPath;
+import masterThesis.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.schedule.DriveTask;
+import masterThesis.dvrp.util.LinkTimePair;
+import masterThesis.dvrp.vrpagent.VrpLeg;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizerWithOnlineTracking;
-import org.matsim.contrib.dvrp.path.*;
-import org.matsim.contrib.dvrp.schedule.DriveTask;
-import org.matsim.contrib.dvrp.util.LinkTimePair;
-import org.matsim.contrib.dvrp.vrpagent.VrpLeg;
 import org.matsim.core.mobsim.framework.MobsimTimer;
 
 /**
@@ -45,7 +47,7 @@ class OnlineDriveTaskTrackerImpl implements OnlineDriveTaskTracker {
 	private double[] remainingTTs;// excluding the current link
 
 	OnlineDriveTaskTrackerImpl(Vehicle vehicle, VrpLeg vrpDynLeg, VrpOptimizerWithOnlineTracking optimizer,
-			MobsimTimer timer) {
+                               MobsimTimer timer) {
 		this.vehicle = vehicle;
 		this.driveTask = (DriveTask)vehicle.getSchedule().getCurrentTask();
 		this.vrpDynLeg = vrpDynLeg;

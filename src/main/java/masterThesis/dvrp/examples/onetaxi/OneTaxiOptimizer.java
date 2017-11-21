@@ -17,26 +17,31 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.examples.onetaxi;
-
-import java.util.List;
-
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.dvrp.data.*;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
-import org.matsim.contrib.dvrp.path.*;
-import org.matsim.contrib.dvrp.router.TimeAsTravelDisutility;
-import org.matsim.contrib.dvrp.run.DvrpModule;
-import org.matsim.contrib.dvrp.schedule.*;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
-import org.matsim.core.mobsim.framework.MobsimTimer;
-import org.matsim.core.mobsim.qsim.QSim;
-import org.matsim.core.router.Dijkstra;
-import org.matsim.core.router.util.*;
-import org.matsim.core.trafficmonitoring.FreeSpeedTravelTime;
+package masterThesis.dvrp.examples.onetaxi;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import masterThesis.dvrp.data.Fleet;
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import masterThesis.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.path.VrpPaths;
+import masterThesis.dvrp.router.TimeAsTravelDisutility;
+import masterThesis.dvrp.run.DvrpModule;
+import masterThesis.dvrp.schedule.*;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
+import org.matsim.core.mobsim.framework.MobsimTimer;
+import org.matsim.core.mobsim.qsim.QSim;
+import org.matsim.core.router.Dijkstra;
+import org.matsim.core.router.DijkstraFactory;
+import org.matsim.core.router.util.LeastCostPathCalculator;
+import org.matsim.core.router.util.TravelTime;
+import org.matsim.core.trafficmonitoring.FreeSpeedTravelTime;
+
+import java.util.List;
 
 /**
  * @author michalm
@@ -56,7 +61,7 @@ public class OneTaxiOptimizer implements VrpOptimizer {
 	public OneTaxiOptimizer(@Named(DvrpModule.DVRP_ROUTING) Network network, Fleet fleet, QSim qSim) {
 		timer = qSim.getSimTimer();
 		travelTime = new FreeSpeedTravelTime();
-		router = new Dijkstra(network, new TimeAsTravelDisutility(travelTime), travelTime);
+		router = new DijkstraFactory(true).createPathCalculator(network, new TimeAsTravelDisutility(travelTime), travelTime);
 
 		vehicle = fleet.getVehicles().values().iterator().next();
 		vehicle.resetSchedule();
@@ -67,7 +72,7 @@ public class OneTaxiOptimizer implements VrpOptimizer {
 	@Override
 	public void requestSubmitted(Request request) {
 		Schedule schedule = vehicle.getSchedule();
-		StayTask lastTask = (StayTask)Schedules.getLastTask(schedule);// only WaitTask possible here
+		StayTask lastTask = (StayTask) Schedules.getLastTask(schedule);// only WaitTask possible here
 		double currentTime = timer.getTimeOfDay();
 
 		switch (lastTask.getStatus()) {

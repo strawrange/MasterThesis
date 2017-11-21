@@ -17,27 +17,35 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.scheduler;
+package masterThesis.drt.scheduler;
 
-import java.util.List;
-
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.optimizer.VehicleData;
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.drt.schedule.DrtDriveTask;
+import masterThesis.drt.schedule.DrtStayTask;
+import masterThesis.drt.schedule.DrtStopTask;
+import masterThesis.drt.schedule.DrtTask;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.optimizer.VehicleData;
-import org.matsim.contrib.drt.optimizer.VehicleData.Stop;
-import org.matsim.contrib.drt.optimizer.insertion.SingleVehicleInsertionProblem.Insertion;
-import org.matsim.contrib.drt.run.DrtConfigGroup;
-import org.matsim.contrib.drt.schedule.*;
-import org.matsim.contrib.drt.schedule.DrtTask.DrtTaskType;
-import org.matsim.contrib.dvrp.data.*;
-import org.matsim.contrib.dvrp.path.*;
-import org.matsim.contrib.dvrp.schedule.*;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
-import org.matsim.contrib.dvrp.tracker.*;
-import org.matsim.contrib.dvrp.util.LinkTimePair;
+import masterThesis.drt.optimizer.VehicleData.Stop;
+import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.Insertion;
+import masterThesis.drt.schedule.DrtTask.DrtTaskType;
+import masterThesis.dvrp.data.Fleet;
+import masterThesis.dvrp.data.FleetImpl;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.data.Vehicles;
+import masterThesis.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.path.VrpPaths;
+import masterThesis.dvrp.schedule.*;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
+import masterThesis.dvrp.tracker.OnlineDriveTaskTracker;
+import masterThesis.dvrp.tracker.TaskTrackers;
+import masterThesis.dvrp.util.LinkTimePair;
 import org.matsim.core.mobsim.framework.MobsimTimer;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.utils.misc.Time;
+
+import java.util.List;
 
 /**
  * @author michalm
@@ -49,7 +57,7 @@ public class DrtScheduler implements ScheduleInquiry {
 	private final TravelTime travelTime;
 
 	public DrtScheduler(DrtConfigGroup drtCfg, Fleet fleet, MobsimTimer timer, DrtSchedulerParams params,
-			TravelTime travelTime) {
+                        TravelTime travelTime) {
 		this.fleet = fleet;
 		this.params = params;
 		this.timer = timer;
@@ -71,6 +79,7 @@ public class DrtScheduler implements ScheduleInquiry {
 					.addTask(new DrtStayTask(veh.getServiceBeginTime(), veh.getServiceEndTime(), veh.getStartLink()));
 		}
 	}
+
 
 	public DrtSchedulerParams getParams() {
 		return params;

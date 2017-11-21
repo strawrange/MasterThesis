@@ -17,21 +17,24 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.util;
-
-import java.io.File;
-import java.util.*;
-
-import org.matsim.api.core.v01.Coord;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.path.VrpPath;
-import org.matsim.contrib.dvrp.schedule.*;
-import org.matsim.core.utils.geometry.geotools.MGC;
-import org.matsim.core.utils.gis.*;
-import org.opengis.feature.simple.SimpleFeature;
+package masterThesis.dvrp.util;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.path.VrpPath;
+import masterThesis.dvrp.schedule.DriveTask;
+import masterThesis.dvrp.schedule.Schedules;
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.core.utils.geometry.geotools.MGC;
+import org.matsim.core.utils.gis.PolylineFeatureFactory;
+import org.matsim.core.utils.gis.ShapeFileWriter;
+import org.opengis.feature.simple.SimpleFeature;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Schedules2GIS {
 	private final Iterable<? extends Vehicle> vehicles;

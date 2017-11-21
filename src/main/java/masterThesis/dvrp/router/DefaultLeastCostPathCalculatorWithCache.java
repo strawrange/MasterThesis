@@ -17,16 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.router;
+package masterThesis.dvrp.router;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+import masterThesis.dvrp.util.TimeDiscretizer;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.dvrp.util.TimeDiscretizer;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.vehicles.Vehicle;
-
-import com.google.common.collect.*;
 
 public class DefaultLeastCostPathCalculatorWithCache implements LeastCostPathCalculatorWithCache {
 	private final LeastCostPathCalculator calculator;

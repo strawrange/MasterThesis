@@ -17,10 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.run;
+package masterThesis.drt.run;
 
 import org.apache.log4j.Logger;
-import org.matsim.contrib.dvrp.run.DvrpConfigConsistencyChecker;
+import masterThesis.dvrp.run.DvrpConfigConsistencyChecker;
 import org.matsim.core.config.Config;
 
 public class DrtConfigConsistencyChecker extends DvrpConfigConsistencyChecker {
@@ -39,6 +39,12 @@ public class DrtConfigConsistencyChecker extends DvrpConfigConsistencyChecker {
 		}
 		if (drtCfg.getMaxWaitTime() < 0) {
 			log.warn(DrtConfigGroup.MAX_WAIT_TIME + " is below 0.0! See comments in the DrtConfigGroup");
+		}
+		if (drtCfg.getInitialFleetSize() < 0){
+			throw new RuntimeException(DrtConfigGroup.INITIAL_FLEET_SIZE + " is below to 0.0! See comments in the DrtConfigGroup");
+		}
+		if (drtCfg.getDetourIdx() < 1){
+			throw new RuntimeException(DrtConfigGroup.DETOUR_IDX + " is below 1! See comments in the DrtConfigGroup");
 		}
 	}
 }

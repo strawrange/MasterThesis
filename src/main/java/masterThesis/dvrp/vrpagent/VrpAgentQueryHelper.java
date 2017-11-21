@@ -17,22 +17,27 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.vrpagent;
+package masterThesis.dvrp.vrpagent;
 
-import java.util.*;
-
+import com.google.inject.Inject;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.path.VrpPaths;
+import masterThesis.dvrp.schedule.DriveTask;
+import masterThesis.dvrp.schedule.Schedule;
+import masterThesis.dvrp.schedule.StayTask;
+import masterThesis.dvrp.schedule.Task;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.population.*;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.path.VrpPaths;
-import org.matsim.contrib.dvrp.schedule.*;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
-import org.matsim.contrib.dynagent.DynAgent;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
+import masterThesis.dynagent.DynAgent;
 import org.matsim.core.mobsim.framework.MobsimAgent;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 import org.matsim.vis.otfvis.OnTheFlyServer.NonPlanAgentQueryHelper;
 
-import com.google.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The class is designed for inheritance. Overrride createLeg() and createActivity() to obtain different visualisation

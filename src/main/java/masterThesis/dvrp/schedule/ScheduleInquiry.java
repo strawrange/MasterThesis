@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.schedule;
+package masterThesis.dvrp.schedule;
 
-import org.matsim.contrib.dvrp.data.Vehicle;
+import masterThesis.dvrp.data.Vehicle;
 
 /**
  * @author michalm

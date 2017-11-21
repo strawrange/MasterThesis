@@ -1,10 +1,12 @@
-package org.matsim.contrib.dvrp.data.file;
+package masterThesis.dvrp.data.file;
 
-import java.util.*;
-
-import org.matsim.contrib.dvrp.data.Vehicle;
+import masterThesis.dvrp.data.Vehicle;
 import org.matsim.core.utils.collections.Tuple;
 import org.matsim.core.utils.io.MatsimXmlWriter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author michalm

@@ -17,17 +17,24 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.vrpagent;
-
-import org.matsim.contrib.drt.schedule.*;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.optimizer.*;
-import org.matsim.contrib.dvrp.passenger.*;
-import org.matsim.contrib.dvrp.vrpagent.*;
-import org.matsim.contrib.dynagent.*;
-import org.matsim.core.mobsim.qsim.QSim;
+package masterThesis.drt.vrpagent;
 
 import com.google.inject.Inject;
+import masterThesis.drt.schedule.DrtStayTask;
+import masterThesis.drt.schedule.DrtStopTask;
+import masterThesis.drt.schedule.DrtTask;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import masterThesis.dvrp.optimizer.VrpOptimizerWithOnlineTracking;
+import masterThesis.dvrp.passenger.BusStopActivity;
+import masterThesis.dvrp.passenger.PassengerEngine;
+import masterThesis.dvrp.vrpagent.VrpActivity;
+import masterThesis.dvrp.vrpagent.VrpAgentLogic;
+import masterThesis.dvrp.vrpagent.VrpLegs;
+import masterThesis.dynagent.DynAction;
+import masterThesis.dynagent.DynAgent;
+import org.matsim.core.mobsim.qsim.QSim;
+import org.matsim.core.router.RoutingModule;
 
 /**
  * @author michalm

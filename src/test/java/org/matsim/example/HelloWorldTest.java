@@ -18,15 +18,44 @@
  * *********************************************************************** */
 package org.matsim.example;
 
-import org.apache.log4j.Logger;
+import static org.junit.Assert.*;
+
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.drt.scoring.AVScoringFunctionFactory;
+import org.apache.commons.lang.mutable.MutableDouble;
 import org.junit.Assert;
 import org.junit.Test;
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.events.*;
+import org.matsim.api.core.v01.events.handler.PersonMoneyEventHandler;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.PlanElement;
+import org.matsim.api.core.v01.population.Population;
+import masterThesis.dvrp.run.DvrpConfigGroup;
+import org.matsim.contrib.taxi.run.*;
+import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.controler.Controler;
-import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
+import org.matsim.core.events.EventsManagerImpl;
+import org.matsim.core.events.EventsUtils;
+import org.matsim.core.events.MatsimEventsReader;
+import org.matsim.core.network.NetworkUtils;
+import org.matsim.core.router.ActivityWrapperFacility;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.core.scoring.SumScoringFunction;
+import org.matsim.facilities.ActivityFacilities;
+import org.matsim.facilities.ActivityFacility;
+import org.matsim.facilities.Facility;
+import org.matsim.vehicles.Vehicle;
+import org.matsim.vis.otfvis.OTFVisConfigGroup;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author nagel
@@ -34,26 +63,34 @@ import org.matsim.core.scenario.ScenarioUtils;
  */
 public class HelloWorldTest {
 
+	/**
+	 * Test method for
+	 */
 	@Test
-	public final void testMain() {
-		try {
-			Config config = ConfigUtils.createConfig() ;
-			config.controler().setLastIteration(1);
-			config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
-
-			Scenario scenario = ScenarioUtils.loadScenario(config) ;
-
-			Controler controler = new Controler( scenario ) ;
-
-			controler.run();
-		} catch ( Exception ee ) {
-			Logger.getLogger(this.getClass()).fatal("there was an exception: \n" + ee ) ;
-			
-			// if one catches an exception, then one needs to explicitly fail the test:
-			Assert.fail();
-		}
+    public static void main(String[] args) {
+		EventsManagerImpl eventsManager = new EventsManagerImpl();
+		new MatsimEventsReader(eventsManager).readFile("/home/biyu/IdeaProjects/MasterThesis/output/A20_B20_C_D_poolScore/drt_5_10prct/output_events.xml.gz");
 
 
 	}
+
+	public static Coord getFacilityCoord(Facility<?> facility, Network network) {
+		Coord coord = facility.getCoord();
+		if (coord == null) {
+			coord = network.getLinks().get(facility.getLinkId()).getCoord();
+			if (coord == null)
+				throw new RuntimeException("From facility has neither coordinates nor link Id. Should not happen.");
+		}
+		System.out.println(facility.getLinkId() + "  " + facility.getCoord());
+		return coord;
+	}
+
+
+	public static Network createNetwork(Scenario scenario){
+		Network network = scenario.getNetwork();
+		return network;
+	}
+
+
 
 }

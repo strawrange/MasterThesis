@@ -17,14 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.schedule;
+package masterThesis.dvrp.schedule;
 
-import java.util.*;
-
+import masterThesis.dvrp.data.Vehicle;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.schedule.Task.TaskStatus;
+import masterThesis.dvrp.schedule.Task.TaskStatus;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author michalm

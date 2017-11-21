@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.passenger;
+package masterThesis.dvrp.passenger;
 
-import org.matsim.contrib.dynagent.DynActivity;
+import masterThesis.dynagent.DynActivity;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 public interface PassengerPickupActivity extends DynActivity {

@@ -17,15 +17,19 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data.file;
+package masterThesis.dvrp.data.file;
 
-import java.util.*;
-
+import masterThesis.dvrp.data.FleetImpl;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.data.VehicleImpl;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.dvrp.data.*;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.utils.io.MatsimXmlParser;
 import org.xml.sax.Attributes;
+
+import java.util.Map;
+import java.util.Stack;
 
 /**
  * @author michalm
@@ -66,7 +70,7 @@ public class VehicleReader extends MatsimXmlParser {
 	}
 
 	protected Vehicle createVehicle(Id<Vehicle> id, Link startLink, double capacity, double t0, double t1,
-			Attributes atts) {
+                                    Attributes atts) {
 		return new VehicleImpl(id, startLink, capacity, t0, t1);
 	}
 }

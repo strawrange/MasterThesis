@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.histogram;
+package masterThesis.util.histogram;
 
 import java.util.Arrays;
 

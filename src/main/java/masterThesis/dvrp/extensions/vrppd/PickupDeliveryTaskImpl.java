@@ -17,12 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.extensions.vrppd;
+package masterThesis.dvrp.extensions.vrppd;
 
-import java.util.*;
-
+import masterThesis.dvrp.schedule.StayTaskImpl;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.schedule.StayTaskImpl;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PickupDeliveryTaskImpl extends StayTaskImpl implements PickupDeliveryTask {
 	private final boolean pickup;

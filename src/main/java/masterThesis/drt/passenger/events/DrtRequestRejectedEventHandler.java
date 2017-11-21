@@ -20,7 +20,7 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.passenger.events;
+package masterThesis.drt.passenger.events;
 
 import org.matsim.core.events.handler.EventHandler;
 
@@ -28,6 +28,7 @@ import org.matsim.core.events.handler.EventHandler;
  * @author  jbischoff
  *
  */
+
 /**
  *
  */

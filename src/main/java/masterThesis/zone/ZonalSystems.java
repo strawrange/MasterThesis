@@ -17,14 +17,13 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone;
-
-import java.util.*;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.util.distance.DistanceCalculators;
+package masterThesis.zone;
 
 import com.google.common.collect.Maps;
+import masterThesis.util.distance.DistanceCalculators;
+import org.matsim.api.core.v01.Id;
+
+import java.util.*;
 
 public class ZonalSystems {
 	public interface ZonalDistanceCalculator {
@@ -43,7 +42,7 @@ public class ZonalSystems {
 	}
 
 	public static Map<Id<Zone>, List<Zone>> initZonesByDistance(Map<Id<Zone>, Zone> zones,
-			final ZonalDistanceCalculator distCalc) {
+                                                                final ZonalDistanceCalculator distCalc) {
 		Map<Id<Zone>, List<Zone>> zonesByDistance = Maps.newHashMapWithExpectedSize(zones.size());
 		List<Zone> sortedList = new ArrayList<>(zones.values());
 

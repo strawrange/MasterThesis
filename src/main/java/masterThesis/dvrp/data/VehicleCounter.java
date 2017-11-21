@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
+package masterThesis.dvrp.data;
 
 import java.util.*;
 

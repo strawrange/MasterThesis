@@ -17,16 +17,18 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.examples.random;
+package masterThesis.dynagent.examples.random;
 
-import java.util.Collection;
-
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.Mobsim;
-import org.matsim.core.mobsim.qsim.*;
+import org.matsim.core.mobsim.qsim.AbstractQSimPlugin;
+import org.matsim.core.mobsim.qsim.QSim;
+import org.matsim.core.mobsim.qsim.QSimUtils;
 
-import com.google.inject.*;
+import java.util.Collection;
 
 public class RandomDynQSimProvider implements Provider<Mobsim> {
 	private final Scenario scenario;

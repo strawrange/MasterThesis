@@ -17,10 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.vrpagent;
+package masterThesis.dvrp.vrpagent;
 
-import org.matsim.contrib.dvrp.schedule.StayTask;
-import org.matsim.contrib.dynagent.AbstractDynActivity;
+import masterThesis.dvrp.schedule.StayTask;
+import masterThesis.dynagent.AbstractDynActivity;
 
 public class VrpActivity extends AbstractDynActivity {
 	private final StayTask stayTask;

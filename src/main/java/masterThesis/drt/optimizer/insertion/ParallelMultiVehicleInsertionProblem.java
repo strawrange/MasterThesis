@@ -17,23 +17,26 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer.insertion;
+package masterThesis.drt.optimizer.insertion;
 
-import java.util.*;
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.optimizer.VehicleData;
+import masterThesis.drt.optimizer.insertion.filter.DrtVehicleFilter;
+import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestInsertion;
+import masterThesis.dvrp.data.Vehicle;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.*;
-
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.optimizer.VehicleData;
-import org.matsim.contrib.drt.optimizer.VehicleData.Entry;
-import org.matsim.contrib.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestInsertion;
-import org.matsim.contrib.drt.optimizer.insertion.filter.DrtVehicleFilter;
 
 /**
  * @author michalm
  */
 public class ParallelMultiVehicleInsertionProblem {
+
 	private static class TaskGroup {
-		private final List<Entry> vEntries = new ArrayList<>();
+		private final List<VehicleData.Entry> vEntries = new ArrayList<VehicleData.Entry>();
 		private final MultiVehicleInsertionProblem multiInsertionProblem;
 
 		private TaskGroup(SingleVehicleInsertionProblem singleInsertionProblem) {
@@ -43,6 +46,11 @@ public class ParallelMultiVehicleInsertionProblem {
 		private BestInsertion findBestInsertion(DrtRequest drtRequest) {
 			BestInsertion bestInsertion = multiInsertionProblem.findBestInsertion(drtRequest, vEntries);
 			vEntries.clear();
+			return bestInsertion;
+		}
+
+		private BestInsertion singleInsertion(DrtRequest drtRequest, VehicleData vdata){
+			BestInsertion bestInsertion = multiInsertionProblem.singleVehicleInsertion(drtRequest, vdata);
 			return bestInsertion;
 		}
 	}
@@ -62,15 +70,22 @@ public class ParallelMultiVehicleInsertionProblem {
 		executorService = Executors.newFixedThreadPool(threads);
 	}
 
+
 	public BestInsertion findBestInsertion(DrtRequest drtRequest, VehicleData vData) {
-		List<Entry> filteredVehicles = filter.applyFilter(drtRequest, vData);
+		List<VehicleData.Entry> filteredVehicles = filter.applyFilter(drtRequest, vData);
 		divideTasksIntoGroups(filteredVehicles);
 		return findBestInsertion(submitTasks(drtRequest));
 	}
 
+	// find random thread to add tasks... It should work
+	public BestInsertion insertionSingleVehicleProblem(DrtRequest req, VehicleData veh) {
+		int randomIdx = ThreadLocalRandom.current().nextInt(0, threads);
+		return this.taskGroups[randomIdx].singleInsertion(req, veh);
+	}
+
 	
-	private void divideTasksIntoGroups(List<Entry> filteredVehicles) {
-		Iterator<Entry> vEntryIter = filteredVehicles.iterator();
+	private void divideTasksIntoGroups(List<VehicleData.Entry> filteredVehicles) {
+		Iterator<VehicleData.Entry> vEntryIter = filteredVehicles.iterator();
 		int div = filteredVehicles.size() / threads;
 		int mod = filteredVehicles.size() % threads;
 

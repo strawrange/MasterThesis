@@ -17,11 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.schedule;
-
-import org.matsim.contrib.dvrp.data.Vehicle;
+package masterThesis.dvrp.schedule;
 
 import com.google.common.base.Predicate;
+import masterThesis.dvrp.data.Vehicle;
 
 /**
  * @author michalm

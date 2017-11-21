@@ -17,13 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.passenger.events;
-
-import java.util.Map;
+package masterThesis.drt.passenger.events;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.Event;
-import org.matsim.contrib.dvrp.data.*;
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.data.Vehicle;
+
+import java.util.Map;
 
 /**
  * @author michalm

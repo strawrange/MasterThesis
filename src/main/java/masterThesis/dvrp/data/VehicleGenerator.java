@@ -17,12 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
-
-import java.util.*;
+package masterThesis.dvrp.data;
 
 import org.apache.commons.math3.stat.descriptive.rank.Max;
-import org.matsim.contrib.util.random.*;
+import masterThesis.util.random.RandomUtils;
+import masterThesis.util.random.UniformRandom;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * @author michalm

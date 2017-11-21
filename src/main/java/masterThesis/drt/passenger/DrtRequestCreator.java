@@ -17,29 +17,34 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.passenger;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.optimizer.DefaultDrtOptimizerProvider;
-import org.matsim.contrib.drt.passenger.events.DrtRequestSubmittedEvent;
-import org.matsim.contrib.drt.run.DrtConfigGroup;
-import org.matsim.contrib.dvrp.data.Request;
-import org.matsim.contrib.dvrp.passenger.PassengerRequestCreator;
-import org.matsim.contrib.dvrp.path.*;
-import org.matsim.contrib.dvrp.router.TimeAsTravelDisutility;
-import org.matsim.contrib.dvrp.run.DvrpModule;
-import org.matsim.contrib.dvrp.trafficmonitoring.VrpTravelTimeModules;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.mobsim.framework.*;
-import org.matsim.core.mobsim.qsim.QSim;
-import org.matsim.core.router.*;
-import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
-import org.matsim.core.router.util.*;
+package masterThesis.drt.passenger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.optimizer.DefaultDrtOptimizerProvider;
+import masterThesis.drt.passenger.events.DrtRequestSubmittedEvent;
+import masterThesis.drt.run.DrtConfigGroup;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.passenger.PassengerRequestCreator;
+import masterThesis.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.path.VrpPaths;
+import masterThesis.dvrp.router.TimeAsTravelDisutility;
+import masterThesis.dvrp.run.DvrpModule;
+import masterThesis.dvrp.trafficmonitoring.VrpTravelTimeModules;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
+import org.matsim.core.mobsim.framework.MobsimTimer;
+import org.matsim.core.mobsim.qsim.QSim;
+import org.matsim.core.router.ArrayFastRouterDelegateFactory;
+import org.matsim.core.router.FastAStarEuclidean;
+import org.matsim.core.router.FastAStarEuclideanFactory;
+import org.matsim.core.router.FastRouterDelegateFactory;
+import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
+import org.matsim.core.router.util.*;
 
 /**
  * @author michalm
@@ -56,7 +61,7 @@ public class DrtRequestCreator implements PassengerRequestCreator {
 
 	@Inject
 	public DrtRequestCreator(DrtConfigGroup drtCfg, @Named(DvrpModule.DVRP_ROUTING) Network network,
-			@Named(VrpTravelTimeModules.DVRP_ESTIMATED) TravelTime travelTime, QSim qSim) {
+                             @Named(VrpTravelTimeModules.DVRP_ESTIMATED) TravelTime travelTime, QSim qSim) {
 		this.drtCfg = drtCfg;
 		this.travelTime = travelTime;
 		this.eventsManager = qSim.getEventsManager();
@@ -68,17 +73,12 @@ public class DrtRequestCreator implements PassengerRequestCreator {
 		PreProcessEuclidean preProcessEuclidean = new PreProcessEuclidean(travelDisutility);
 		preProcessEuclidean.run(network);
 
-		FastRouterDelegateFactory fastRouterFactory = new ArrayFastRouterDelegateFactory();
-		RoutingNetwork routingNetwork = new ArrayRoutingNetworkFactory(preProcessEuclidean)
-				.createRoutingNetwork(network);
-
-		router = new FastAStarEuclidean(routingNetwork, preProcessEuclidean, travelDisutility, travelTime,
-				drtCfg.getAStarEuclideanOverdoFactor(), fastRouterFactory);
+		router = new FastAStarEuclideanFactory().createPathCalculator(network, travelDisutility, travelTime);
 	}
 
 	@Override
 	public DrtRequest createRequest(Id<Request> id, MobsimPassengerAgent passenger, Link fromLink, Link toLink,
-			double departureTime, double submissionTime) {
+                                    double departureTime, double submissionTime) {
 		double latestDepartureTime = departureTime + drtCfg.getMaxWaitTime();
 
 		VrpPathWithTravelData unsharedRidePath = VrpPaths.calcAndCreatePath(fromLink, toLink, departureTime, router,

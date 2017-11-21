@@ -17,11 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
+package masterThesis.dvrp.data;
 
+import masterThesis.dvrp.schedule.Schedule;
+import masterThesis.dvrp.schedule.ScheduleImpl;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.schedule.*;
 
 /**
  * @author michalm
@@ -38,7 +39,7 @@ public class VehicleImpl implements Vehicle {
 	private Schedule schedule;
 
 	public VehicleImpl(Id<Vehicle> id, Link startLink, double capacity, double serviceBeginTime,
-			double serviceEndTime) {
+                       double serviceEndTime) {
 		this.id = id;
 		this.startLink = startLink;
 		this.capacity = capacity;
@@ -73,10 +74,10 @@ public class VehicleImpl implements Vehicle {
 		return serviceBeginTime;
 	}
 
-	@Override
-	public double getServiceEndTime() {
-		return serviceEndTime;
-	}
+    @Override
+    public double getServiceEndTime() {
+        return serviceEndTime;
+    }
 
 	@Override
 	public Schedule getSchedule() {
@@ -88,6 +89,7 @@ public class VehicleImpl implements Vehicle {
 		return "Vehicle_" + id;
 	}
 
+    @Override
 	public void setServiceEndTime(double serviceEndTime) {
 		this.serviceEndTime = serviceEndTime;
 	}

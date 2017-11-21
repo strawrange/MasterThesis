@@ -17,21 +17,26 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone.util;
+package masterThesis.zone.util;
 
-import java.util.*;
-
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.geom.TopologyException;
+import com.vividsolutions.jts.geom.util.PolygonExtracter;
+import masterThesis.zone.Zone;
 import org.geotools.geometry.jts.GeometryCollector;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.zone.Zone;
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.geom.util.PolygonExtracter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SubzoneUtils {
 	public static Map<Id<Zone>, List<Polygon>> extractSubzonePolygons(Map<Id<Zone>, Zone> zones,
-			Collection<SimpleFeature> subzonePattern) {
+                                                                      Collection<SimpleFeature> subzonePattern) {
 		Map<Id<Zone>, List<Polygon>> polygonsByZone = new HashMap<>();
 		int topologyExceptionCount = 0;
 

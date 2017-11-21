@@ -17,26 +17,27 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.vrpagent;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.Fleet;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
-import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
-import org.matsim.contrib.dynagent.DynAgent;
-import org.matsim.core.mobsim.framework.AgentSource;
-import org.matsim.core.mobsim.qsim.QSim;
-import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
-import org.matsim.vehicles.*;
+package masterThesis.dvrp.vrpagent;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import masterThesis.drt.optimizer.insertion.InsertionDrtOptimizer;
+import masterThesis.dvrp.data.Fleet;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
+import masterThesis.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
+import masterThesis.dynagent.DynAgent;
+import org.matsim.core.mobsim.framework.AgentSource;
+import org.matsim.core.mobsim.qsim.QSim;
+import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
+import org.matsim.vehicles.VehicleType;
+import org.matsim.vehicles.VehicleUtils;
+import org.matsim.vehicles.VehiclesFactory;
 
 public class VrpAgentSource implements AgentSource {
 	public static final String DVRP_VEHICLE_TYPE = "dvrp_vehicle_type";
-
 	private final DynActionCreator nextActionCreator;
 	private final Fleet fleet;
 	private final VrpOptimizer optimizer;
@@ -51,12 +52,14 @@ public class VrpAgentSource implements AgentSource {
 		this.fleet = fleet;
 		this.optimizer = optimizer;
 		this.qSim = qSim;
+		initOptimizer();
 	}
 
-	public VrpAgentSource(DynActionCreator nextActionCreator, Fleet fleet, VrpOptimizer optimizer, QSim qSim,
-			VehicleType vehicleType) {
-		this(nextActionCreator, fleet, optimizer, qSim);
-		this.vehicleType = vehicleType;
+	private void initOptimizer() {
+		if(optimizer instanceof InsertionDrtOptimizer){
+			((InsertionDrtOptimizer)optimizer).getVrp(this);
+		}
+
 	}
 
 	@Override
@@ -66,8 +69,8 @@ public class VrpAgentSource implements AgentSource {
 			vehicleType = VehicleUtils.getDefaultVehicleType();
 		}
 
-		for (Vehicle vrpVeh : fleet.getVehicles().values()) {
-			Id<Vehicle> id = vrpVeh.getId();
+		for (masterThesis.dvrp.data.Vehicle vrpVeh : fleet.getVehicles().values()) {
+			Id<masterThesis.dvrp.data.Vehicle> id = vrpVeh.getId();
 			Id<Link> startLinkId = vrpVeh.getStartLink().getId();
 
 			VrpAgentLogic vrpAgentLogic = new VrpAgentLogic(optimizer, nextActionCreator, vrpVeh);
@@ -82,4 +85,31 @@ public class VrpAgentSource implements AgentSource {
 			qSim.insertAgentIntoMobsim(vrpAgent);
 		}
 	}
+
+	public VrpAgentSource getInstance(){
+		return this;
+	}
+
+	public DynAgent updateAgentsInMobsim(Vehicle vrpVeh){
+		VehiclesFactory vehicleFactory = VehicleUtils.getFactory();
+		if (vehicleType == null) {
+			vehicleType = VehicleUtils.getDefaultVehicleType();
+		}
+			Id<Vehicle> id = vrpVeh.getId();
+			Id<Link> startLinkId = vrpVeh.getStartLink().getId();
+
+			VrpAgentLogic vrpAgentLogic = new VrpAgentLogic(optimizer, nextActionCreator, vrpVeh);
+			DynAgent vrpAgent = new DynAgent(Id.createPersonId(id), startLinkId, qSim.getEventsManager(),
+					vrpAgentLogic);
+			QVehicle mobsimVehicle = new QVehicle(
+					vehicleFactory.createVehicle(Id.create(id, org.matsim.vehicles.Vehicle.class), vehicleType));
+			vrpAgent.setVehicle(mobsimVehicle);
+			mobsimVehicle.setDriver(vrpAgent);
+
+
+			qSim.addParkedVehicle(mobsimVehicle, startLinkId);
+			qSim.insertAgentIntoMobsim(vrpAgent);
+			return vrpAgent;
+	}
+
 }

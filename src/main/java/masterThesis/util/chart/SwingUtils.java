@@ -1,8 +1,7 @@
-package org.matsim.contrib.util.chart;
+package masterThesis.util.chart;
 
-import java.awt.Window;
-
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author michalm

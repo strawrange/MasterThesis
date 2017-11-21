@@ -20,39 +20,29 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.analysis;
+package masterThesis.drt.analysis;
+
+import com.google.inject.Inject;
+import masterThesis.drt.passenger.events.DrtRequestSubmittedEvent;
+import masterThesis.drt.passenger.events.DrtRequestSubmittedEventHandler;
+import org.apache.commons.lang3.mutable.MutableDouble;
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.events.*;
+import org.matsim.api.core.v01.events.handler.*;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.population.Person;
+import masterThesis.dvrp.run.DvrpConfigGroup;
+import masterThesis.dvrp.vrpagent.VrpAgentLogic;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.config.Config;
+import org.matsim.vehicles.Vehicle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.mutable.MutableDouble;
-import org.matsim.api.core.v01.Coord;
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.events.ActivityEndEvent;
-import org.matsim.api.core.v01.events.LinkEnterEvent;
-import org.matsim.api.core.v01.events.PersonArrivalEvent;
-import org.matsim.api.core.v01.events.PersonDepartureEvent;
-import org.matsim.api.core.v01.events.PersonEntersVehicleEvent;
-import org.matsim.api.core.v01.events.handler.ActivityEndEventHandler;
-import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
-import org.matsim.api.core.v01.events.handler.PersonArrivalEventHandler;
-import org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler;
-import org.matsim.api.core.v01.events.handler.PersonEntersVehicleEventHandler;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.drt.passenger.events.DrtRequestScheduledEvent;
-import org.matsim.contrib.drt.passenger.events.DrtRequestSubmittedEvent;
-import org.matsim.contrib.drt.passenger.events.DrtRequestSubmittedEventHandler;
-import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
-import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.config.Config;
-import org.matsim.vehicles.Vehicle;
-
-import com.google.inject.Inject;
 
 /**
  * @author jbischoff
@@ -73,12 +63,12 @@ public class DynModePassengerStats implements PersonEntersVehicleEventHandler, P
 	final private Network network;
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.matsim.core.events.handler.EventHandler#reset(int)
 	 */
 
 	/**
-	 * 
+	 *
 	 */
 	@Inject
 	public DynModePassengerStats(Network network, EventsManager events, Config config) {
@@ -104,7 +94,7 @@ public class DynModePassengerStats implements PersonEntersVehicleEventHandler, P
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.matsim.api.core.v01.events.handler.ActivityEndEventHandler#handleEvent(org.matsim.api.core.v01.events.
 	 * ActivityEndEvent)
 	 */
@@ -119,7 +109,7 @@ public class DynModePassengerStats implements PersonEntersVehicleEventHandler, P
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.matsim.api.core.v01.events.handler.LinkEnterEventHandler#handleEvent(org.matsim.api.core.v01.events.
 	 * LinkEnterEvent)
 	 */
@@ -142,7 +132,7 @@ public class DynModePassengerStats implements PersonEntersVehicleEventHandler, P
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.matsim.api.core.v01.events.handler.PersonArrivalEventHandler#handleEvent(org.matsim.api.core.v01.events.
 	 * PersonArrivalEvent)
 	 */
@@ -167,7 +157,7 @@ public class DynModePassengerStats implements PersonEntersVehicleEventHandler, P
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler#handleEvent(org.matsim.api.core.v01.events.
 	 * PersonDepartureEvent)
@@ -182,7 +172,7 @@ public class DynModePassengerStats implements PersonEntersVehicleEventHandler, P
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.matsim.api.core.v01.events.handler.PersonEntersVehicleEventHandler#handleEvent(org.matsim.api.core.v01.events
 	 * .PersonEntersVehicleEvent)

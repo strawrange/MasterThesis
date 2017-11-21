@@ -17,11 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
-
-import org.matsim.api.core.v01.network.Link;
+package masterThesis.util;
 
 import com.google.common.base.Function;
+import org.matsim.api.core.v01.network.Link;
 
 /**
  * @author michalm

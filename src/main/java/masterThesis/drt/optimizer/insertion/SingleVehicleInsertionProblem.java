@@ -17,23 +17,25 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer.insertion;
+package masterThesis.drt.optimizer.insertion;
 
-import java.util.*;
-
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.optimizer.VehicleData;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.optimizer.VehicleData;
-import org.matsim.contrib.dvrp.path.OneToManyPathSearch;
-import org.matsim.contrib.dvrp.path.OneToManyPathSearch.PathData;
-import org.matsim.contrib.locationchoice.router.BackwardMultiNodePathCalculator;
+import masterThesis.dvrp.path.OneToManyPathSearch;
+import masterThesis.dvrp.path.OneToManyPathSearch.PathData;
+import masterThesis.router.BackwardMultiNodePathCalculator;
 import org.matsim.core.mobsim.framework.MobsimTimer;
 import org.matsim.core.router.MultiNodePathCalculator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author michalm
  */
 public class SingleVehicleInsertionProblem {
+
 	public static class Insertion {
 		public final int pickupIdx;
 		public final int dropoffIdx;
@@ -225,7 +227,7 @@ public class SingleVehicleInsertionProblem {
 		Insertion bestInsertion = null;
 		for (Insertion insertion : insertions) {
 			double cost = costCalculator.calculate(drtRequest, vEntry, insertion, timer.getTimeOfDay());
-			if (cost < minCost) {
+			if (cost <= minCost) {
 				bestInsertion = insertion;
 				minCost = cost;
 			}

@@ -17,13 +17,17 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.schedule;
+package masterThesis.drt.schedule;
 
-import java.util.*;
-
+import masterThesis.drt.data.DrtRequest;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.dvrp.schedule.StayTaskImpl;
+import masterThesis.dvrp.schedule.StayTaskImpl;
+import org.matsim.pt.transitSchedule.api.TransitStopFacility;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author michalm

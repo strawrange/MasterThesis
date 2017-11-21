@@ -17,11 +17,13 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
-
-import java.util.*;
+package masterThesis.util;
 
 import com.google.common.collect.Iterables;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CSVLineBuilder {
 	private final List<String> line = new ArrayList<>();

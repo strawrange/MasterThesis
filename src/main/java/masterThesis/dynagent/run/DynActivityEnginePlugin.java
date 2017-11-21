@@ -1,12 +1,14 @@
-package org.matsim.contrib.dynagent.run;
+package masterThesis.dynagent.run;
 
-import java.util.*;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import org.matsim.core.config.Config;
 import org.matsim.core.mobsim.qsim.AbstractQSimPlugin;
-import org.matsim.core.mobsim.qsim.interfaces.*;
+import org.matsim.core.mobsim.qsim.interfaces.ActivityHandler;
+import org.matsim.core.mobsim.qsim.interfaces.MobsimEngine;
 
-import com.google.inject.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DynActivityEnginePlugin extends AbstractQSimPlugin {
 	public DynActivityEnginePlugin(Config config) {

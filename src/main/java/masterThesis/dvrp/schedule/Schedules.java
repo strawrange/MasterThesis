@@ -17,16 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.schedule;
-
-import java.util.*;
-
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
+package masterThesis.dvrp.schedule;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import masterThesis.dvrp.data.Vehicle;
+import org.matsim.api.core.v01.network.Link;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class Schedules {
 	public static final Predicate<Task> STAY_TASK_PREDICATE = new Predicate<Task>() {
@@ -100,7 +100,7 @@ public class Schedules {
 	}
 
 	public static Iterable<? extends Task> createTaskFilterIter(Schedule schedule,
-			Predicate<? super Task> taskPredicate) {
+                                                                Predicate<? super Task> taskPredicate) {
 		return Iterables.filter(schedule.getTasks(), taskPredicate);
 	}
 }

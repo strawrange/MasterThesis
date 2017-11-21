@@ -17,13 +17,15 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone;
+package masterThesis.zone;
+
+import masterThesis.zone.util.NetworkWithZonesUtils;
+import masterThesis.zone.util.ZoneFinder;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
 
 import java.util.Map;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.zone.util.*;
 
 public class ZonalSystemImpl implements ZonalSystem {
 	private final Map<Id<Zone>, Zone> zones;

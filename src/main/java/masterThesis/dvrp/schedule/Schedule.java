@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.schedule;
+package masterThesis.dvrp.schedule;
 
 import java.util.List;
 
@@ -99,4 +99,4 @@ public interface Schedule {
 	 * returns it. If no task is left, it sets the Schedule to completed and returns null.
 	 */
 	Task nextTask();// this one seems synchronous (will be executed when switching between DynActions)
-}
+	}

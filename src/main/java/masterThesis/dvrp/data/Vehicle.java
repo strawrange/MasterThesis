@@ -17,11 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
+package masterThesis.dvrp.data;
 
+import masterThesis.dvrp.schedule.Schedule;
 import org.matsim.api.core.v01.Identifiable;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.schedule.Schedule;
 
 /**
  * @author michalm
@@ -52,6 +52,8 @@ public interface Vehicle extends Identifiable<Vehicle> {
 	 *         {@link Schedule#getEndTime()}
 	 */
 	double getServiceEndTime();
+
+	void setServiceEndTime(double time);
 
 	/**
 	 * Design comment(s):

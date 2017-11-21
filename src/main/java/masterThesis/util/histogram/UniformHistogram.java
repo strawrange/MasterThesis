@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.histogram;
+package masterThesis.util.histogram;
 
 public class UniformHistogram extends AbstractHistogram<Double> {
 	public static UniformHistogram create(double binSize, int binCount, double[] values) {

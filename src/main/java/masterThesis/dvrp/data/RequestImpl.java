@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
+package masterThesis.dvrp.data;
 
 import org.matsim.api.core.v01.Id;
 
@@ -30,16 +30,18 @@ public class RequestImpl implements Request {
 	private final double earliestStartTime;
 	private final double latestStartTime;
 	private final double submissionTime;
+	private double updateTime;
 
 	private boolean rejected = false;
 
 	public RequestImpl(Id<Request> id, double quantity, double earliestStartTime, double latestStartTime,
-			double submissionTime) {
+                       double submissionTime) {
 		this.id = id;
 		this.quantity = quantity;
 		this.earliestStartTime = earliestStartTime;
 		this.latestStartTime = latestStartTime;
 		this.submissionTime = submissionTime;
+		this.updateTime = submissionTime + 1;
 	}
 
 	@Override
@@ -65,6 +67,16 @@ public class RequestImpl implements Request {
 	@Override
 	public double getSubmissionTime() {
 		return submissionTime;
+	}
+
+	@Override
+	public void setUpdateTime(double time) {
+		this.updateTime=time;
+	}
+
+	@Override
+	public double getUpdateTime(){
+		return this.updateTime;
 	}
 
 	@Override

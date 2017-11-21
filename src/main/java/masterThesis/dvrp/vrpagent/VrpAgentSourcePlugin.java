@@ -1,12 +1,13 @@
-package org.matsim.contrib.dvrp.vrpagent;
+package masterThesis.dvrp.vrpagent;
 
-import java.util.*;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import org.matsim.core.config.Config;
 import org.matsim.core.mobsim.framework.AgentSource;
 import org.matsim.core.mobsim.qsim.AbstractQSimPlugin;
 
-import com.google.inject.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class VrpAgentSourcePlugin extends AbstractQSimPlugin {
 	public VrpAgentSourcePlugin(Config config) {

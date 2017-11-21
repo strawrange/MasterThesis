@@ -1,6 +1,7 @@
-package org.matsim.contrib.util.distance;
+package masterThesis.util.distance;
 
-import org.matsim.api.core.v01.*;
+import org.matsim.api.core.v01.BasicLocation;
+import org.matsim.api.core.v01.Coord;
 
 public class DistanceUtils {
 	public static double calculateDistance(BasicLocation<?> fromLocation, BasicLocation<?> toLocation) {

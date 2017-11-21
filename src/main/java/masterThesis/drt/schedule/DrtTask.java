@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.schedule;
+package masterThesis.drt.schedule;
 
-import org.matsim.contrib.dvrp.schedule.Task;
+import masterThesis.dvrp.schedule.Task;
 
 /**
  * @author michalm

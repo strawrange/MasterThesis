@@ -17,13 +17,15 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.chart;
-
-import java.util.*;
+package masterThesis.util.chart;
 
 import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.xy.*;
+import org.jfree.data.xy.AbstractXYDataset;
+import org.jfree.data.xy.XYDataset;
 import org.matsim.api.core.v01.Coord;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author michalm

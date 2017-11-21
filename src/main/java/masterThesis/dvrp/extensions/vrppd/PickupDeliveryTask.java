@@ -17,11 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.extensions.vrppd;
+package masterThesis.dvrp.extensions.vrppd;
+
+import masterThesis.dvrp.schedule.StayTask;
 
 import java.util.List;
-
-import org.matsim.contrib.dvrp.schedule.StayTask;
 
 public interface PickupDeliveryTask extends StayTask {
 	boolean isPickup();

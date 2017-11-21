@@ -17,9 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
+package masterThesis.util;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Sorts from smallest to largest. If the opposite should be the case then add elements with their values negated:

@@ -17,13 +17,19 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.router;
+package masterThesis.dvrp.router;
 
-import java.util.*;
-
-import org.matsim.api.core.v01.network.*;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.router.Dijkstra;
-import org.matsim.core.router.util.*;
+import org.matsim.core.router.util.DijkstraNodeData;
+import org.matsim.core.router.util.PreProcessDijkstra;
+import org.matsim.core.router.util.TravelDisutility;
+import org.matsim.core.router.util.TravelTime;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class DijkstraWithThinPath extends Dijkstra {
 	public DijkstraWithThinPath(Network network, TravelDisutility costFunction, TravelTime timeFunction) {

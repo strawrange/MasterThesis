@@ -17,23 +17,28 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.routing;
+package masterThesis.drt.closerouting;
 
-import java.util.*;
-
+import com.google.inject.Inject;
+import masterThesis.drt.run.DrtConfigGroup;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.population.*;
-import org.matsim.contrib.drt.run.DrtConfigGroup;
+import org.matsim.api.core.v01.population.Leg;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.PlanElement;
+import org.matsim.api.core.v01.population.Route;
 import org.matsim.core.config.Config;
 import org.matsim.core.population.PopulationUtils;
-import org.matsim.core.population.routes.GenericRouteImpl;
-import org.matsim.core.router.*;
+import org.matsim.core.population.routes.RouteUtils;
+import org.matsim.core.router.EmptyStageActivityTypes;
+import org.matsim.core.router.RoutingModule;
+import org.matsim.core.router.StageActivityTypes;
 import org.matsim.core.utils.geometry.CoordUtils;
 import org.matsim.facilities.Facility;
 
-import com.google.inject.Inject;
+import java.util.Collections;
+import java.util.List;
 
 public class DrtRoutingModule implements RoutingModule {
 	private final DrtConfigGroup drtconfig;
@@ -48,7 +53,7 @@ public class DrtRoutingModule implements RoutingModule {
 	@Override
 	public List<? extends PlanElement> calcRoute(Facility<?> fromFacility, Facility<?> toFacility, double departureTime,
 			Person person) {
-		Route route = new GenericRouteImpl(fromFacility.getLinkId(), toFacility.getLinkId());
+		Route route = RouteUtils.createGenericRouteImpl(fromFacility.getLinkId(), toFacility.getLinkId());
 		Coord fromCoord = fromFacility.getCoord();
 		Coord toCoord = toFacility.getCoord();
 		

@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.util;
+package masterThesis.dvrp.util;
 
 import org.matsim.core.config.groups.TravelTimeCalculatorConfigGroup;
 

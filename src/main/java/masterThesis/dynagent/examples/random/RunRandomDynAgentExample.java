@@ -17,13 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.examples.random;
+package masterThesis.dynagent.examples.random;
 
+import masterThesis.dynagent.run.DynQSimConfigConsistencyChecker;
+import masterThesis.dynagent.run.DynQSimModule;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.dynagent.run.*;
 import org.matsim.contrib.otfvis.OTFVisLiveModule;
-import org.matsim.core.config.*;
-import org.matsim.core.config.groups.QSimConfigGroup.*;
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.config.groups.QSimConfigGroup.SnapshotStyle;
+import org.matsim.core.config.groups.QSimConfigGroup.StarttimeInterpretation;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.scenario.ScenarioUtils;

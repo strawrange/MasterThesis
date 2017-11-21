@@ -17,13 +17,15 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.random;
+package masterThesis.util.random;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ArrayTable;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
 public class WeightedRandomSelectionTable<R, C, V> {
 	public static <R, C, V> WeightedRandomSelectionTable<R, C, V> createWithArrayTable(Iterable<? extends R> rowKeys,
-			Iterable<? extends C> colKeys) {
+                                                                                       Iterable<? extends C> colKeys) {
 		Table<R, C, WeightedRandomSelection<V>> selectionTable = ArrayTable.create(rowKeys, colKeys);
 		return new WeightedRandomSelectionTable<R, C, V>(selectionTable);
 	}

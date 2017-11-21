@@ -17,21 +17,26 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone;
+package masterThesis.zone;
 
-import java.util.*;
-
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.geom.util.PolygonExtracter;
+import masterThesis.zone.io.ZoneShpReader;
+import masterThesis.zone.io.ZoneShpWriter;
+import masterThesis.zone.io.ZoneXmlReader;
+import masterThesis.zone.io.ZoneXmlWriter;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.zone.io.*;
 import org.matsim.core.utils.geometry.geotools.MGC;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.*;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.geom.util.PolygonExtracter;
+import java.util.List;
+import java.util.Map;
 
 public class Zones {
 	public static Map<Id<Zone>, Zone> readZones(String zonesXmlFile, String zonesShpFile) {
@@ -45,7 +50,7 @@ public class Zones {
 	}
 
 	public static void writeZones(Map<Id<Zone>, Zone> zones, String coordinateSystem, String zonesXmlFile,
-			String zonesShpFile) {
+                                  String zonesShpFile) {
 		new ZoneXmlWriter(zones).write(zonesXmlFile);
 		new ZoneShpWriter(zones, coordinateSystem).write(zonesShpFile);
 	}

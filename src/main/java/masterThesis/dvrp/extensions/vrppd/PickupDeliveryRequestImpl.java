@@ -17,11 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.extensions.vrppd;
+package masterThesis.dvrp.extensions.vrppd;
 
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.data.RequestImpl;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.*;
 
 public class PickupDeliveryRequestImpl extends RequestImpl implements PickupDeliveryRequest {
 	private final Link fromLink;
@@ -31,7 +32,7 @@ public class PickupDeliveryRequestImpl extends RequestImpl implements PickupDeli
 	private PickupDeliveryTask deliveryTask;
 
 	public PickupDeliveryRequestImpl(Id<Request> id, double quantity, double earliestStartTime, double latestStartTime,
-			double submissionTime, Link fromLink, Link toLink) {
+                                     double submissionTime, Link fromLink, Link toLink) {
 		super(id, quantity, earliestStartTime, latestStartTime, submissionTime);
 		this.fromLink = fromLink;
 		this.toLink = toLink;

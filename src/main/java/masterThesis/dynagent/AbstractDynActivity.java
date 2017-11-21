@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent;
+package masterThesis.dynagent;
 
 public abstract class AbstractDynActivity implements DynActivity {
 	private final String activityType;

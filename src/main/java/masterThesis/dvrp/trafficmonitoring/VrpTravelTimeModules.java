@@ -17,15 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.trafficmonitoring;
+package masterThesis.dvrp.trafficmonitoring;
 
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.trafficmonitoring.FreeSpeedTravelTime;
-
-import com.google.inject.*;
-import com.google.inject.name.*;
 
 public class VrpTravelTimeModules {
 	public static final String DVRP_INITIAL = "dvrp_initial";

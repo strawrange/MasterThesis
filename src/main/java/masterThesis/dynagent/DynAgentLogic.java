@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent;
+package masterThesis.dynagent;
 
 public interface DynAgentLogic {
 	DynAgent getDynAgent();

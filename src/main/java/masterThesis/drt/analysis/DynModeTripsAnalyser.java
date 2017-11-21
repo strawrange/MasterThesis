@@ -20,27 +20,9 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.analysis;
+package masterThesis.drt.analysis;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
+import masterThesis.dvrp.data.FleetImpl;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
@@ -56,11 +38,22 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.util.chart.ChartSaveUtils;
+import masterThesis.util.chart.ChartSaveUtils;
 import org.matsim.core.utils.geometry.CoordUtils;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.vehicles.Vehicle;
+
+import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * @author jbischoff
@@ -70,7 +63,7 @@ import org.matsim.vehicles.Vehicle;
 public class DynModeTripsAnalyser {
 
 	public static Map<Double, List<DynModeTrip>> splitTripsIntoBins(Collection<DynModeTrip> trips, int startTime,
-			int endTime, int binSize_s) {
+                                                                    int endTime, int binSize_s) {
 		LinkedList<DynModeTrip> alltrips = new LinkedList<>();
 		alltrips.addAll(trips);
 		Collections.sort(alltrips);
@@ -129,7 +122,7 @@ public class DynModeTripsAnalyser {
 	}
 
 	public static void analyseDetours(Network network, List<DynModeTrip> trips, double beelineDistanceFactor,
-			double freeSpeedModeFactor, String fileName) {
+                                      double freeSpeedModeFactor, String fileName) {
 		if (trips == null)
 			return;
 
@@ -314,6 +307,7 @@ public class DynModeTripsAnalyser {
 	 * @param vehicleDistances
 	 * @param iterationFilename
 	 */
+	// also out put vehicle information
 	public static void writeVehicleDistances(Map<Id<Vehicle>, double[]> vehicleDistances, String iterationFilename) {
 		String header = "vehicleId;drivenDistance_m;occupiedDistance_m;emptyDistance_m;revenueDistance_pm";
 		BufferedWriter bw = IOUtils.getBufferedWriter(iterationFilename);
@@ -373,4 +367,7 @@ public class DynModeTripsAnalyser {
 				+ format.format(empty.getMean()) + del + format.format(revenue.getMean());
 		return result;
 	}
+
+
+
 }

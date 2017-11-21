@@ -17,9 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.optimizer;
+package masterThesis.dvrp.optimizer;
 
-import org.matsim.contrib.dvrp.data.*;
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.vrpagent.VrpAgentSource;
 
 /**
  * Minimal functionality of dvrp optimizers in the dvrp contrib. <br>
@@ -41,4 +43,5 @@ public interface VrpOptimizer {
 	 * the "currentTask" setting.
 	 */
 	void nextTask(Vehicle vehicle);
+
 }

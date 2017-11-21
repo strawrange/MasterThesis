@@ -17,17 +17,23 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.run;
+package masterThesis.dvrp.run;
 
-import java.util.*;
-
+import com.google.inject.Inject;
+import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import masterThesis.dvrp.passenger.PassengerEnginePlugin;
+import masterThesis.dvrp.passenger.PassengerRequestCreator;
+import masterThesis.dvrp.trafficmonitoring.VrpTravelTimeModules;
+import masterThesis.dvrp.vrpagent.VrpAgentQueryHelper;
+import masterThesis.dvrp.vrpagent.VrpAgentSourcePlugin;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
-import org.matsim.contrib.dvrp.passenger.*;
-import org.matsim.contrib.dvrp.trafficmonitoring.VrpTravelTimeModules;
-import org.matsim.contrib.dvrp.vrpagent.*;
-import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
-import org.matsim.contrib.dynagent.run.*;
+import masterThesis.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
+import masterThesis.dynagent.run.DynQSimModule;
+import masterThesis.dynagent.run.DynRoutingModule;
 import org.matsim.core.config.Config;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.mobsim.framework.listeners.MobsimListener;
@@ -36,8 +42,7 @@ import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.algorithms.TransportModeNetworkFilter;
 import org.matsim.vis.otfvis.OnTheFlyServer.NonPlanAgentQueryHelper;
 
-import com.google.inject.*;
-import com.google.inject.name.Named;
+import java.util.*;
 
 public class DvrpModule extends AbstractModule {
 	public static final String DVRP_ROUTING = "dvrp_routing";// TODO ==> dvrp_optimizer???

@@ -17,10 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.run;
+package masterThesis.dvrp.run;
 
 import org.apache.log4j.Logger;
-import org.matsim.contrib.dynagent.run.DynQSimConfigConsistencyChecker;
+import masterThesis.dynagent.run.DynQSimConfigConsistencyChecker;
 import org.matsim.core.config.Config;
 
 public class DvrpConfigConsistencyChecker extends DynQSimConfigConsistencyChecker {

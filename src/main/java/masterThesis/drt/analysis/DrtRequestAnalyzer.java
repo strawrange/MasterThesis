@@ -20,17 +20,9 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.analysis;
+package masterThesis.drt.analysis;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.inject.Inject;
-
+import masterThesis.drt.passenger.events.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -42,26 +34,29 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.PersonEntersVehicleEvent;
 import org.matsim.api.core.v01.events.handler.PersonEntersVehicleEventHandler;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.drt.passenger.events.DrtRequestRejectedEvent;
-import org.matsim.contrib.drt.passenger.events.DrtRequestRejectedEventHandler;
-import org.matsim.contrib.drt.passenger.events.DrtRequestScheduledEvent;
-import org.matsim.contrib.drt.passenger.events.DrtRequestScheduledEventHandler;
-import org.matsim.contrib.drt.passenger.events.DrtRequestSubmittedEvent;
-import org.matsim.contrib.drt.passenger.events.DrtRequestSubmittedEventHandler;
-import org.matsim.contrib.dvrp.data.Request;
+import masterThesis.dvrp.data.Request;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.utils.collections.Tuple;
 import org.matsim.core.utils.io.IOUtils;
+
+import javax.inject.Inject;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author  jbischoff
  *
  */
+
 /**
  *
  */
 public class DrtRequestAnalyzer implements DrtRequestRejectedEventHandler, DrtRequestScheduledEventHandler,
-		DrtRequestSubmittedEventHandler, PersonEntersVehicleEventHandler {
+        DrtRequestSubmittedEventHandler, PersonEntersVehicleEventHandler {
 
 	
 	private final Map<Id<Request>,DrtRequestSubmittedEvent> submittedRequests = new HashMap<>();
@@ -124,7 +119,7 @@ public class DrtRequestAnalyzer implements DrtRequestRejectedEventHandler, DrtRe
 	 */
 	@Override
 	public void handleEvent(DrtRequestRejectedEvent event) {
-		this.submittedRequests.remove(event.getRequestId());
+		//this.submittedRequests.remove(event.getRequestId());
 	}
 	
 	/**

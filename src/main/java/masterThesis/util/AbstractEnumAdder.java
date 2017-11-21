@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
+package masterThesis.util;
 
 public abstract class AbstractEnumAdder<K extends Enum<K>, N extends Number> implements EnumAdder<K, N> {
 	protected final K[] keys;

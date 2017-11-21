@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.schedule;
+package masterThesis.dvrp.schedule;
 
-import org.matsim.contrib.dvrp.tracker.TaskTracker;
+import masterThesis.dvrp.tracker.TaskTracker;
 
 /**
  * Root class of Task hierarchy. <br/>

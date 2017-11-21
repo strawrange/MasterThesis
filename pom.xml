@@ -15,22 +15,46 @@
 			<id>matsim</id>
 			<url>https://dl.bintray.com/matsim/matsim</url>
 		</repository>
+		<repository>
+			<id>matsim-eth</id>
+			<url>https://dl.bintray.com/matsim-eth/matsim</url>
+		</repository>
+		<repository>
+			<id>ojo-snapshots</id>
+			<name>MATSim snapshot repository</name>
+			<url>http://oss.jfrog.org/libs-snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<!-- Geotools is not on Maven central -->
+			<id>osgeo</id>
+			<name>Geotools repository</name>
+			<url>http://download.osgeo.org/webdav/geotools</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
 
 		<!-- This is the matsim "core": -->
-		<dependency>
-			<groupId>org.matsim</groupId>
-			<artifactId>matsim</artifactId>
-			<version>0.9.0</version>
-		</dependency>
         <dependency>
             <groupId>org.matsim.contrib</groupId>
             <artifactId>av</artifactId>
-            <version>0.9.0</version>
+            <version>0.10.0-eth</version>
             <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId>org.matsim.contrib</groupId>
+			<artifactId>eventsBasedPTRouter</artifactId>
+			<version>0.10.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.ethz.matsim</groupId>
+			<artifactId>av</artifactId>
+			<version>0.1.1</version>
+			<scope>compile</scope>
+		</dependency>
 		<!-- Include the JUnit testing library -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -38,7 +62,12 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.matsim</groupId>
+            <artifactId>matsim</artifactId>
+            <version>0.10.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

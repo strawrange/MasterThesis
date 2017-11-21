@@ -1,12 +1,14 @@
-package org.matsim.contrib.drt.optimizer;
+package masterThesis.drt.optimizer;
 
+import masterThesis.drt.optimizer.insertion.filter.DrtVehicleFilter;
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.drt.scheduler.DrtScheduler;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.drt.optimizer.insertion.filter.DrtVehicleFilter;
-import org.matsim.contrib.drt.scheduler.DrtScheduler;
-import org.matsim.contrib.dvrp.data.Fleet;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.mobsim.framework.MobsimTimer;
-import org.matsim.core.router.util.*;
+import masterThesis.dvrp.data.Fleet;
+import org.matsim.core.mobsim.qsim.QSim;
+import org.matsim.core.router.util.TravelDisutility;
+import org.matsim.core.router.util.TravelTime;
+
 
 /**
  * @author michalm
@@ -14,22 +16,22 @@ import org.matsim.core.router.util.*;
 public class DrtOptimizerContext {
 	public final Fleet fleet;
 	public final Network network;
-	public final MobsimTimer timer;
 	public final TravelTime travelTime;
 	public final TravelDisutility travelDisutility;
 	public final DrtScheduler scheduler;
-	public final EventsManager eventsManager;
+	public final QSim qSim;
 	public final DrtVehicleFilter filter;
+	public final DrtConfigGroup drtConfig;
 
-	public DrtOptimizerContext(Fleet fleet, Network network, MobsimTimer timer, TravelTime travelTime,
-			TravelDisutility travelDisutility, DrtScheduler scheduler, EventsManager eventsManager,DrtVehicleFilter filter) {
+	public DrtOptimizerContext(Fleet fleet, Network network, QSim qSim, TravelTime travelTime,
+							   TravelDisutility travelDisutility, DrtScheduler scheduler, DrtVehicleFilter filter, DrtConfigGroup drtconfig) {
 		this.fleet = fleet;
 		this.network = network;
-		this.timer = timer;
+		this.qSim = qSim;
 		this.travelTime = travelTime;
 		this.travelDisutility = travelDisutility;
 		this.scheduler = scheduler;
-		this.eventsManager = eventsManager;
 		this.filter = filter;
+		this.drtConfig = drtconfig;
 	}
 }

@@ -17,13 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.util;
+package masterThesis.dynagent.util;
+
+import masterThesis.dynagent.*;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Leg;
+import org.matsim.api.core.v01.population.Plan;
+import org.matsim.api.core.v01.population.PlanElement;
+import org.matsim.core.population.routes.NetworkRoute;
 
 import java.util.Iterator;
-
-import org.matsim.api.core.v01.population.*;
-import org.matsim.contrib.dynagent.*;
-import org.matsim.core.population.routes.NetworkRoute;
 
 /**
  * This class could be useful for jUnit testing of compatibility of DynAgent with PersonDriverAgentImpl (i.e. comparing

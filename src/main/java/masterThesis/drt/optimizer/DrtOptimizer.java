@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer;
+package masterThesis.drt.optimizer;
 
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizerWithOnlineTracking;
+import masterThesis.dvrp.optimizer.VrpOptimizerWithOnlineTracking;
 import org.matsim.core.mobsim.framework.listeners.MobsimBeforeSimStepListener;
 
 /**

@@ -17,24 +17,32 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.util.chart;
+package masterThesis.dvrp.util.chart;
+
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.schedule.DriveTask;
+import masterThesis.dvrp.schedule.Schedule;
+import masterThesis.dvrp.schedule.StayTask;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.SymbolAxis;
+import org.jfree.chart.labels.XYToolTipGenerator;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.data.gantt.TaskSeries;
+import org.jfree.data.gantt.TaskSeriesCollection;
+import org.jfree.data.gantt.XYTaskDataset;
+import org.jfree.data.time.SimpleTimePeriod;
+import org.jfree.data.time.TimePeriod;
+import org.jfree.data.xy.XYDataset;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-
-import org.jfree.chart.*;
-import org.jfree.chart.axis.*;
-import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.*;
-import org.jfree.chart.renderer.xy.*;
-import org.jfree.data.gantt.*;
-import org.jfree.data.time.*;
-import org.jfree.data.xy.XYDataset;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.schedule.*;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
-import org.matsim.contrib.dvrp.schedule.Task;
 
 public class ScheduleCharts {
 	public static JFreeChart chartSchedule(List<? extends Vehicle> vehicles) {
@@ -76,9 +84,9 @@ public class ScheduleCharts {
 
 	@SuppressWarnings("serial")
 	private static class ChartTask extends org.jfree.data.gantt.Task {
-		private Task vrpTask;
+		private masterThesis.dvrp.schedule.Task vrpTask;
 
-		private ChartTask(String description, TimePeriod duration, Task vrpTask) {
+		private ChartTask(String description, TimePeriod duration, masterThesis.dvrp.schedule.Task vrpTask) {
 			super(description, duration);
 			this.vrpTask = vrpTask;
 		}
@@ -118,14 +126,14 @@ public class ScheduleCharts {
 	}
 
 	public static interface PaintSelector {
-		Paint select(Task task);
+		Paint select(masterThesis.dvrp.schedule.Task task);
 	}
 
 	private static final Color WAIT_COLOR = new Color(0, 200, 0);
 	private static final Color DRIVE_COLOR = new Color(200, 0, 0);
 
 	public static final PaintSelector BASIC_PAINT_SELECTOR = new PaintSelector() {
-		public Paint select(Task task) {
+		public Paint select(masterThesis.dvrp.schedule.Task task) {
 			if (task instanceof DriveTask) {
 				return DRIVE_COLOR;
 			} else if (task instanceof StayTask) {
@@ -136,11 +144,11 @@ public class ScheduleCharts {
 	};
 
 	public static interface DescriptionCreator {
-		String create(Task task);
+		String create(masterThesis.dvrp.schedule.Task task);
 	}
 
 	public static final DescriptionCreator BASIC_DESCRIPTION_CREATOR = new DescriptionCreator() {
-		public String create(Task task) {
+		public String create(masterThesis.dvrp.schedule.Task task) {
 			if (task instanceof StayTask) {
 				return StayTask.class.toString();
 			} else if (task instanceof DriveTask) {
@@ -164,7 +172,7 @@ public class ScheduleCharts {
 				continue;
 			}
 
-			for (Task t : schedule.getTasks()) {
+			for (masterThesis.dvrp.schedule.Task t : schedule.getTasks()) {
 				String description = descriptionCreator.create(t);
 
 				TimePeriod duration = new SimpleTimePeriod(//

@@ -17,12 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer.insertion;
+package masterThesis.drt.optimizer.insertion;
 
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.optimizer.VehicleData;
-import org.matsim.contrib.drt.optimizer.VehicleData.Entry;
-import org.matsim.contrib.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestInsertion;
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.optimizer.VehicleData;
+import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestInsertion;
+import masterThesis.dvrp.data.Vehicle;
 
 /**
  * @author michalm
@@ -38,11 +38,15 @@ public class MultiVehicleInsertionProblem {
 		return findBestInsertion(drtRequest, vData.getEntries());
 	}
 
+	public BestInsertion singleVehicleInsertion(DrtRequest drtRequest, VehicleData veh) {
+		return insertionProblem.findBestInsertion(drtRequest,veh.getEntry(0));
+	}
+
 	// TODO run Dijkstra once for all vehicles instead of running it separately for each one
-	public BestInsertion findBestInsertion(DrtRequest drtRequest, Iterable<Entry> vEntries) {
+	public BestInsertion findBestInsertion(DrtRequest drtRequest, Iterable<VehicleData.Entry> vEntries) {
 		double minCost = Double.MAX_VALUE;
 		BestInsertion fleetBestInsertion = null;
-		for (Entry vEntry : vEntries) {
+		for (VehicleData.Entry vEntry : vEntries) {
 			BestInsertion bestInsertion = insertionProblem.findBestInsertion(drtRequest, vEntry);
 			if (bestInsertion.cost < minCost) {
 				fleetBestInsertion = bestInsertion;

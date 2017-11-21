@@ -17,15 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.examples.random;
-
-import java.util.Set;
-
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.dynagent.*;
-import org.matsim.core.gbl.MatsimRandom;
+package masterThesis.dynagent.examples.random;
 
 import com.google.common.collect.Iterators;
+import masterThesis.dynagent.*;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.core.gbl.MatsimRandom;
+
+import java.util.Set;
 
 public class RandomDynAgentLogic implements DynAgentLogic {
 	private final Network network;

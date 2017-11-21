@@ -17,12 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.vrpagent;
+package masterThesis.dvrp.vrpagent;
 
-import org.matsim.api.core.v01.*;
+import masterThesis.dvrp.path.DivertedVrpPath;
+import masterThesis.dvrp.path.VrpPath;
+import masterThesis.dvrp.tracker.OnlineDriveTaskTracker;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.path.*;
-import org.matsim.contrib.dvrp.tracker.OnlineDriveTaskTracker;
 import org.matsim.vehicles.Vehicle;
 
 /**

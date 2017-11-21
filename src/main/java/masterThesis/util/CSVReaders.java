@@ -17,14 +17,15 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
+package masterThesis.util;
+
+import com.opencsv.CSVParser;
+import com.opencsv.CSVReader;
+import org.matsim.core.utils.io.IOUtils;
+import org.matsim.core.utils.io.UncheckedIOException;
 
 import java.io.IOException;
 import java.util.List;
-
-import org.matsim.core.utils.io.*;
-
-import com.opencsv.*;
 
 public class CSVReaders {
 	public static List<String[]> readTSV(String file) {

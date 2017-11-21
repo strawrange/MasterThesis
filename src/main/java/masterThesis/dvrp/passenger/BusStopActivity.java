@@ -17,13 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.passenger;
+package masterThesis.dvrp.passenger;
+
+import masterThesis.dvrp.schedule.StayTask;
+import masterThesis.dynagent.AbstractDynActivity;
+import masterThesis.dynagent.DynAgent;
+import org.matsim.api.core.v01.Id;
+import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
+import org.matsim.pt.transitSchedule.api.TransitStopFacility;
 
 import java.util.Set;
-
-import org.matsim.contrib.dvrp.schedule.StayTask;
-import org.matsim.contrib.dynagent.*;
-import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 /**
  * Multiple passenger dropoff and pickup activity
@@ -35,14 +38,15 @@ public class BusStopActivity extends AbstractDynActivity implements PassengerPic
 	private final DynAgent driver;
 	private final Set<? extends PassengerRequest> dropoffRequests;
 	private final Set<? extends PassengerRequest> pickupRequests;
+	private final Id<TransitStopFacility> stopFacilityId = null;
 
 	private int passengersAboard;
 	private double endTime = END_ACTIVITY_LATER;
 	private double departureTime;
 
 	public BusStopActivity(PassengerEngine passengerEngine, DynAgent driver, StayTask task,
-			Set<? extends PassengerRequest> dropoffRequests, Set<? extends PassengerRequest> pickupRequests,
-			String activityType) {
+                           Set<? extends PassengerRequest> dropoffRequests, Set<? extends PassengerRequest> pickupRequests,
+                           String activityType) {
 		super(activityType);
 
 		this.passengerEngine = passengerEngine;

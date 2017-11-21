@@ -20,21 +20,21 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.analysis;
+package masterThesis.drt.analysis;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.util.List;
-
+import com.google.inject.Inject;
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.dvrp.data.FleetImpl;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.drt.run.DrtConfigGroup;
 import org.matsim.core.config.Config;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.utils.io.IOUtils;
 
-import com.google.inject.Inject;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author jbischoff
@@ -43,21 +43,24 @@ import com.google.inject.Inject;
 public class DrtAnalysisControlerListener implements IterationEndsListener {
 
 	@Inject
-	DrtVehicleOccupancyEvaluator vehicleOccupancyEvaluator;
+    DrtVehicleOccupancyEvaluator vehicleOccupancyEvaluator;
 	@Inject
-	DynModePassengerStats drtPassengerStats;
+    DynModePassengerStats drtPassengerStats;
 	@Inject
 	MatsimServices matsimServices;
 	@Inject
 	Network network;
 	@Inject
-	DrtRequestAnalyzer drtRequestAnalyzer;
+    DrtRequestAnalyzer drtRequestAnalyzer;
+	@Inject
+	DrtStopEvaluator drtStopEvaluator;
+
 	private final DrtConfigGroup drtgroup;
 	private boolean headerWritten = false;
 	private boolean vheaderWritten = false;
 
 	/**
-	 * 
+	 *
 	 */
 	@Inject
 	public DrtAnalysisControlerListener(Config config) {
@@ -67,7 +70,7 @@ public class DrtAnalysisControlerListener implements IterationEndsListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.matsim.core.controler.listener.IterationEndsListener#notifyIterationEnds(org.matsim.core.controler.events.
 	 * IterationEndsEvent)
@@ -79,8 +82,9 @@ public class DrtAnalysisControlerListener implements IterationEndsListener {
 				matsimServices.getControlerIO().getIterationFilename(event.getIteration(), "vehicleOccupancy"));
 		if (drtgroup.isPlotDetailedVehicleStats()) {
 			vehicleOccupancyEvaluator.writeDetailedOccupancyFiles(
-					matsimServices.getControlerIO().getIterationFilename(event.getIteration(), "vehicleStats_"));
+					matsimServices.getControlerIO().getIterationFilename(event.getIteration(), "vehicleStats"));
 		}
+		drtStopEvaluator.writeStopStatsFile(matsimServices.getControlerIO().getIterationFilename(event.getIteration(), "stopStats"));
 		drtRequestAnalyzer.writeAndPlotWaitTimeEstimateComparison(matsimServices.getControlerIO().getIterationFilename(event.getIteration(), "waitTimeComparison.png"), matsimServices.getControlerIO().getIterationFilename(event.getIteration(), "waitTimeComparison.csv"));
 		List<DynModeTrip> trips = drtPassengerStats.getDrtTrips();
 

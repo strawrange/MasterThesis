@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.path;
+package masterThesis.dvrp.path;
 
 public interface VrpPathWithTravelData extends VrpPath {
 	public double getDepartureTime();

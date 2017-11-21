@@ -1,17 +1,21 @@
-package org.matsim.contrib.dvrp.passenger;
+package masterThesis.dvrp.passenger;
 
-import java.util.*;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Module;
+import com.google.inject.Provider;
+import com.google.inject.name.Named;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import masterThesis.dvrp.run.DvrpModule;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
-import org.matsim.contrib.dvrp.run.DvrpModule;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.config.Config;
 import org.matsim.core.mobsim.qsim.AbstractQSimPlugin;
-import org.matsim.core.mobsim.qsim.interfaces.*;
+import org.matsim.core.mobsim.qsim.interfaces.DepartureHandler;
+import org.matsim.core.mobsim.qsim.interfaces.MobsimEngine;
 
-import com.google.inject.*;
-import com.google.inject.name.Named;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class PassengerEnginePlugin extends AbstractQSimPlugin {
 	private final String mode;

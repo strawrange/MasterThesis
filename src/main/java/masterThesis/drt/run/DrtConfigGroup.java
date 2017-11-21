@@ -17,16 +17,19 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.run;
+package masterThesis.drt.run;
+
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigGroup;
+import org.matsim.core.config.ReflectiveConfigGroup;
 
 import java.net.URL;
 import java.util.Map;
 
-import org.matsim.core.config.*;
-
 public class DrtConfigGroup extends ReflectiveConfigGroup {
 	public static final String GROUP_NAME = "drt";
 	public static final String DRT_MODE = "drt";
+	public static final String DRT_CREATION = "drt creation";
 
 	@SuppressWarnings("deprecation")
 	public static DrtConfigGroup get(Config config) {
@@ -48,15 +51,25 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	private static final String ESTIMATED_BEELINE_DISTANCE_FACTOR = "estimatedBeelineDistanceFactor";
 
 	public static final String VEHICLES_FILE = "vehiclesFile";
+	public static final String  INPUT_VEHICLE_FILE = "inputVehicleFile";
+	public static final String INITIAL_FLEET_SIZE = "initialFleetSize";
+    public static final String  VEHICLE_CAPACITY = "capacity";
+    public static final String DETOUR_IDX = "detourIdx";
 	private static final String TRANSIT_STOP_FILE = "transitStopFile";
 	private static final String PLOT_CUST_STATS = "writeDetailedCustomerStats";
 	private static final String PLOT_VEH_STATS = "writeDetailedVehicleStats";
 	private static final String PRINT_WARNINGS = "plotDetailedWarnings";
 	private static final String NUMBER_OF_THREADS = "numberOfThreads";
 	private static final String K_NEAREST_VEHICLES = "kNearestVehiclesToFilter";
+	private static final String MARGINAL_UTILITY_OF_WAITING_TIME = "marginalUtilityOfWaitingTime";
+	private static final String REQUEST_UPDATE_TIME = "requestUpdateTime";
+	public static final String KILLING_TIME = "killingTime";
 
 	private double stopDuration = Double.NaN;// seconds
 	private double maxWaitTime = Double.NaN;// seconds
+
+
+	private double detourIdx = 1;
 
 	// max arrival time defined as:
 	// maxTravelTimeAlpha * unshared_ride_travel_time(fromLink, toLink) + maxTravelTimeBeta,
@@ -66,7 +79,7 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	private double maxTravelTimeBeta = Double.NaN;// [s], >= 0.0
 	private double AStarEuclideanOverdoFactor = 1.;// >= 1.0
 	private boolean changeStartLinkToLastLinkInSchedule = false;
-
+		private double marginalUtilityOfWaitingTime = 0;
 	private boolean idleVehiclesReturnToDepots = false;
 	private OperationalScheme operationalScheme = OperationalScheme.door2door;
 
@@ -75,6 +88,12 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	private double estimatedBeelineDistanceFactor = 1.3;// [-]
 
 	private String vehiclesFile = null;
+
+    private int initialFleetSize = 1;
+
+
+    private int capacity = 4;
+    private boolean inputVehicleFile = true;
 	private String transitStopFile = null; // only for stationbased DRT scheme
 
 	private boolean plotDetailedCustomerStats = true;
@@ -83,6 +102,10 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	private int numberOfThreads = Runtime.getRuntime().availableProcessors();
 
 	private int kNearestVehicles = 0;
+
+	private double requestUpdateTime = 0;
+
+	private double killingTime = Double.POSITIVE_INFINITY;
 	
 	public enum OperationalScheme {
 		stationbased, door2door
@@ -133,9 +156,17 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 		map.put(NUMBER_OF_THREADS,
 				"Number of threads used for parallel evaluation of request insertion into existing schedules. "
 						+ "If unset, the number of threads is equal to the number of logical cores available to JVM.");
+		map.put(INPUT_VEHICLE_FILE,
+                "whether input vehicles from file, if not, the system will randomly generate vehicles");
+		map.put(VEHICLE_CAPACITY,
+                "if generate vehicles in the simulation, please input capacity");
 		map.put(PRINT_WARNINGS,
 				"Prints detailed warnings for DRT customers that cannot be served or routed. Default is false.");
 		map.put(K_NEAREST_VEHICLES, "Filters the k nearest vehicles to the request. Speeds up simulation with big fleets, but could lead to a worse solution. Default: k==0 (no filtering used)");
+		map.put(INITIAL_FLEET_SIZE, "If there is no pre defined vehicle file, the initial fleet size should be defined, the default value is 0");
+		map.put(DETOUR_IDX, "Tolerated detour, 1 means no detour accepted, 1.2 means 20% detour tolerated");
+		map.put(REQUEST_UPDATE_TIME, "request update time interval");
+		map.put(KILLING_TIME, " If a vehicle is idle for more than killing time, it will disappear from the system-");
 		return map;
 	}
 
@@ -334,4 +365,64 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	public void setPrintDetailedWarnings(boolean printDetailedWarnings) {
 		this.printDetailedWarnings = printDetailedWarnings;
 	}
+
+    @StringGetter(INPUT_VEHICLE_FILE)
+    public boolean isInputVehicleFile() {
+        return inputVehicleFile;
+    }
+    @StringSetter(INPUT_VEHICLE_FILE)
+    public void setInputVehicleFile(boolean inputVehicleFile) {
+        this.inputVehicleFile = inputVehicleFile;
+    }
+
+    @StringGetter(VEHICLE_CAPACITY)
+    public int getCapacity() {
+        return capacity;
+    }
+    @StringSetter(VEHICLE_CAPACITY)
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+	@StringGetter(MARGINAL_UTILITY_OF_WAITING_TIME)
+    public double getMarginalUtilityOfWaitingTime() {
+		return marginalUtilityOfWaitingTime;
+	}
+	@StringSetter(MARGINAL_UTILITY_OF_WAITING_TIME)
+	public void setMarginalUtilityOfWaitingTime(double marginalUtilityOfWaitingTime) {
+		this.marginalUtilityOfWaitingTime = marginalUtilityOfWaitingTime;
+	}
+    @StringGetter(INITIAL_FLEET_SIZE)
+    public int getInitialFleetSize() {
+        return initialFleetSize;
+    }
+    @StringSetter(INITIAL_FLEET_SIZE)
+    public void setInitialFleetSize(int initialFleetSize) {
+        this.initialFleetSize = initialFleetSize;
+    }
+
+    @StringGetter(DETOUR_IDX)
+	public double getDetourIdx() {
+		return detourIdx;
+	}
+	@StringSetter(DETOUR_IDX)
+	public void setDetourIdx(double detourIdx) {
+		this.detourIdx = detourIdx;
+	}
+	@StringGetter(REQUEST_UPDATE_TIME)
+	public double getRequestUpdateTime() {
+		return requestUpdateTime;
+	}
+	@StringSetter(REQUEST_UPDATE_TIME)
+	public void setRequestUpdateTime(double requestUpdateTime) {
+		this.requestUpdateTime = requestUpdateTime;
+	}
+	@StringGetter(KILLING_TIME)
+	public double getKillingTime() {
+		return killingTime;
+	}
+	@StringSetter(KILLING_TIME)
+	public void setKillingTime(double killingTime) {
+		this.killingTime = killingTime;
+	}
+
 }

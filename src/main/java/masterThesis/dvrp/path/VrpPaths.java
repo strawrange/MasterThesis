@@ -17,22 +17,24 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.path;
-
-import java.util.ArrayList;
+package masterThesis.dvrp.path;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.core.population.routes.*;
-import org.matsim.core.router.util.*;
+import org.matsim.core.population.routes.NetworkRoute;
+import org.matsim.core.population.routes.RouteFactories;
+import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+import org.matsim.core.router.util.TravelTime;
+
+import java.util.ArrayList;
 
 public class VrpPaths {
 	/**
 	 * ASSUMPTION: A vehicle enters and exits links at their ends (link.getToNode())
 	 */
 	public static VrpPathWithTravelData calcAndCreatePath(Link fromLink, Link toLink, double departureTime,
-			LeastCostPathCalculator router, TravelTime travelTime) {
+                                                          LeastCostPathCalculator router, TravelTime travelTime) {
 		Path path = null;
 		if (fromLink != toLink) {
 			// calc path for departureTime+1 (we need 1 second to move over the node)
@@ -47,7 +49,7 @@ public class VrpPaths {
 	}
 
 	public static VrpPathWithTravelData createPath(Link fromLink, Link toLink, double departureTime, Path path,
-			TravelTime travelTime) {
+                                                   TravelTime travelTime) {
 		if (fromLink == toLink) {
 			return createZeroLengthPath(fromLink, departureTime);
 		}

@@ -20,24 +20,9 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.analysis;
+package masterThesis.drt.analysis;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-
+import masterThesis.drt.vrpagent.DrtActionCreator;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -58,19 +43,28 @@ import org.matsim.api.core.v01.events.handler.ActivityStartEventHandler;
 import org.matsim.api.core.v01.events.handler.PersonEntersVehicleEventHandler;
 import org.matsim.api.core.v01.events.handler.PersonLeavesVehicleEventHandler;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.drt.vrpagent.DrtActionCreator;
-import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic;
-import org.matsim.contrib.util.chart.ChartSaveUtils;
+import masterThesis.dvrp.vrpagent.VrpAgentLogic;
+import masterThesis.util.chart.ChartSaveUtils;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.config.Config;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.vehicles.Vehicle;
 
+import javax.inject.Inject;
+import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
+import java.util.Map.Entry;
+
 /**
  * @author  jbischoff
  *
  */
+
 /**
  *
  */
@@ -83,6 +77,7 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 
 	private final int bins;
 	private int startTime;
+	private int endTime;
 	private int maxcap = 8;
 	private int smoothSeconds = 300;
 
@@ -90,10 +85,12 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 	private Set<Id<Person>> taxiDrivers = new HashSet<>();
 	private Map<Id<Person>, Double> boardingTimes = new HashMap<>();
 	private Map<Id<Person>, Double> taxiDriversInStayTask = new HashMap<>();
+	private Map<Id<Vehicle>, int[]> vehicleTime = new HashMap<>();
 
 	@Inject
 	public DrtVehicleOccupancyEvaluator(Config config, EventsManager events) {
 		this.startTime = (int)config.qsim().getStartTime();
+		this.endTime = (int) config.qsim().getEndTime();
 		if (startTime < 0)
 			startTime = 0;
 		double endTime;
@@ -119,6 +116,7 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 	@Override
 	public void reset(int iteration) {
 		vehicleOccupancy.clear();
+		vehicleTime.clear();
 		taxiDrivers.clear();
 		boardingTimes.clear();
 	}
@@ -136,7 +134,12 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 			Id<Vehicle> vid = Id.createVehicleId(event.getPersonId().toString());
 			vehicleOccupancy.put(vid, new int[bins]);
 			taxiDrivers.add(event.getPersonId());
+			int[] time = new int[2];
+			time[0] = getBin(event.getTime());
+			time[1] = getBin(endTime);
+			vehicleTime.put(vid,time);
 		}
+
 		if (event.getActType().equals(DrtActionCreator.DRT_STAY_NAME)) {
 			setTaxiToStay(event.getPersonId(), event.getTime());
 		}
@@ -252,6 +255,7 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 			}
 		}
 		int[][] occupancyOverTime = new int[bins][maxcap + 2];
+		int[] numOfVehicles = new int[bins];
 
 		DecimalFormat format = new DecimalFormat();
 		format.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
@@ -261,7 +265,8 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 		DescriptiveStatistics stats[] = new DescriptiveStatistics[bins];
 		for (int i = 0; i < bins; i++) {
 			stats[i] = new DescriptiveStatistics();
-			for (int[] occ : vehicleOccupancy.values()) {
+			for ( Id<Vehicle> id: vehicleOccupancy.keySet()) {
+				int[] occ = vehicleOccupancy.get(id);
 				int value = occ[i];
 				if (value == -1) {
 					value = 0;
@@ -269,11 +274,14 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 				}
 				stats[i].addValue(value);
 				occupancyOverTime[i][occ[i] + 1]++;
+				if (i >= vehicleTime.get(id)[0] && i <= vehicleTime.get(id)[1]){
+					numOfVehicles[i]++;
+				}
 			}
 		}
 		BufferedWriter bw = IOUtils.getBufferedWriter(statsFileName + ".csv");
 		try {
-			bw.write("time;mean;median;min;max;idle;emptyDrive");
+			bw.write("time;mean;median;min;max;numOfVehicles;idle;emptyDrive");
 			for (int i = 1; i <= maxcap; i++) {
 				bw.write(";" + i + "_pax");
 			}
@@ -284,7 +292,8 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 				double median = stats[i].getGeometricMean();
 				double min = stats[i].getMin();
 				double max = stats[i].getMax();
-				bw.write(time + ";" + format.format(mean) + ";" + format.format(median) + ";" + min + ";" + max);
+				int numOfVehicle = numOfVehicles[i];
+				bw.write(time + ";" + format.format(mean) + ";" + format.format(median) + ";" + min + ";" + max + ";" + numOfVehicle);
 				for (int ii = 0; ii <= maxcap + 1; ii++) {
 					bw.write(";" + occupancyOverTime[i][ii]);
 				}
@@ -393,6 +402,16 @@ public class DrtVehicleOccupancyEvaluator implements PersonEntersVehicleEventHan
 	public void handleEvent(ActivityStartEvent event) {
 		if (event.getActType().equals(DrtActionCreator.DRT_STAY_NAME)) {
 			taxiDriversInStayTask.put(event.getPersonId(), event.getTime());
+		}
+		if (event.getActType().equals(VrpAgentLogic.AFTER_SCHEDULE_ACTIVITY_TYPE)) {
+			Id<Vehicle> vid = Id.createVehicleId(event.getPersonId().toString());
+			int[] time;
+			if (!vehicleTime.containsKey(vid)) {
+				throw new RuntimeException("No before schedule activity found!");
+			}
+			time = vehicleTime.get(vid);
+			time[1] = getBin(event.getTime());
+			vehicleTime.put(vid,time);
 		}
 	}
 

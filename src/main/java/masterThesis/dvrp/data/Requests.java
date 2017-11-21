@@ -1,9 +1,10 @@
-package org.matsim.contrib.dvrp.data;
-
-import java.util.Comparator;
+package masterThesis.dvrp.data;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Iterables;
+
+import java.util.Comparator;
 
 /**
  * @author michalm
@@ -24,6 +25,12 @@ public class Requests {
 	public static final Comparator<Request> SUBMISSION_TIME_COMPARATOR = new Comparator<Request>() {
 		public int compare(Request r1, Request r2) {
 			return Double.compare(r1.getSubmissionTime(), r2.getSubmissionTime());
+		}
+	};
+
+	public static final Comparator<Request> UPDATE_TIME_COMPARATOR = new Comparator<Request>() {
+		public int compare(Request r1, Request r2) {
+			return Double.compare(r1.getUpdateTime(), r2.getUpdateTime());
 		}
 	};
 

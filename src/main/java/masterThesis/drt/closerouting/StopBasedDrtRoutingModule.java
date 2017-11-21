@@ -20,26 +20,21 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.routing;
+package masterThesis.drt.closerouting;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import masterThesis.drt.run.DrtConfigGroup;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.TransportMode;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.population.Activity;
-import org.matsim.api.core.v01.population.Leg;
-import org.matsim.api.core.v01.population.Person;
-import org.matsim.api.core.v01.population.PlanElement;
-import org.matsim.api.core.v01.population.Route;
-import org.matsim.contrib.drt.run.DrtConfigGroup;
+import org.matsim.api.core.v01.population.*;
 import org.matsim.core.population.PopulationUtils;
-import org.matsim.core.population.routes.GenericRouteImpl;
+import org.matsim.core.population.routes.RouteUtils;
 import org.matsim.core.router.RoutingModule;
 import org.matsim.core.router.StageActivityTypes;
 import org.matsim.core.utils.geometry.CoordUtils;
@@ -47,17 +42,17 @@ import org.matsim.facilities.Facility;
 import org.matsim.pt.transitSchedule.api.TransitSchedule;
 import org.matsim.pt.transitSchedule.api.TransitStopFacility;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import java.util.*;
 
 /**
  * @author  jbischoff
  *
  */
+
 /**
  *
  */
-public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
+public class StopBasedDrtRoutingModule implements RoutingModule {
 
 	private final StageActivityTypes drtStageActivityType = new DrtStageActivityType();
 	private final RoutingModule walkRouter;
@@ -71,8 +66,8 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 	 * 
 	 */
 	@Inject
-	public ClosestStopBasedDrtRoutingModule(@Named(TransportMode.walk) RoutingModule walkRouter,
-			@Named(DrtConfigGroup.DRT_MODE) TransitSchedule transitSchedule, Scenario scenario) {
+	public StopBasedDrtRoutingModule(@Named(TransportMode.walk) RoutingModule walkRouter,
+                                     @Named(DrtConfigGroup.DRT_MODE) TransitSchedule transitSchedule, Scenario scenario) {
 		transitSchedule.getFacilities();
 		this.walkRouter = walkRouter;
 		this.stops = transitSchedule.getFacilities();
@@ -87,13 +82,13 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 	public List<? extends PlanElement> calcRoute(Facility<?> fromFacility, Facility<?> toFacility, double departureTime,
 			Person person) {
 		List<PlanElement> legList = new ArrayList<>();
-		TransitStopFacility accessFacility = findAccessFacility(fromFacility);
+		TransitStopFacility accessFacility = findAccessFacility(fromFacility, toFacility);
 		if (accessFacility == null) {
 			if (drtconfig.isPrintDetailedWarnings()){
 			Logger.getLogger(getClass()).error("No access stop found, agent will walk. Agent Id:\t" + person.getId());}
 			return (walkRouter.calcRoute(fromFacility, toFacility, departureTime, person));
 		}
-		TransitStopFacility egressFacility = findEgressFacility(toFacility);
+		TransitStopFacility egressFacility = findEgressFacility(accessFacility, toFacility);
 		if (egressFacility == null) {
 			if (drtconfig.isPrintDetailedWarnings()){
 			Logger.getLogger(getClass()).error("No egress stop found, agent will walk. Agent Id:\t" + person.getId());}
@@ -107,7 +102,7 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 		drtInt1.setLinkId(accessFacility.getLinkId());
 		legList.add(drtInt1);
 
-		Route drtRoute = new GenericRouteImpl(accessFacility.getLinkId(), egressFacility.getLinkId());
+		Route drtRoute = RouteUtils.createGenericRouteImpl(accessFacility.getLinkId(), egressFacility.getLinkId());
 		drtRoute.setDistance(drtconfig.getEstimatedBeelineDistanceFactor()
 				* CoordUtils.calcEuclideanDistance(accessFacility.getCoord(), egressFacility.getCoord()));
 		drtRoute.setTravelTime(drtRoute.getDistance() / drtconfig.getEstimatedDrtSpeed());
@@ -142,36 +137,71 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 	 * @param toFacility
 	 * @return
 	 */
-	private TransitStopFacility findAccessFacility(Facility<?> fromFacility) {
+	private TransitStopFacility findAccessFacility(Facility<?> fromFacility, Facility<?> toFacility) {
 		Coord fromCoord = getFacilityCoord(fromFacility);
-		TransitStopFacility accessFacility = findClosestStop(fromCoord);
-		
+		Coord toCoord = getFacilityCoord(toFacility);
+		Set<TransitStopFacility> stopCandidates = findStopCoordinates(fromCoord);
+		TransitStopFacility accessFacility = null;
+		double bestHeading = Double.MAX_VALUE;
+		for (TransitStopFacility stop : stopCandidates) {
+			Link stopLink = network.getLinks().get(stop.getLinkId());
+			if (stopLink == null) {
+				throw new RuntimeException(
+						"Stop " + stop.getId() + " on link id " + stop.getLinkId() + " is not part of the network.");
+			}
+			double[] stopLinkVector = getVector(stopLink.getFromNode().getCoord(), stopLink.getToNode().getCoord());
+			double[] destinationVector = getVector(stopLink.getFromNode().getCoord(), toCoord);
+			double heading = calcHeading(stopLinkVector, destinationVector);
+			if (heading < bestHeading) {
+				accessFacility = stop;
+				bestHeading = heading;
+			}
+		}
 		return accessFacility;
 	}
 
-	private TransitStopFacility findEgressFacility(Facility<?> toFacility) {
+	private TransitStopFacility findEgressFacility(TransitStopFacility fromStopFacility, Facility<?> toFacility) {
+		Coord fromCoord = fromStopFacility.getCoord();
 		Coord toCoord = getFacilityCoord(toFacility);
-		TransitStopFacility stop = findClosestStop(toCoord);
-		return stop;
+		Set<TransitStopFacility> stopCandidates = findStopCoordinates(toCoord);
 
+		TransitStopFacility egressFacility = null;
+		double bestHeading = Double.MAX_VALUE;
+		for (TransitStopFacility stop : stopCandidates) {
+			Link stopLink = network.getLinks().get(stop.getLinkId());
+			double[] stopLinkVector = getVector(stopLink.getFromNode().getCoord(), stopLink.getToNode().getCoord());
+			double[] originVector = getVector(fromCoord, stopLink.getToNode().getCoord());
+			double heading = calcHeading(stopLinkVector, originVector);
+			if (heading < bestHeading) {
+				egressFacility = stop;
+				bestHeading = heading;
+			}
+		}
+		return egressFacility;
 	}
 
+	/**
+	 * @param stopLinkVector
+	 * @param destinationVector
+	 * @return
+	 */
+	private double calcHeading(double[] stopLinkVector, double[] destinationVector) {
 
-	private TransitStopFacility findClosestStop(Coord coord) {
-		TransitStopFacility bestStop = null;
-		double bestDist = Double.MAX_VALUE;
+		return Math.acos((stopLinkVector[0] * destinationVector[0] + stopLinkVector[1] * destinationVector[1])
+				/ (Math.sqrt(stopLinkVector[0] * stopLinkVector[0] + stopLinkVector[1] * stopLinkVector[1]) * Math.sqrt(
+						destinationVector[0] * destinationVector[0] + destinationVector[1] * destinationVector[1])));
+	}
+
+	private Set<TransitStopFacility> findStopCoordinates(Coord coord) {
+		Set<TransitStopFacility> stopCandidates = new HashSet<>();
 		for (TransitStopFacility stop : this.stops.values()) {
 			double distance = walkBeelineFactor * CoordUtils.calcEuclideanDistance(coord, stop.getCoord());
 			if (distance <= drtconfig.getMaxWalkDistance()) {
-				if (distance<bestDist){
-					bestDist = distance;
-					bestStop = stop;
-				}
-				
+				stopCandidates.add(stop);
 			}
 
 		}
-		return bestStop;
+		return stopCandidates;
 	}
 
 	@Override
@@ -189,5 +219,11 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 		return coord;
 	}
 
+	double[] getVector(Coord from, Coord to) {
+		double[] vector = new double[2];
+		vector[0] = to.getX() - from.getX();
+		vector[1] = to.getY() - from.getY();
+		return vector;
+	}
 
 }

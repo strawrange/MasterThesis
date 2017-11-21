@@ -17,15 +17,20 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer.insertion;
+package masterThesis.drt.optimizer.insertion;
 
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.optimizer.VehicleData;
-import org.matsim.contrib.drt.optimizer.VehicleData.Stop;
-import org.matsim.contrib.drt.optimizer.insertion.SingleVehicleInsertionProblem.Insertion;
-import org.matsim.contrib.drt.schedule.*;
-import org.matsim.contrib.drt.schedule.DrtTask.DrtTaskType;
-import org.matsim.contrib.dvrp.schedule.Schedules;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.optimizer.VehicleData;
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.drt.schedule.DrtStayTask;
+import masterThesis.drt.schedule.DrtTask;
+import masterThesis.drt.optimizer.VehicleData.Stop;
+import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.Insertion;
+import masterThesis.drt.schedule.DrtTask.DrtTaskType;
+import masterThesis.dvrp.schedule.Schedules;
 
 /**
  * @author michalm
@@ -36,9 +41,13 @@ public class InsertionCostCalculator {
 	private final double stopDuration;
 	private final double maxWaitTime;
 
+	private DrtConfigGroup drtConfigGroup;
+
 	public InsertionCostCalculator(double stopDuration, double maxWaitTime) {
 		this.stopDuration = stopDuration;
 		this.maxWaitTime = maxWaitTime;
+		Injector inject = Guice.createInjector();
+		drtConfigGroup = inject.getInstance(DrtConfigGroup.class);
 	}
 
 	// the main goal - minimise bus operation time
@@ -85,7 +94,7 @@ public class InsertionCostCalculator {
 	}
 
 	private double calculateDropoffDetourTimeLoss(DrtRequest drtRequest, VehicleData.Entry vEntry,
-			Insertion insertion) {
+                                                  Insertion insertion) {
 		if (insertion.dropoffIdx > 0
 				&& drtRequest.getToLink() == vEntry.stops.get(insertion.dropoffIdx - 1).task.getLink()) {
 			return 0; // no detour
@@ -114,8 +123,68 @@ public class InsertionCostCalculator {
 		return replacedDriveEndTime - replacedDriveStartTime;
 	}
 
+	//I think the algorithm should be improved later...
 	private boolean areConstraintsSatisfied(DrtRequest drtRequest, VehicleData.Entry vEntry, Insertion insertion,
-			double pickupDetourTimeLoss, double totalTimeLoss, double currentTime) {
+                                            double pickupDetourTimeLoss, double totalTimeLoss, double currentTime) {
+		// this is what we cannot violate
+        //Biyu changes, all stops after pickup will delay by more than 20%, then false...
+		for (int s = insertion.pickupIdx; s < insertion.dropoffIdx; s++) {
+			Stop stop = vEntry.stops.get(s);
+			// all stops after pickup are delayed by pickupDetourTimeLoss
+			if (stop.task.getBeginTime() + pickupDetourTimeLoss > stop.maxArrivalTime  * drtConfigGroup.getDetourIdx() //
+					|| stop.task.getEndTime() + pickupDetourTimeLoss > stop.maxDepartureTime * drtConfigGroup.getDetourIdx()) {
+				return false;
+			}
+		}
+
+		// this is what we cannot violate
+		for (int s = insertion.dropoffIdx; s < vEntry.stops.size(); s++) {
+			Stop stop = vEntry.stops.get(s);
+			// all stops after dropoff are delayed by totalTimeLoss
+			if (stop.task.getBeginTime() + totalTimeLoss > stop.maxArrivalTime * drtConfigGroup.getDetourIdx() //
+					|| stop.task.getEndTime() + totalTimeLoss > stop.maxDepartureTime * drtConfigGroup.getDetourIdx()) {
+				return false;
+			}
+		}
+
+		// reject solutions when maxWaitTime for the new request is violated
+		double driveToPickupStartTime = (insertion.pickupIdx == 0) ? vEntry.start.time //
+				: vEntry.stops.get(insertion.pickupIdx - 1).task.getEndTime();
+
+		double pickupEndTime = driveToPickupStartTime + insertion.pathToPickup.path.travelTime
+				+ insertion.pathToPickup.firstAndLastLinkTT + stopDuration;
+
+		//Biyu changes, otherwise the waiting request list will be forever long
+		//original is if (pickupEndTime > drtRequest.getEarliestStartTime() + maxWaitTime)
+		if (pickupEndTime > currentTime + maxWaitTime) {
+			return false;
+		}
+
+		// reject solutions when latestArrivalTime for the new request is violated
+		// Biyu changes, I prefer to punish the late Arrival rather than forbid...
+		/*double dropoffStartTime = insertion.pickupIdx == insertion.dropoffIdx
+				? pickupEndTime + insertion.pathFromPickup.path.travelTime + insertion.pathFromPickup.firstAndLastLinkTT
+				: vEntry.stops.get(insertion.dropoffIdx - 1).task.getEndTime() + insertion.pathToDropoff.path.travelTime
+						+ insertion.pathToDropoff.firstAndLastLinkTT;
+
+		if (dropoffStartTime > drtRequest.getLatestArrivalTime()) {
+			return false;
+		}*/
+
+		// vehicle's time window cannot be violated
+		DrtStayTask lastTask = (DrtStayTask)Schedules.getLastTask(vEntry.vehicle.getSchedule());
+		double timeSlack = vEntry.vehicle.getServiceEndTime() - Math.max(lastTask.getBeginTime(), currentTime);
+		if (timeSlack < totalTimeLoss) {
+			return false;
+		}
+
+		return true;// all constraints satisfied
+	}
+
+	//first strategy, original one
+	//I think the algorithm should be improved later...
+	/*private boolean areConstraintsSatisfied(DrtRequest drtRequest, VehicleData.Entry vEntry, Insertion insertion,
+											double pickupDetourTimeLoss, double totalTimeLoss, double currentTime) {
 		// this is what we cannot violate
 		for (int s = insertion.pickupIdx; s < insertion.dropoffIdx; s++) {
 			Stop stop = vEntry.stops.get(s);
@@ -143,7 +212,7 @@ public class InsertionCostCalculator {
 		double pickupEndTime = driveToPickupStartTime + insertion.pathToPickup.path.travelTime
 				+ insertion.pathToPickup.firstAndLastLinkTT + stopDuration;
 
-		if (pickupEndTime > drtRequest.getEarliestStartTime() + maxWaitTime) {
+		if (pickupEndTime > drtRequest.getEarliestStartTime() + maxWaitTime){
 			return false;
 		}
 
@@ -165,5 +234,5 @@ public class InsertionCostCalculator {
 		}
 
 		return true;// all constraints satisfied
-	}
+	}*/
 }

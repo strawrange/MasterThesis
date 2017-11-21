@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.router;
+package masterThesis.dvrp.router;
 
 import org.matsim.core.router.util.LeastCostPathCalculator;
 

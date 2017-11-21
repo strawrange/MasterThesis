@@ -17,12 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.examples.onetaxi;
+package masterThesis.dvrp.examples.onetaxi;
 
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.passenger.PassengerRequestCreator;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.Request;
-import org.matsim.contrib.dvrp.passenger.PassengerRequestCreator;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 /**
@@ -31,7 +31,7 @@ import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 public class OneTaxiRequestCreator implements PassengerRequestCreator {
 	@Override
 	public OneTaxiRequest createRequest(Id<Request> id, MobsimPassengerAgent passenger, Link fromLink, Link toLink,
-			double departureTime, double submissionTime) {
+                                        double departureTime, double submissionTime) {
 		return new OneTaxiRequest(id, passenger, fromLink, toLink, submissionTime);
 	}
 }

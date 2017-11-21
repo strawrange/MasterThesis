@@ -17,14 +17,18 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.distance;
+package masterThesis.util.distance;
 
 import org.matsim.api.core.v01.Coord;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.dvrp.router.*;
-import org.matsim.contrib.dvrp.util.TimeDiscretizer;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
+import masterThesis.dvrp.router.DijkstraWithDijkstraTreeCache;
+import masterThesis.dvrp.router.DistanceAsTravelDisutility;
+import masterThesis.dvrp.router.TimeAsTravelDisutility;
+import masterThesis.dvrp.util.TimeDiscretizer;
 import org.matsim.core.network.NetworkUtils;
-import org.matsim.core.router.util.*;
+import org.matsim.core.router.util.TravelDisutility;
+import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.trafficmonitoring.FreeSpeedTravelTime;
 
 public class DistanceCalculators {

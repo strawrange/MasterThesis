@@ -17,13 +17,13 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
-
-import java.io.*;
-
-import org.matsim.core.utils.io.UncheckedIOException;
+package masterThesis.util;
 
 import com.opencsv.CSVWriter;
+import org.matsim.core.utils.io.UncheckedIOException;
+
+import java.io.IOException;
+import java.io.Writer;
 
 public class CompactCSVWriter extends CSVWriter {
 	public static final String[] EMPTY_LINE = {};

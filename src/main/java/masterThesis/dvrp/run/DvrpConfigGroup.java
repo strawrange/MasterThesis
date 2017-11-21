@@ -17,11 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.run;
+package masterThesis.dvrp.run;
+
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ReflectiveConfigGroup;
 
 import java.util.Map;
-
-import org.matsim.core.config.*;
 
 public class DvrpConfigGroup extends ReflectiveConfigGroup {
 	public static final String GROUP_NAME = "dvrp";

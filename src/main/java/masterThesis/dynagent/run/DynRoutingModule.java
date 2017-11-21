@@ -17,16 +17,22 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.run;
-
-import java.util.*;
+package masterThesis.dynagent.run;
 
 import org.matsim.api.core.v01.TransportMode;
-import org.matsim.api.core.v01.population.*;
+import org.matsim.api.core.v01.population.Leg;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.PlanElement;
+import org.matsim.api.core.v01.population.Route;
 import org.matsim.core.population.PopulationUtils;
-import org.matsim.core.population.routes.GenericRouteImpl;
-import org.matsim.core.router.*;
+import org.matsim.core.population.routes.RouteUtils;
+import org.matsim.core.router.EmptyStageActivityTypes;
+import org.matsim.core.router.RoutingModule;
+import org.matsim.core.router.StageActivityTypes;
 import org.matsim.facilities.Facility;
+
+import java.util.Collections;
+import java.util.List;
 
 public class DynRoutingModule implements RoutingModule {
 	private final String mode;
@@ -39,7 +45,7 @@ public class DynRoutingModule implements RoutingModule {
 	@Override
 	public List<? extends PlanElement> calcRoute(Facility<?> fromFacility, Facility<?> toFacility, double departureTime,
 			Person person) {
-		Route route = new GenericRouteImpl(fromFacility.getLinkId(), toFacility.getLinkId());
+		Route route = RouteUtils.createGenericRouteImpl(fromFacility.getLinkId(), toFacility.getLinkId());
 		route.setDistance(Double.NaN);
 		route.setTravelTime(Double.NaN);
 		

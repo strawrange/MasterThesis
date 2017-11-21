@@ -17,11 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
-
-import java.util.EnumMap;
+package masterThesis.util;
 
 import org.apache.commons.lang3.mutable.MutableDouble;
+
+import java.util.EnumMap;
 
 public class DoubleEnumAdder<K extends Enum<K>> extends AbstractEnumAdder<K, Double> {
 	private final EnumMap<K, MutableDouble> sums;

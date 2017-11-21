@@ -17,12 +17,15 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone;
-
-import java.util.*;
+package masterThesis.zone;
 
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SquareGridSystem implements ZonalSystem {
 	private final SquareGrid grid;
@@ -38,7 +41,7 @@ public class SquareGridSystem implements ZonalSystem {
 	}
 
 	public static Map<Id<Zone>, Zone> filterZonesWithNodes(Map<Id<Zone>, Zone> zones, Network network,
-			ZonalSystem zonalSystem) {
+                                                           ZonalSystem zonalSystem) {
 		Map<Id<Zone>, Zone> zonesWithNodes = new HashMap<>();
 		for (Node n : network.getNodes().values()) {
 			Zone zone = zonalSystem.getZone(n);

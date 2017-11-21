@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data.file;
+package masterThesis.dvrp.data.file;
 
 import org.xml.sax.Attributes;
 

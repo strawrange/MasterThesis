@@ -20,13 +20,12 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.optimizer.insertion.filter;
+package masterThesis.drt.optimizer.insertion.filter;
+
+import masterThesis.drt.data.DrtRequest;
+import masterThesis.drt.optimizer.VehicleData;
 
 import java.util.List;
-
-import org.matsim.contrib.drt.data.DrtRequest;
-import org.matsim.contrib.drt.optimizer.VehicleData;
-import org.matsim.contrib.drt.optimizer.VehicleData.Entry;
 
 /**
  * @author  jbischoff
@@ -38,5 +37,5 @@ public interface DrtVehicleFilter {
 	/**
 	 *  applies a prefiltering to Vehicle Data set based on a certain request.
 	 */
-	List<Entry>  applyFilter(DrtRequest drtRequest, VehicleData vData);
+	List<VehicleData.Entry> applyFilter(DrtRequest drtRequest, VehicleData vData);
 }

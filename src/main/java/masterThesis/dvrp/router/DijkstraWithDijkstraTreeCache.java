@@ -17,18 +17,19 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.router;
-
-import java.util.Map;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.dvrp.util.TimeDiscretizer;
-import org.matsim.core.router.util.*;
-import org.matsim.vehicles.Vehicle;
+package masterThesis.dvrp.router;
 
 import com.google.common.collect.Maps;
+import masterThesis.dvrp.util.TimeDiscretizer;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.core.router.util.TravelDisutility;
+import org.matsim.core.router.util.TravelTime;
+import org.matsim.vehicles.Vehicle;
+
+import java.util.Map;
 
 public class DijkstraWithDijkstraTreeCache implements LeastCostPathCalculatorWithCache {
 	private final Network network;

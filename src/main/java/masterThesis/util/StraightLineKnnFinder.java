@@ -17,12 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
+package masterThesis.util;
+
+import masterThesis.util.distance.DistanceUtils;
+import org.matsim.api.core.v01.Coord;
 
 import java.util.List;
-
-import org.matsim.api.core.v01.Coord;
-import org.matsim.contrib.util.distance.DistanceUtils;
 
 /**
  * @author michalm

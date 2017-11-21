@@ -20,32 +20,52 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.run;
+package masterThesis.drt.run;
 
+import com.google.inject.Provider;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
+import masterThesis.drt.analysis.DrtAnalysisModule;
+import masterThesis.drt.analysis.DrtScoringAnalysis;
+import masterThesis.drt.optimizer.DefaultDrtOptimizerProvider;
+import masterThesis.drt.optimizer.DrtOptimizer;
+import masterThesis.drt.passenger.DrtRequestCreator;
+import masterThesis.drt.closerouting.ClosestStopBasedDrtCreationRoutingModule;
+import masterThesis.drt.closerouting.ClosestStopBasedDrtRoutingModule;
+import masterThesis.drt.closerouting.DrtRoutingModule;
+import masterThesis.drt.closerouting.DrtStageActivityType;
+import masterThesis.drt.scoring.AVScoringFunctionFactory;
+import masterThesis.drt.vrpagent.DrtActionCreator;
 import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.drt.analysis.DrtAnalysisModule;
-import org.matsim.contrib.drt.optimizer.*;
-import org.matsim.contrib.drt.passenger.DrtRequestCreator;
-import org.matsim.contrib.drt.routing.*;
-import org.matsim.contrib.drt.vrpagent.DrtActionCreator;
-import org.matsim.contrib.dvrp.data.*;
-import org.matsim.contrib.dvrp.data.file.VehicleReader;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
-import org.matsim.contrib.dvrp.passenger.PassengerRequestCreator;
-import org.matsim.contrib.dvrp.run.*;
-import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
+import masterThesis.dvrp.data.Fleet;
+import masterThesis.dvrp.data.FleetImpl;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.data.VehicleImpl;
+import masterThesis.dvrp.data.file.VehicleReader;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import masterThesis.dvrp.passenger.PassengerRequestCreator;
+import masterThesis.dvrp.run.DvrpConfigConsistencyChecker;
+import masterThesis.dvrp.run.DvrpModule;
+import masterThesis.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
 import org.matsim.contrib.otfvis.OTFVisLiveModule;
-import org.matsim.core.config.*;
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup.ActivityParams;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.pt.transitSchedule.api.*;
+import org.matsim.core.scoring.ScoringFunctionFactory;
+import org.matsim.pt.transitSchedule.api.TransitSchedule;
+import org.matsim.pt.transitSchedule.api.TransitScheduleReader;
 
-import com.google.inject.*;
-import com.google.inject.name.*;
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author jbischoff
@@ -61,8 +81,11 @@ public class DrtControlerCreator {
 			ActivityParams params = config.planCalcScore().getActivityParams(DrtStageActivityType.DRTSTAGEACTIVITY);
 			if (params == null)
 			{
+				// keep parameters in line with pt_interaction
 				params = new ActivityParams(DrtStageActivityType.DRTSTAGEACTIVITY);
-				params.setTypicalDuration(1);
+				params.setTypicalDuration(120);//1
+				params.setOpeningTime(0.) ;//null
+				params.setClosingTime(0.) ;//null
 				params.setScoringThisActivityAtAll(false);
 				config.planCalcScore().addActivityParams(params);
 				Logger.getLogger(DrtControlerCreator.class).info("drt interaction scoring parameters not set. Adding default values (activity will not be scored).");
@@ -75,22 +98,35 @@ public class DrtControlerCreator {
 				new DvrpModule(createModuleForQSimPlugin(DefaultDrtOptimizerProvider.class), DrtOptimizer.class) {
 					@Provides
 					@Singleton
+					// input vehicles from file or generate vehicles in the system
 					private Fleet provideVehicles(@Named(DvrpModule.DVRP_ROUTING) Network network, Config config,
 							DrtConfigGroup drtCfg) {
-						FleetImpl fleet = new FleetImpl();
-						new VehicleReader(network, fleet).parse(drtCfg.getVehiclesFileUrl(config.getContext()));
+						FleetImpl fleet = new FleetImpl(config.qsim().getEndTime());
+						if (drtCfg.isInputVehicleFile()) {
+							new VehicleReader(network, fleet).parse(drtCfg.getVehiclesFileUrl(config.getContext()));
+						}else{
+							for(int i = 0; i < drtCfg.getInitialFleetSize(); i++){
+								int startLinkIdx = ThreadLocalRandom.current().nextInt(0, network.getLinks().size());
+								Link startLink = (new ArrayList<Link>(network.getLinks().values())).get(startLinkIdx);
+								Id<Vehicle> id = Id.create("taxibus" + i, Vehicle.class);
+								Vehicle veh = new VehicleImpl(id,startLink,drtCfg.getCapacity(),0,config.qsim().getEndTime());
+								fleet.addVehicle(veh);
+							}
+						}
 						return fleet;
 					}
 
 				});
 		controler.addOverridingModule(new DrtAnalysisModule());
 
+
 		switch (drtCfg.getOperationalScheme()) {
 			case door2door: {
 				controler.addOverridingModule(new AbstractModule() {
 					@Override
 					public void install() {
-						addRoutingModuleBinding(DrtConfigGroup.DRT_MODE).to(DrtRoutingModule.class).asEagerSingleton();
+						addRoutingModuleBinding(DrtConfigGroup.DRT_MODE).to(DrtRoutingModule.class);
+						bind(ScoringFunctionFactory.class).to(AVScoringFunctionFactory.class).asEagerSingleton();
 					}
 				});
 				break;
@@ -103,10 +139,11 @@ public class DrtControlerCreator {
 					@Override
 					public void install() {
 						bind(TransitSchedule.class).annotatedWith(Names.named(DrtConfigGroup.DRT_MODE))
-								.toInstance(scenario2.getTransitSchedule());;
-						addRoutingModuleBinding(DrtConfigGroup.DRT_MODE).to(StopBasedDrtRoutingModule.class)
-								.asEagerSingleton();
-
+								.toInstance(scenario2.getTransitSchedule());
+						addRoutingModuleBinding(DrtConfigGroup.DRT_MODE).to(ClosestStopBasedDrtRoutingModule.class);
+                        addRoutingModuleBinding(DrtConfigGroup.DRT_CREATION).to(ClosestStopBasedDrtCreationRoutingModule.class);
+						bind(ScoringFunctionFactory.class).to(AVScoringFunctionFactory.class).asEagerSingleton();
+						addControlerListenerBinding().to(DrtScoringAnalysis.class);
 					}
 				});
 				break;

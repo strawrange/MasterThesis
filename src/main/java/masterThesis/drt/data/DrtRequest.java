@@ -17,20 +17,24 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.data;
+package masterThesis.drt.data;
 
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.drt.schedule.DrtStopTask;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.drt.schedule.DrtStopTask;
-import org.matsim.contrib.dvrp.data.*;
-import org.matsim.contrib.dvrp.passenger.PassengerRequest;
-import org.matsim.contrib.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.data.RequestImpl;
+import masterThesis.dvrp.passenger.PassengerRequest;
+import masterThesis.dvrp.path.VrpPathWithTravelData;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 /**
  * @author michalm
  */
 public class DrtRequest extends RequestImpl implements PassengerRequest {
+
+
 
 	public enum DrtRequestStatus {
 		UNPLANNED, // submitted by the CUSTOMER and received by the DISPATCHER
@@ -49,6 +53,8 @@ public class DrtRequest extends RequestImpl implements PassengerRequest {
 	private DrtStopTask dropoffTask = null;
 	private final double latestArrivalTime;
 	private final VrpPathWithTravelData unsharedRidePath;
+
+
 
 	public DrtRequest(Id<Request> id, MobsimPassengerAgent passenger, Link fromLink, Link toLink,
 			double earliestStartTime, double latestStartTime, double latestArrivalTime, double submissionTime,
@@ -129,4 +135,5 @@ public class DrtRequest extends RequestImpl implements PassengerRequest {
 
 		throw new IllegalStateException("Unreachable code");
 	}
+
 }

@@ -17,13 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.passenger;
+package masterThesis.dvrp.passenger;
+
+import masterThesis.dvrp.schedule.StayTask;
+import masterThesis.dynagent.AbstractDynActivity;
+import masterThesis.dynagent.DynAgent;
+import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 import java.util.Set;
-
-import org.matsim.contrib.dvrp.schedule.StayTask;
-import org.matsim.contrib.dynagent.*;
-import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 public class MultiPassengerPickupActivity extends AbstractDynActivity implements PassengerPickupActivity {
 	private final PassengerEngine passengerEngine;
@@ -37,7 +38,7 @@ public class MultiPassengerPickupActivity extends AbstractDynActivity implements
 	private double endTime;
 
 	public MultiPassengerPickupActivity(PassengerEngine passengerEngine, DynAgent driver, StayTask pickupTask,
-			Set<? extends PassengerRequest> requests, double pickupDuration, String activityType) {
+                                        Set<? extends PassengerRequest> requests, double pickupDuration, String activityType) {
 		super(activityType);
 
 		this.passengerEngine = passengerEngine;

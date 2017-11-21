@@ -17,9 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.random;
+package masterThesis.util.random;
 
-import org.apache.commons.math3.random.*;
+import org.apache.commons.math3.random.MersenneTwister;
+import org.apache.commons.math3.random.RandomGenerator;
 
 /**
  * Based on org.matsim.core.gbl.MatsimRandom

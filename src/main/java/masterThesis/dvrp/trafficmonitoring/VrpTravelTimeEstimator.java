@@ -17,14 +17,17 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.trafficmonitoring;
+package masterThesis.dvrp.trafficmonitoring;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import masterThesis.dvrp.run.DvrpConfigGroup;
+import masterThesis.dvrp.run.DvrpModule;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.dvrp.run.*;
 import org.matsim.core.config.groups.TravelTimeCalculatorConfigGroup;
 import org.matsim.core.mobsim.framework.events.MobsimBeforeCleanupEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimBeforeCleanupListener;
@@ -32,9 +35,7 @@ import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.trafficmonitoring.TimeBinUtils;
 import org.matsim.vehicles.Vehicle;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import java.util.Map;
 
 public class VrpTravelTimeEstimator implements TravelTime, MobsimBeforeCleanupListener {
 	private final TravelTime observedTT;
@@ -47,9 +48,9 @@ public class VrpTravelTimeEstimator implements TravelTime, MobsimBeforeCleanupLi
 
 	@Inject
 	public VrpTravelTimeEstimator(@Named(VrpTravelTimeModules.DVRP_INITIAL) TravelTime initialTT,
-			@Named(VrpTravelTimeModules.DVRP_OBSERVED) TravelTime observedTT,
-			@Named(DvrpModule.DVRP_ROUTING) Network network, TravelTimeCalculatorConfigGroup ttCalcConfig,
-			DvrpConfigGroup dvrpConfig) {
+                                  @Named(VrpTravelTimeModules.DVRP_OBSERVED) TravelTime observedTT,
+                                  @Named(DvrpModule.DVRP_ROUTING) Network network, TravelTimeCalculatorConfigGroup ttCalcConfig,
+                                  DvrpConfigGroup dvrpConfig) {
 		this(initialTT, observedTT, network, ttCalcConfig, dvrpConfig.getTravelTimeEstimationAlpha());
 	}
 

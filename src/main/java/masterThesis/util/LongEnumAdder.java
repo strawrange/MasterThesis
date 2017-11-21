@@ -17,11 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
-
-import java.util.EnumMap;
+package masterThesis.util;
 
 import org.apache.commons.lang3.mutable.MutableLong;
+
+import java.util.EnumMap;
 
 public class LongEnumAdder<K extends Enum<K>> extends AbstractEnumAdder<K, Long> {
 	private final EnumMap<K, MutableLong> sums;

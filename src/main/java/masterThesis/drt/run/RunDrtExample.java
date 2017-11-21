@@ -17,10 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.run;
+package masterThesis.drt.run;
 
-import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
-import org.matsim.core.config.*;
+import masterThesis.drt.scoring.AVScoringFunction;
+import masterThesis.dvrp.run.DvrpConfigGroup;
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.vis.otfvis.OTFVisConfigGroup;
 
 /**
@@ -39,8 +41,7 @@ public class RunDrtExample {
 
 	public static void main(String[] args) {
 		
-		Config config = ConfigUtils.loadConfig("drt_example/drtconfig.xml", new DrtConfigGroup(), new DvrpConfigGroup(), new OTFVisConfigGroup());
-		run(config,true);
-
+		Config config = ConfigUtils.loadConfig("scenarios/siouxFalls/drtconfig.xml", new DrtConfigGroup(), new DvrpConfigGroup(), new OTFVisConfigGroup());
+		run(config,false);
 	}
 }

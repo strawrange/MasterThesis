@@ -17,14 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone.io;
+package masterThesis.zone.io;
 
-import java.util.*;
-
+import masterThesis.zone.Zone;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.zone.Zone;
 import org.matsim.core.utils.io.MatsimXmlParser;
 import org.xml.sax.Attributes;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Stack;
 
 public class ZoneXmlReader extends MatsimXmlParser {
 	private final static String ZONE = "zone";

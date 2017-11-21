@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent;
+package masterThesis.dynagent;
 
 /**
  * endTime is not subject to change

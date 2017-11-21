@@ -17,14 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent;
-
-import java.util.List;
+package masterThesis.dynagent;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.vehicles.Vehicle;
+
+import java.util.List;
 
 public class StaticDriverDynLeg implements DriverDynLeg {
 	private final NetworkRoute route;

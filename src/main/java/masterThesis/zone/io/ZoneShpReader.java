@@ -17,16 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone.io;
+package masterThesis.zone.io;
 
-import java.util.*;
-
+import com.vividsolutions.jts.geom.MultiPolygon;
+import masterThesis.zone.Zone;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.zone.Zone;
 import org.matsim.core.utils.gis.ShapeFileReader;
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.MultiPolygon;
+import java.util.Collection;
+import java.util.Map;
 
 public class ZoneShpReader {
 	private final Map<Id<Zone>, Zone> zones;

@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.util;
+package masterThesis.dvrp.util;
 
 import org.matsim.api.core.v01.network.Link;
 

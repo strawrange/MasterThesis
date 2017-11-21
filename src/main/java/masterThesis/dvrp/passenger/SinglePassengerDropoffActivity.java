@@ -17,11 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.passenger;
+package masterThesis.dvrp.passenger;
 
-import org.matsim.contrib.dvrp.schedule.StayTask;
-import org.matsim.contrib.dvrp.vrpagent.VrpActivity;
-import org.matsim.contrib.dynagent.DynAgent;
+import masterThesis.dvrp.schedule.StayTask;
+import masterThesis.dvrp.vrpagent.VrpActivity;
+import masterThesis.dynagent.DynAgent;
 
 public class SinglePassengerDropoffActivity extends VrpActivity {
 	private final PassengerEngine passengerEngine;
@@ -29,7 +29,7 @@ public class SinglePassengerDropoffActivity extends VrpActivity {
 	private final PassengerRequest request;
 
 	public SinglePassengerDropoffActivity(PassengerEngine passengerEngine, DynAgent driver, StayTask dropoffTask,
-			PassengerRequest request, String activityType) {
+                                          PassengerRequest request, String activityType) {
 		super(activityType, dropoffTask);
 
 		this.passengerEngine = passengerEngine;

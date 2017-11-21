@@ -17,14 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone.util;
-
-import org.matsim.contrib.util.random.*;
-import org.matsim.core.utils.geometry.geotools.MGC;
+package masterThesis.zone.util;
 
 import com.google.common.base.Predicate;
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
+import masterThesis.util.random.RandomUtils;
+import masterThesis.util.random.UniformRandom;
+import org.matsim.core.utils.geometry.geotools.MGC;
 
 public class RandomPointUtils {
 	public static Point getRandomPointInGeometry(final Geometry geometry) {

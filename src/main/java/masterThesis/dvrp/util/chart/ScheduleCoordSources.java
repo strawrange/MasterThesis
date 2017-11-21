@@ -17,15 +17,16 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.util.chart;
-
-import java.util.List;
-
-import org.matsim.api.core.v01.Coord;
-import org.matsim.contrib.dvrp.schedule.*;
-import org.matsim.contrib.util.chart.CoordDataset.CoordSource;
+package masterThesis.dvrp.util.chart;
 
 import com.google.common.collect.Lists;
+import masterThesis.dvrp.schedule.DriveTask;
+import masterThesis.dvrp.schedule.Schedule;
+import masterThesis.dvrp.schedule.Schedules;
+import org.matsim.api.core.v01.Coord;
+import masterThesis.util.chart.CoordDataset.CoordSource;
+
+import java.util.List;
 
 public class ScheduleCoordSources {
 	// n DriveTasks -> n+1 Links

@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.histogram;
+package masterThesis.util.histogram;
 
 public abstract class AbstractHistogram<T> implements Histogram<T> {
 	protected final long[] counts;

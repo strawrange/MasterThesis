@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.scheduler;
+package masterThesis.drt.scheduler;
 
-import org.matsim.contrib.drt.run.DrtConfigGroup;
+import masterThesis.drt.run.DrtConfigGroup;
 
 /**
  * @author michalm

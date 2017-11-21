@@ -17,17 +17,23 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.examples.onetaxi;
-
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.passenger.*;
-import org.matsim.contrib.dvrp.schedule.*;
-import org.matsim.contrib.dvrp.vrpagent.*;
-import org.matsim.contrib.dynagent.*;
-import org.matsim.core.mobsim.framework.MobsimTimer;
-import org.matsim.core.mobsim.qsim.QSim;
+package masterThesis.dvrp.examples.onetaxi;
 
 import com.google.inject.Inject;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.passenger.PassengerEngine;
+import masterThesis.dvrp.passenger.SinglePassengerDropoffActivity;
+import masterThesis.dvrp.passenger.SinglePassengerPickupActivity;
+import masterThesis.dvrp.schedule.DriveTask;
+import masterThesis.dvrp.schedule.StayTask;
+import masterThesis.dvrp.schedule.Task;
+import masterThesis.dvrp.vrpagent.VrpActivity;
+import masterThesis.dvrp.vrpagent.VrpAgentLogic;
+import masterThesis.dvrp.vrpagent.VrpLegs;
+import masterThesis.dynagent.DynAction;
+import masterThesis.dynagent.DynAgent;
+import org.matsim.core.mobsim.framework.MobsimTimer;
+import org.matsim.core.mobsim.qsim.QSim;
 
 /**
  * @author michalm
@@ -44,7 +50,7 @@ public class OneTaxiActionCreator implements VrpAgentLogic.DynActionCreator {
 
 	@Override
 	public DynAction createAction(DynAgent dynAgent, Vehicle vehicle, double now) {
-		Task task = vehicle.getSchedule().getCurrentTask(); 
+		Task task = vehicle.getSchedule().getCurrentTask();
 		if (task instanceof DriveTask) {
 			return VrpLegs.createLegWithOfflineTracker(vehicle, timer);
 		} else if (task instanceof OneTaxiServeTask) { // PICKUP or DROPOFF

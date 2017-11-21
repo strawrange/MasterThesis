@@ -17,17 +17,19 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone.util;
+package masterThesis.zone.util;
 
-import java.util.*;
-
-import org.matsim.api.core.v01.*;
-import org.matsim.contrib.zone.Zone;
-import org.matsim.core.utils.geometry.geotools.MGC;
-
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.index.SpatialIndex;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
+import masterThesis.zone.Zone;
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
+import org.matsim.core.utils.geometry.geotools.MGC;
+
+import java.util.List;
+import java.util.Map;
 
 public class ZoneFinderImpl implements ZoneFinder {
 	private final SpatialIndex quadTree = new Quadtree();

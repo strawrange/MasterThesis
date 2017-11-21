@@ -17,16 +17,19 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone.io;
+package masterThesis.zone.io;
 
-import java.util.*;
-
+import masterThesis.zone.Zone;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.zone.Zone;
 import org.matsim.core.utils.geometry.geotools.MGC;
-import org.matsim.core.utils.gis.*;
+import org.matsim.core.utils.gis.PolygonFeatureFactory;
+import org.matsim.core.utils.gis.ShapeFileWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ZoneShpWriter {
 	public static final String ID_HEADER = "ID";

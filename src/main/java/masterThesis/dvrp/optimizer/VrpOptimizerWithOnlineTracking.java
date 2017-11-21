@@ -17,10 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.optimizer;
+package masterThesis.dvrp.optimizer;
 
+import masterThesis.dvrp.data.Vehicle;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.data.Vehicle;
 
 /**
  * @author michalm

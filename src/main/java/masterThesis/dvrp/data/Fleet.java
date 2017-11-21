@@ -17,15 +17,19 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
-
-import java.util.Map;
+package masterThesis.dvrp.data;
 
 import org.matsim.api.core.v01.Id;
+
+import java.util.Map;
 
 /**
  * @author michalm
  */
 public interface Fleet {
 	Map<Id<Vehicle>, ? extends Vehicle> getVehicles();
+	void addVehicle(Vehicle vehicle);
+	double getServiceEndTime();
+	void initialize();
+	Map<Id<Vehicle>, Vehicle> getModifiableVehicles();
 }

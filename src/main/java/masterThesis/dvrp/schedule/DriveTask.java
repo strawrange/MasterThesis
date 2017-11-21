@@ -17,9 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.schedule;
+package masterThesis.dvrp.schedule;
 
-import org.matsim.contrib.dvrp.path.*;
+import masterThesis.dvrp.path.DivertedVrpPath;
+import masterThesis.dvrp.path.VrpPath;
 
 /**
  * @author (of documentation) maciejewski, nagel

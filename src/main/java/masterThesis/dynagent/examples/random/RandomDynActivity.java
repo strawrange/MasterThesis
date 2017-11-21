@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.examples.random;
+package masterThesis.dynagent.examples.random;
 
-import org.matsim.contrib.dynagent.AbstractDynActivity;
+import masterThesis.dynagent.AbstractDynActivity;
 import org.matsim.core.gbl.MatsimRandom;
 
 public class RandomDynActivity extends AbstractDynActivity {

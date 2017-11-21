@@ -17,13 +17,14 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.passenger.events;
-
-import java.util.Map;
+package masterThesis.drt.passenger.events;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.Event;
-import org.matsim.contrib.dvrp.data.Request;
+import masterThesis.dvrp.data.Request;
+import org.matsim.api.core.v01.population.Person;
+
+import java.util.Map;
 
 /**
  * @author michalm
@@ -37,9 +38,12 @@ public class DrtRequestRejectedEvent extends Event {
 
 	private final Id<Request> requestId;
 
-	public DrtRequestRejectedEvent(double time, Id<Request> requestId) {
+	private final Id<Person> personId;
+
+	public DrtRequestRejectedEvent(double time, Id<Request> requestId, Id<Person> personId) {
 		super(time);
 		this.requestId = requestId;
+		this.personId = personId;
 	}
 
 	@Override

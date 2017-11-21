@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent.run;
+package masterThesis.dynagent.run;
 
 import org.apache.log4j.Logger;
 import org.matsim.core.config.Config;

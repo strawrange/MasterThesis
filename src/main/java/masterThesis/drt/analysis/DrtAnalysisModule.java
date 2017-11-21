@@ -20,8 +20,9 @@
 /**
  * 
  */
-package org.matsim.contrib.drt.analysis;
+package masterThesis.drt.analysis;
 
+import masterThesis.dvrp.data.FleetImpl;
 import org.matsim.core.controler.AbstractModule;
 
 /**
@@ -40,6 +41,8 @@ public class DrtAnalysisModule extends AbstractModule {
 		bind(DrtVehicleOccupancyEvaluator.class).asEagerSingleton();
 		bind(DynModePassengerStats.class).asEagerSingleton();
 		bind(DrtRequestAnalyzer.class).asEagerSingleton();
+		bind(DrtStopEvaluator.class).asEagerSingleton();
+		//bind(FleetImpl.class).asEagerSingleton();
 		addControlerListenerBinding().to(DrtAnalysisControlerListener.class).asEagerSingleton();
 	}
 

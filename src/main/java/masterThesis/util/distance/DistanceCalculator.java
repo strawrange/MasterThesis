@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.distance;
+package masterThesis.util.distance;
 
 import org.matsim.api.core.v01.Coord;
 

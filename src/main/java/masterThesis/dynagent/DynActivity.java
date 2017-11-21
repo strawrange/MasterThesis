@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dynagent;
+package masterThesis.dynagent;
 
 public interface DynActivity extends DynAction {
 	// Double.POSITIVE_INFINITY == stop simulating the agent (permanent sleep)

@@ -17,22 +17,33 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.data;
+package masterThesis.dvrp.data;
 
-import java.util.*;
-
+import com.google.inject.Inject;
 import org.matsim.api.core.v01.Id;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author michalm
  */
 public class FleetImpl implements Fleet {
-	private final Map<Id<Vehicle>, Vehicle> vehicles = new LinkedHashMap<>();
+	private final Map<Id<Vehicle>, Vehicle> vehicles  = new LinkedHashMap<>();
+	private final double serviceEndTime;
 
-	@Override
+    public FleetImpl(double serviceEndTime) {
+        this.serviceEndTime = serviceEndTime;
+    }
+    @Override
 	public Map<Id<Vehicle>, ? extends Vehicle> getVehicles() {
 		return Collections.unmodifiableMap(vehicles);
 	}
+
+	public Map<Id<Vehicle>, Vehicle> getModifiableVehicles(){
+        return vehicles;
+    }
 
 	public void addVehicle(Vehicle vehicle) {
 		vehicles.put(vehicle.getId(), vehicle);
@@ -43,4 +54,14 @@ public class FleetImpl implements Fleet {
 			v.resetSchedule();
 		}
 	}
+
+	public double getServiceEndTime(){
+        return this.serviceEndTime;
+    }
+
+    @Override
+    public void initialize() {
+        vehicles.clear();
+    }
+
 }

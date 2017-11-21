@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.distance;
+package masterThesis.util.distance;
 
 import org.matsim.api.core.v01.BasicLocation;
 import org.matsim.matrices.Matrix;
@@ -30,7 +30,7 @@ public class DistanceMatrixUtils {
 		for (BasicLocation<?> from : fromLocations) {
 			for (BasicLocation<?> to : toLocations) {
 				double distance = calculator.calcDistance(from.getCoord(), to.getCoord());
-				matrix.createEntry(from.getId().toString(), to.getId().toString(), distance);
+				matrix.createAndAddEntry(from.getId().toString(), to.getId().toString(), distance);
 			}
 		}
 

@@ -17,10 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.schedule;
+package masterThesis.drt.schedule;
 
-import org.matsim.contrib.dvrp.path.VrpPathWithTravelData;
-import org.matsim.contrib.dvrp.schedule.DriveTaskImpl;
+import masterThesis.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.schedule.DriveTaskImpl;
 
 /**
  * @author michalm

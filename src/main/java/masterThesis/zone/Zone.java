@@ -17,12 +17,13 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.zone;
-
-import org.matsim.api.core.v01.*;
-import org.matsim.core.utils.geometry.geotools.MGC;
+package masterThesis.zone;
 
 import com.vividsolutions.jts.geom.MultiPolygon;
+import org.matsim.api.core.v01.BasicLocation;
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
+import org.matsim.core.utils.geometry.geotools.MGC;
 
 public class Zone implements BasicLocation<Zone> {
 	private final Id<Zone> id;

@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.histogram;
+package masterThesis.util.histogram;
 
 /**
  * This is a read-only interface: you can get but cannot set values.

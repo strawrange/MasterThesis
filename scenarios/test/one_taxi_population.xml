@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE population SYSTEM "http://www.matsim.org/files/dtd/population_v5.dtd">
+ 
+<population>
+
+<!-- ====================================================================== -->
+
+	<person id="passenger_0" employed="no">
+		<plan selected="yes">
+			<act type="home" link="114" end_time="00:00:00" x="-300" y="-800"/>
+			<leg mode="drt" dep_time="00:00:00" trav_time="00:01:00" arr_time="00:01:00">
+			</leg> 
+			<act type="train08" link="349" x="300" y="-200"/>
+		</plan>
+	</person>
+
+	<person id="passenger_1" employed="no">
+		<plan selected="yes">
+			<act type="home" link="144" end_time="00:05:00" x="-700" y="-200"/>
+			<leg mode="drt" dep_time="00:05:00" trav_time="00:01:00" arr_time="00:06:00">
+			</leg> 
+			<act type="train08" link="437" x="-200" y="-300"/>
+		</plan>
+	</person>
+
+	<person id="passenger_2" employed="no">
+		<plan selected="yes">
+			<act type="home" link="223" end_time="00:10:00" x="-800" y="-500"/>
+			<leg mode="drt" dep_time="00:10:00" trav_time="00:01:00" arr_time="00:11:00">
+			</leg> 
+			<act type="train08" link="347" x="-100" y="-200"/>
+		</plan>
+	</person>
+
+	<person id="passenger_3" employed="no">
+		<plan selected="yes">
+			<act type="home" link="234" end_time="00:15:00" x="-800" y="-300"/>
+			<leg mode="drt" dep_time="00:15:00" trav_time="00:01:00" arr_time="00:16:00">
+			</leg> 
+			<act type="train08" link="119" x="700" y="-800"/>
+		</plan>
+	</person>
+
+	<person id="passenger_4" employed="no">
+		<plan selected="yes">
+			<act type="home" link="314" end_time="00:20:00" x="-300" y="-800"/>
+			<leg mode="drt" dep_time="00:20:00" trav_time="00:01:00" arr_time="00:21:00">
+			</leg> 
+			<act type="train08" link="260" x="200" y="-100"/>
+		</plan>
+	</person>
+
+	<person id="passenger_5" employed="no">
+		<plan selected="yes">
+			<act type="home" link="333" end_time="00:25:00" x="-900" y="-400"/>
+			<leg mode="drt" dep_time="00:25:00" trav_time="00:01:00" arr_time="00:26:00">
+			</leg> 
+			<act type="train08" link="438" x="0" y="-300"/>
+		</plan>
+	</person>
+
+	<person id="passenger_6" employed="no">
+		<plan selected="yes">
+			<act type="home" link="325" end_time="00:30:00" x="-300" y="-600"/>
+			<leg mode="drt" dep_time="00:30:00" trav_time="00:01:00" arr_time="00:31:00">
+			</leg> 
+			<act type="train08" link="111" x="-900" y="-800"/>
+		</plan>
+	</person>
+
+	<person id="passenger_7" employed="no">
+		<plan selected="yes">
+			<act type="home" link="412" end_time="00:25:00" x="-800" y="-700"/>
+			<leg mode="drt" dep_time="00:35:00" trav_time="00:01:00" arr_time="00:36:00">
+			</leg> 
+			<act type="train08" link="318" x="500" y="-800"/>
+		</plan>
+	</person>
+
+	<person id="passenger_8" employed="no">
+		<plan selected="yes">
+			<act type="home" link="455" end_time="00:40:00" x="-800" y="-100"/>
+			<leg mode="drt" dep_time="00:40:00" trav_time="00:01:00" arr_time="00:41:00">
+			</leg> 
+			<act type="train08" link="236" x="-400" y="-300"/>
+		</plan>
+	</person>
+
+	<person id="passenger_9" employed="no">
+		<plan selected="yes">
+			<act type="home" link="139" end_time="00:45:00" x="300" y="-400"/>
+			<leg mode="drt" dep_time="00:45:00" trav_time="00:01:00" arr_time="00:46:00">
+			</leg> 
+			<act type="train08" link="330" x="700" y="-600"/>
+		</plan>
+	</person>
+
+<!-- ====================================================================== -->
+
+</population>

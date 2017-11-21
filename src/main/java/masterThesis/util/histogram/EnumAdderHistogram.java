@@ -17,9 +17,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util.histogram;
+package masterThesis.util.histogram;
 
-import org.matsim.contrib.util.EnumAdder;
+import masterThesis.util.EnumAdder;
 
 public class EnumAdderHistogram<T extends Enum<T>, N extends Number> implements Histogram<T> {
 	private final EnumAdder<T, N> adder;

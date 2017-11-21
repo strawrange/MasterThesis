@@ -17,15 +17,20 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.examples.onetaxi;
+package masterThesis.dvrp.examples.onetaxi;
 
+import masterThesis.dvrp.data.Fleet;
+import masterThesis.dvrp.data.FleetImpl;
+import masterThesis.dvrp.data.file.VehicleReader;
+import masterThesis.dvrp.run.DvrpConfigConsistencyChecker;
+import masterThesis.dvrp.run.DvrpConfigGroup;
+import masterThesis.dvrp.run.DvrpModule;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.dvrp.data.*;
-import org.matsim.contrib.dvrp.data.file.VehicleReader;
-import org.matsim.contrib.dvrp.run.*;
 import org.matsim.contrib.otfvis.OTFVisLiveModule;
-import org.matsim.core.config.*;
-import org.matsim.core.controler.*;
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.controler.AbstractModule;
+import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vis.otfvis.OTFVisConfigGroup;
 
@@ -47,7 +52,7 @@ public class RunOneTaxiExample {
 		Scenario scenario = ScenarioUtils.loadScenario(config);
 
 		// load fleet
-		final FleetImpl fleet = new FleetImpl();
+		final FleetImpl fleet = new FleetImpl(config.qsim().getEndTime());
 		new VehicleReader(scenario.getNetwork(), fleet).readFile(TAXIS_FILE);
 
 		// setup controler
@@ -57,7 +62,8 @@ public class RunOneTaxiExample {
 				OneTaxiRequestCreator.class, // converts departures of the "taxi" mode into taxi requests
 				OneTaxiActionCreator.class)); // converts scheduled tasks into simulated actions (legs and activities)
 		
-		controler.addOverridingModule(new AbstractModule() {
+		controler.addOverridingModule(
+				new AbstractModule() {
 			@Override
 			public void install() {
 				bind(Fleet.class).toInstance(fleet);

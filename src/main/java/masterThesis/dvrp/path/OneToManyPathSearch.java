@@ -17,17 +17,22 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.path;
-
-import java.util.*;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.locationchoice.router.BackwardMultiNodePathCalculator;
-import org.matsim.core.router.*;
-import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+package masterThesis.dvrp.path;
 
 import com.google.common.collect.Maps;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Node;
+import masterThesis.router.BackwardMultiNodePathCalculator;
+import org.matsim.core.router.ImaginaryNode;
+import org.matsim.core.router.InitialNode;
+import org.matsim.core.router.MultiNodeDijkstra;
+import org.matsim.core.router.MultiNodePathCalculator;
+import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class OneToManyPathSearch {
 	public static OneToManyPathSearch createForwardSearch(MultiNodePathCalculator forwardMultiNodeDijkstra) {

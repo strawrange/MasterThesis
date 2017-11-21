@@ -17,12 +17,13 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.passenger;
+package masterThesis.dvrp.passenger;
 
-import java.util.*;
-
+import masterThesis.dvrp.data.Request;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.dvrp.data.Request;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AwaitingPickupStorage {
 	// passenger's request id -> driver's stay task

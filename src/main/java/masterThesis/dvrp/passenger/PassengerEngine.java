@@ -17,20 +17,28 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.passenger;
+package masterThesis.dvrp.passenger;
+
+import masterThesis.drt.optimizer.AbstractDrtOptimizer;
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.dvrp.data.Request;
+import masterThesis.dvrp.optimizer.VrpOptimizer;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.events.PersonEntersVehicleEvent;
+import org.matsim.api.core.v01.events.PersonLeavesVehicleEvent;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.mobsim.framework.MobsimAgent;
+import org.matsim.core.mobsim.framework.MobsimAgent.State;
+import org.matsim.core.mobsim.framework.MobsimDriverAgent;
+import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
+import org.matsim.core.mobsim.qsim.InternalInterface;
+import org.matsim.core.mobsim.qsim.interfaces.DepartureHandler;
+import org.matsim.core.mobsim.qsim.interfaces.MobsimEngine;
+import org.matsim.core.mobsim.qsim.interfaces.MobsimVehicle;
 
 import java.util.Map;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.events.*;
-import org.matsim.api.core.v01.network.*;
-import org.matsim.contrib.dvrp.data.Request;
-import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.mobsim.framework.*;
-import org.matsim.core.mobsim.framework.MobsimAgent.State;
-import org.matsim.core.mobsim.qsim.InternalInterface;
-import org.matsim.core.mobsim.qsim.interfaces.*;
 
 public class PassengerEngine implements MobsimEngine, DepartureHandler {
 	private final String mode;
@@ -45,7 +53,7 @@ public class PassengerEngine implements MobsimEngine, DepartureHandler {
 	private final AwaitingPickupStorage awaitingPickupStorage;
 
 	public PassengerEngine(String mode, EventsManager eventsManager, PassengerRequestCreator requestCreator,
-			VrpOptimizer optimizer, Network network) {
+                           VrpOptimizer optimizer, Network network) {
 		this.mode = mode;
 		this.eventsManager = eventsManager;
 		this.requestCreator = requestCreator;
@@ -75,6 +83,9 @@ public class PassengerEngine implements MobsimEngine, DepartureHandler {
 
 	@Override
 	public void afterSim() {
+		if (optimizer instanceof AbstractDrtOptimizer){
+			((AbstractDrtOptimizer) optimizer).abortUnplannedRequests(eventsManager);
+		}
 	}
 
 	/**
@@ -98,10 +109,9 @@ public class PassengerEngine implements MobsimEngine, DepartureHandler {
 
 	@Override
 	public boolean handleDeparture(double now, MobsimAgent agent, Id<Link> fromLinkId) {
-		if (!agent.getMode().equals(mode)) {
+		if (!agent.getMode().startsWith(mode)) {
 			return false;
 		}
-
 		MobsimPassengerAgent passenger = (MobsimPassengerAgent)agent;
 
 		Id<Link> toLinkId = passenger.getDestinationLinkId();
@@ -130,7 +140,7 @@ public class PassengerEngine implements MobsimEngine, DepartureHandler {
 	private long nextId = 0;
 
 	private PassengerRequest createRequest(MobsimPassengerAgent passenger, Id<Link> fromLinkId, Id<Link> toLinkId,
-			double departureTime, double now) {
+                                           double departureTime, double now) {
 		Map<Id<Link>, ? extends Link> links = network.getLinks();
 		Link fromLink = links.get(fromLinkId);
 		Link toLink = links.get(toLinkId);
@@ -143,12 +153,12 @@ public class PassengerEngine implements MobsimEngine, DepartureHandler {
 	// ================ PICKUP / DROPOFF
 
 	public boolean pickUpPassenger(PassengerPickupActivity pickupActivity, MobsimDriverAgent driver,
-			PassengerRequest request, double now) {
+                                   PassengerRequest request, double now) {
 		MobsimPassengerAgent passenger = request.getPassenger();
 		Id<Link> linkId = driver.getCurrentLinkId();
 
 		if (passenger.getCurrentLinkId() != linkId || passenger.getState() != State.LEG
-				|| !passenger.getMode().equals(mode)) {
+				|| !passenger.getMode().startsWith(mode)) {
 			awaitingPickupStorage.storeAwaitingPickup(request, pickupActivity);
 			return false;// wait for the passenger
 		}

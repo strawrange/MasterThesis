@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.util;
+package masterThesis.util;
 
 public interface EnumAdder<K extends Enum<K>, N extends Number> {
 	K[] getKeys();

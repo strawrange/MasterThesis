@@ -17,10 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.vrpagent;
+package masterThesis.dvrp.vrpagent;
 
-import org.matsim.contrib.dvrp.path.*;
-import org.matsim.contrib.dynagent.DriverDynLeg;
+import masterThesis.dvrp.path.DivertedVrpPath;
+import masterThesis.dvrp.path.VrpPath;
+import masterThesis.dynagent.DriverDynLeg;
 
 public interface DivertibleLeg extends DriverDynLeg {
 	VrpPath getPath();

@@ -17,13 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.path;
-
-import java.util.Iterator;
-
-import org.matsim.api.core.v01.network.Link;
+package masterThesis.dvrp.path;
 
 import com.google.common.collect.Iterators;
+import org.matsim.api.core.v01.network.Link;
+
+import java.util.Iterator;
 
 public class VrpPathWithTravelDataImpl implements VrpPathWithTravelData {
 	private final double departureTime;

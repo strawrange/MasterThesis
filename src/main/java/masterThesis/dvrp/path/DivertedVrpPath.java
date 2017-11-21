@@ -17,13 +17,12 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.path;
-
-import java.util.Iterator;
-
-import org.matsim.api.core.v01.network.Link;
+package masterThesis.dvrp.path;
 
 import com.google.common.collect.Iterators;
+import org.matsim.api.core.v01.network.Link;
+
+import java.util.Iterator;
 
 /**
  * A DivertedVrpPath is a VrpPath which additionally keeps information about the original path, where the new path

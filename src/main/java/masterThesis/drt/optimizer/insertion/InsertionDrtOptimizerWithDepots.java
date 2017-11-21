@@ -17,22 +17,30 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.drt.optimizer.insertion;
+package masterThesis.drt.optimizer.insertion;
 
-import java.util.*;
-
+import masterThesis.drt.optimizer.DrtOptimizerContext;
+import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.drt.schedule.DrtStayTask;
+import masterThesis.drt.schedule.DrtTask;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.drt.optimizer.DrtOptimizerContext;
-import org.matsim.contrib.drt.run.DrtConfigGroup;
-import org.matsim.contrib.drt.schedule.*;
-import org.matsim.contrib.drt.schedule.DrtTask.DrtTaskType;
-import org.matsim.contrib.dvrp.data.Vehicle;
-import org.matsim.contrib.dvrp.path.*;
-import org.matsim.contrib.dvrp.schedule.Schedule;
-import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
-import org.matsim.contrib.util.distance.DistanceUtils;
-import org.matsim.core.router.*;
-import org.matsim.core.router.util.*;
+import masterThesis.drt.schedule.DrtTask.DrtTaskType;
+import masterThesis.dvrp.data.Vehicle;
+import masterThesis.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.path.VrpPaths;
+import masterThesis.dvrp.schedule.Schedule;
+import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
+import masterThesis.util.distance.DistanceUtils;
+import org.matsim.core.router.ArrayFastRouterDelegateFactory;
+import org.matsim.core.router.FastAStarEuclidean;
+import org.matsim.core.router.FastAStarEuclideanFactory;
+import org.matsim.core.router.FastRouterDelegateFactory;
+import org.matsim.core.router.util.ArrayRoutingNetworkFactory;
+import org.matsim.core.router.util.PreProcessEuclidean;
+import org.matsim.core.router.util.RoutingNetwork;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author michalm
@@ -52,11 +60,11 @@ public class InsertionDrtOptimizerWithDepots extends InsertionDrtOptimizer {
 		preProcessEuclidean.run(optimContext.network);
 
 		FastRouterDelegateFactory fastRouterFactory = new ArrayFastRouterDelegateFactory();
-		RoutingNetwork routingNetwork = new ArrayRoutingNetworkFactory(preProcessEuclidean)
+		RoutingNetwork routingNetwork = new ArrayRoutingNetworkFactory()
 				.createRoutingNetwork(optimContext.network);
 
-		router = new FastAStarEuclidean(routingNetwork, preProcessEuclidean, optimContext.travelDisutility,
-				optimContext.travelTime, 2., fastRouterFactory);
+		router = (FastAStarEuclidean) new FastAStarEuclideanFactory().createPathCalculator(routingNetwork,  optimContext.travelDisutility,
+				optimContext.travelTime);
 	}
 
 	@Override

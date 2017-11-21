@@ -17,11 +17,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.tracker;
+package masterThesis.dvrp.tracker;
 
+import masterThesis.dvrp.path.VrpPathWithTravelData;
+import masterThesis.dvrp.util.LinkTimePair;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.path.VrpPathWithTravelData;
-import org.matsim.contrib.dvrp.util.LinkTimePair;
 
 /**
  * @author michalm

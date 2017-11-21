@@ -17,10 +17,10 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.matsim.contrib.dvrp.examples.onetaxi;
+package masterThesis.dvrp.examples.onetaxi;
 
+import masterThesis.dvrp.schedule.StayTaskImpl;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.schedule.StayTaskImpl;
 
 /**
  * @author michalm
