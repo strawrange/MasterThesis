@@ -29,6 +29,7 @@ import org.matsim.api.core.v01.events.PersonLeavesVehicleEvent;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.api.experimental.events.VehicleArrivesAtFacilityEvent;
 import org.matsim.core.mobsim.framework.MobsimAgent;
 import org.matsim.core.mobsim.framework.MobsimAgent.State;
 import org.matsim.core.mobsim.framework.MobsimDriverAgent;
@@ -115,6 +116,7 @@ public class PassengerEngine implements MobsimEngine, DepartureHandler {
 		MobsimPassengerAgent passenger = (MobsimPassengerAgent)agent;
 
 		Id<Link> toLinkId = passenger.getDestinationLinkId();
+
 		double departureTime = now;
 
 		internalInterface.registerAdditionalAgentOnLink(passenger);

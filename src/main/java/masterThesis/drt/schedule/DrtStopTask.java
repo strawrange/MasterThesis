@@ -36,8 +36,12 @@ public class DrtStopTask extends StayTaskImpl implements DrtTask {
 	private final Set<DrtRequest> dropoffRequests = new HashSet<>();
 	private final Set<DrtRequest> pickupRequests = new HashSet<>();
 
-	public DrtStopTask(double beginTime, double endTime, Link link) {
+
+	private final Id<TransitStopFacility> transitStopFacilityId;
+
+	public DrtStopTask(double beginTime, double endTime, Link link, Id<TransitStopFacility> transitStopFacilityId) {
 		super(beginTime, endTime, link);
+		this.transitStopFacilityId = transitStopFacilityId;
 	}
 
 	@Override
@@ -59,6 +63,10 @@ public class DrtStopTask extends StayTaskImpl implements DrtTask {
 
 	public void addPickupRequest(DrtRequest request) {
 		pickupRequests.add(request);
+	}
+
+	public Id<TransitStopFacility> getTransitStopFacilityId() {
+		return transitStopFacilityId;
 	}
 
 	@Override

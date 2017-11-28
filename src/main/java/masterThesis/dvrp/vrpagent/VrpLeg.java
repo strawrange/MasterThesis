@@ -57,6 +57,10 @@ public class VrpLeg implements DivertibleLeg {
 		this.onlineTracker = onlineTracker;
 	}
 
+	public double getLegEndTime(){
+		return this.onlineTracker.predictEndTime();
+	}
+
 	@Override
 	public void movedOverNode(Id<Link> newLinkId) {
 		currentLinkIdx++;

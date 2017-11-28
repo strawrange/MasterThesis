@@ -308,7 +308,7 @@ public class DrtScheduler implements ScheduleInquiry {
 		// insert pickup stop task
 		double startTime = beforePickupTask.getEndTime();
 		int taskIdx = beforePickupTask.getTaskIdx() + 1;
-		DrtStopTask pickupStopTask = new DrtStopTask(startTime, startTime + params.stopDuration, request.getFromLink());
+		DrtStopTask pickupStopTask = new DrtStopTask(startTime, startTime + params.stopDuration, request.getFromLink(), request.getFromStop());
 		schedule.addTask(taskIdx, pickupStopTask);
 		pickupStopTask.addPickupRequest(request);
 		request.setPickupTask(pickupStopTask);
@@ -365,7 +365,7 @@ public class DrtScheduler implements ScheduleInquiry {
 		// insert dropoff stop task
 		double startTime = driveToDropoffTask.getEndTime();
 		int taskIdx = driveToDropoffTask.getTaskIdx() + 1;
-		DrtStopTask dropoffStopTask = new DrtStopTask(startTime, startTime + params.stopDuration, request.getToLink());
+		DrtStopTask dropoffStopTask = new DrtStopTask(startTime, startTime + params.stopDuration, request.getToLink(), request.getToStop());
 		schedule.addTask(taskIdx, dropoffStopTask);
 		dropoffStopTask.addDropoffRequest(request);
 		request.setDropoffTask(dropoffStopTask);

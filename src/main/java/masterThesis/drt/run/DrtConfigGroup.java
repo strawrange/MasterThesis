@@ -63,7 +63,8 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	private static final String K_NEAREST_VEHICLES = "kNearestVehiclesToFilter";
 	private static final String MARGINAL_UTILITY_OF_WAITING_TIME = "marginalUtilityOfWaitingTime";
 	private static final String REQUEST_UPDATE_TIME = "requestUpdateTime";
-	public static final String KILLING_TIME = "killingTime";
+	private static final String KILLING_TIME = "killingTime";
+	private static final String ABORT_TIME = "abortTime";
 
 	private double stopDuration = Double.NaN;// seconds
 	private double maxWaitTime = Double.NaN;// seconds
@@ -106,9 +107,12 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	private double requestUpdateTime = 0;
 
 	private double killingTime = Double.POSITIVE_INFINITY;
+
+
+    private double abortTime = Double.POSITIVE_INFINITY;
 	
 	public enum OperationalScheme {
-		stationbased, door2door
+		stationbased, door2door, stationbasedclose
 	}
 	
 	
@@ -167,6 +171,7 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 		map.put(DETOUR_IDX, "Tolerated detour, 1 means no detour accepted, 1.2 means 20% detour tolerated");
 		map.put(REQUEST_UPDATE_TIME, "request update time interval");
 		map.put(KILLING_TIME, " If a vehicle is idle for more than killing time, it will disappear from the system-");
+		map.put(ABORT_TIME, "If a passenger waits for more than 2 hours, it will be labeled as abort...");
 		return map;
 	}
 
@@ -424,5 +429,14 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	public void setKillingTime(double killingTime) {
 		this.killingTime = killingTime;
 	}
+	@StringGetter(ABORT_TIME)
+    public double getAbortTime() {
+        return abortTime;
+    }
+    @StringSetter(ABORT_TIME)
+    public void setAbortTime(double abortTime) {
+        this.abortTime = abortTime;
+    }
+
 
 }

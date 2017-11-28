@@ -28,6 +28,9 @@ import masterThesis.dvrp.data.RequestImpl;
 import masterThesis.dvrp.passenger.PassengerRequest;
 import masterThesis.dvrp.path.VrpPathWithTravelData;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
+import org.matsim.core.router.ActivityWrapperFacility;
+import org.matsim.pt.transitSchedule.TransitStopFacilityImpl;
+import org.matsim.pt.transitSchedule.api.TransitStopFacility;
 
 /**
  * @author michalm
@@ -49,6 +52,8 @@ public class DrtRequest extends RequestImpl implements PassengerRequest {
 	private final MobsimPassengerAgent passenger;
 	private final Link fromLink;
 	private final Link toLink;
+	private final Id<TransitStopFacility> fromStop;
+	private final Id<TransitStopFacility> toStop;
 	private DrtStopTask pickupTask = null;
 	private DrtStopTask dropoffTask = null;
 	private final double latestArrivalTime;
@@ -65,7 +70,26 @@ public class DrtRequest extends RequestImpl implements PassengerRequest {
 		this.toLink = toLink;
 		this.latestArrivalTime = latestArrivalTime;
 		this.unsharedRidePath = unsharedRidePath;
+		if (passenger.getCurrentFacility() instanceof ActivityWrapperFacility){
+			this.fromStop = Id.create(passenger.getCurrentFacility().getId(),TransitStopFacility.class);
+		}else{
+			this.fromStop = null;
+		}
+		if (passenger.getDestinationFacility() instanceof ActivityWrapperFacility){
+			this.toStop = Id.create(passenger.getDestinationFacility().getId(), TransitStopFacility.class);
+		}else{
+			this.toStop = null;
+		}
 	}
+
+	public Id<TransitStopFacility> getFromStop(){
+		return fromStop;
+	}
+
+	public Id<TransitStopFacility> getToStop(){
+		return toStop;
+	}
+
 
 	@Override
 	public Link getFromLink() {

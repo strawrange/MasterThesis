@@ -33,7 +33,7 @@
 		<param name="maxWalkDistance" value="10000000000.0" />
 
 		<!-- Number of threads used for parallel evaluation of request insertion into existing schedules. If unset, the number of threads is equal to the number of logical cores available to JVM. -->
-		<param name="numberOfThreads" value="15" />
+		<param name="numberOfThreads" value="3" />
 
 		<!-- Operational Scheme, either door2door or stationbased. door2door by default -->
 		<param name="operationalScheme" value="stationbased" />
@@ -66,6 +66,8 @@
 		<param name="requestUpdateTime" value="300"/>
 		<!-- If a vehicle is idle for more than killing time, it will disappear from the system-->
 		<param name="killingTime" value="1800"/>
+		<!-- If a passenger waits for more than 2 hours, it will be labeled as abort...-->
+		<param name="abortTime" value="7200"/>
 	</module>
 	
 	
@@ -82,7 +84,7 @@
 	</module>
 	
 	<module name="controler">
-		<param name="outputDirectory" value="output/drt_10_01prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill" />
+		<param name="outputDirectory" value="output/drt_10_01prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abort_abortTime_transitRouter_waitTimeCalculator" />
 		<param name="firstIteration" value="0" />
 		<param name="lastIteration" value="100" />
 		<param name="eventsFileFormat" value="xml" />
@@ -168,7 +170,7 @@
 			<parameterset type="modeParams" >
 				<param name="constant" value="-1.0" />
 				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<param name="marginalUtilityOfTraveling_util_hr" value="-2.0" />
+				<param name="marginalUtilityOfTraveling_util_hr" value="-10.0" />
 				<param name="mode" value="walk" />
 				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>

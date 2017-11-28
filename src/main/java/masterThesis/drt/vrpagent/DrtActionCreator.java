@@ -61,7 +61,7 @@ public class DrtActionCreator implements VrpAgentLogic.DynActionCreator {
 
 			case STOP:
 				DrtStopTask t = (DrtStopTask)task;
-				return new BusStopActivity(passengerEngine, dynAgent, t, t.getDropoffRequests(), t.getPickupRequests(),
+				return new BusStopActivity(passengerEngine, dynAgent, t, t.getDropoffRequests(), t.getPickupRequests(), t.getTransitStopFacilityId(),
 						DRT_STOP_NAME);
 
 			case STAY:

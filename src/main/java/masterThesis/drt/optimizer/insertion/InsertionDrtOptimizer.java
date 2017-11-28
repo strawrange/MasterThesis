@@ -35,6 +35,7 @@ import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestIn
 import masterThesis.dvrp.data.*;
 import masterThesis.router.BackwardFastMultiNodeDijkstra;
 import masterThesis.router.InverseArrayRoutingNetworkFactory;
+import org.matsim.api.core.v01.events.PersonStuckEvent;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.events.MobsimBeforeCleanupEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimBeforeCleanupListener;
@@ -125,9 +126,13 @@ public class InsertionDrtOptimizer extends AbstractDrtOptimizer implements Mobsi
 						Logger.getLogger(getClass()).warn("No vehicle found for drt request from passenger \t"
 								+ req.getPassenger().getId() + "\tat\t" + Time.writeTime(req.getSubmissionTime()));
 					}
-					double time = getOptimContext().qSim.getSimTimer().getTimeOfDay() + getOptimContext().drtConfig.getRequestUpdateTime();
-					req.setUpdateTime(time);
-					newRequests.add(req);
+					if (getOptimContext().qSim.getSimTimer().getTimeOfDay() - req.getSubmissionTime() <= getOptimContext().drtConfig.getAbortTime()) {
+						double nextUpdatedTime = getOptimContext().qSim.getSimTimer().getTimeOfDay() + getOptimContext().drtConfig.getRequestUpdateTime();
+                        req.setUpdateTime(nextUpdatedTime);
+                        newRequests.add(req);
+                    }else{
+					    eventsManager.processEvent(new PersonStuckEvent(getOptimContext().qSim.getSimTimer().getTimeOfDay(),req.getPassenger().getId(),req.getFromLink().getId(),req.getPassenger().getMode()));
+                    }
 				}
 			}
 			if (best != null) {

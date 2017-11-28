@@ -23,6 +23,7 @@
 package masterThesis.drt.closerouting;
 
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
 import masterThesis.drt.run.DrtConfigGroup;
 import org.apache.log4j.Logger;
@@ -58,29 +59,32 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 	private final StageActivityTypes drtStageActivityType = new DrtStageActivityType();
 	private final RoutingModule walkRouter;
 	private final RoutingModule accessWalkRouter;
+	private final Network network;
+	private final Scenario scenario;
+
+	private final String mode;
 	private final Map<Id<TransitStopFacility>, TransitStopFacility> stops;
 	private final DrtConfigGroup drtconfig;
 	private final double walkBeelineFactor;
-	private final Network network;
-	private final Scenario scenario;
 
 	/**
 	 *
 	 */
 	@Inject
-	public ClosestStopBasedDrtRoutingModule(@Named(TransportMode.walk) RoutingModule walkRouter,
-											@Named(TransportMode.access_walk) RoutingModule accessWalkRouter,
-                                            @Named(DrtConfigGroup.DRT_MODE) TransitSchedule transitSchedule, Scenario scenario) {
-		transitSchedule.getFacilities();
+	public ClosestStopBasedDrtRoutingModule( RoutingModule walkRouter,RoutingModule accessWalkRouter,
+                                             TransitSchedule transitSchedule, Scenario scenario, String mode) {
 		this.walkRouter = walkRouter;
 		this.accessWalkRouter = accessWalkRouter;
-		this.stops = transitSchedule.getFacilities();
+	    this.stops = transitSchedule.getFacilities();
 		this.drtconfig = (DrtConfigGroup)scenario.getConfig().getModules().get(DrtConfigGroup.GROUP_NAME);
 		this.walkBeelineFactor = scenario.getConfig().plansCalcRoute().getModeRoutingParams().get(TransportMode.access_walk)
 				.getBeelineDistanceFactor();
 		this.network = scenario.getNetwork();
 		this.scenario = scenario;
-	}
+		this.mode = mode;
+;	}
+
+
 
 	@Override
 	public List<? extends PlanElement> calcRoute(Facility<?> fromFacility, Facility<?> toFacility, double departureTime,
@@ -119,7 +123,6 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 			return (walkRouter.calcRoute(fromFacility, toFacility, departureTime, person));
 
 		}
-		String mode = identifyMode();
 		Leg drtLeg = PopulationUtils.createLeg(mode);
 		drtLeg.setDepartureTime(departureTime + walkLeg.getTravelTime() + 1);
 		drtLeg.setTravelTime(drtRoute.getTravelTime());
@@ -138,10 +141,6 @@ public class ClosestStopBasedDrtRoutingModule implements RoutingModule {
 				drtLeg.getDepartureTime() + drtLeg.getTravelTime() + 1, person));
 		return legList;
 	}
-
-	protected String identifyMode(){
-	    return DrtConfigGroup.DRT_MODE;
-    }
 
 	private Id<ActivityFacility> transitStopFacilityIdToActivity(Id<TransitStopFacility> transitStopFacilityId){
 		return Id.create(transitStopFacilityId.toString(),ActivityFacility.class);

@@ -212,7 +212,13 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
                 throw new RuntimeException("just encountered mode for which no scoring parameters are defined: " + leg.getMode().toString() ) ;
             }
         }
-        tmpScore += travelTime * modeParams.marginalUtilityOfTraveling_s;
+        if (leg.getMode().equals(TransportMode.transit_walk) || leg.getMode().equals(TransportMode.access_walk)
+                || leg.getMode().equals(TransportMode.egress_walk) || leg.getMode().equals(TransportMode.walk) ){
+            tmpScore += - Math.exp(travelTime * modeParams.marginalUtilityOfTraveling_s) + 1;
+        }else{
+            tmpScore += travelTime * modeParams.marginalUtilityOfTraveling_s;
+        }
+
         if (modeParams.marginalUtilityOfDistance_m != 0.0
                 || modeParams.monetaryDistanceCostRate != 0.0) {
             Route route = leg.getRoute();

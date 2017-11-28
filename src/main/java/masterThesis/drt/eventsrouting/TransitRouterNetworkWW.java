@@ -55,18 +55,14 @@ public final class TransitRouterNetworkWW implements Network {
 
 	public static final class TransitRouterNetworkNode implements Node {
 
-		public final TransitRouteStop stop;
-		public final TransitRoute route;
-		public final TransitLine line;
+		public final TransitStopFacility stop;
 		final Id<Node> id;
 		final Map<Id<Link>, TransitRouterNetworkLink> ingoingLinks = new LinkedHashMap<Id<Link>, TransitRouterNetworkLink>();
 		final Map<Id<Link>, TransitRouterNetworkLink> outgoingLinks = new LinkedHashMap<Id<Link>, TransitRouterNetworkLink>();
 
-		public TransitRouterNetworkNode(final Id<Node> id, final TransitRouteStop stop, final TransitRoute route, final TransitLine line) {
+		public TransitRouterNetworkNode(final Id<Node> id, final TransitStopFacility stop) {
 			this.id = id;
 			this.stop = stop;
-			this.route = route;
-			this.line = line;
 		}
 
 		@Override
@@ -91,7 +87,7 @@ public final class TransitRouterNetworkWW implements Network {
 
 		@Override
 		public Coord getCoord() {
-			return this.stop.getStopFacility().getCoord();
+			return this.stop.getCoord();
 		}
 
 		@Override
@@ -99,16 +95,8 @@ public final class TransitRouterNetworkWW implements Network {
 			return this.id;
 		}
 
-		public TransitRouteStop getStop() {
+		public TransitStopFacility getStop() {
 			return stop;
-		}
-
-		public TransitRoute getRoute() {
-			return route;
-		}
-
-		public TransitLine getLine() {
-			return line;
 		}
 
 		@Override
@@ -144,25 +132,14 @@ public final class TransitRouterNetworkWW implements Network {
 
 		final TransitRouterNetworkNode fromNode;
 		final TransitRouterNetworkNode toNode;
-		final TransitRoute route;
-		final TransitLine line;
 		final Id<Link> id;
 		private double length;
 
-		public TransitRouterNetworkLink(final Id<Link> id, final TransitRouterNetworkNode fromNode, final TransitRouterNetworkNode toNode, final TransitRoute route, final TransitLine line, Network network) {
+		public TransitRouterNetworkLink(final Id<Link> id, final TransitRouterNetworkNode fromNode, final TransitRouterNetworkNode toNode) {
 			this.id = id;
 			this.fromNode = fromNode;
 			this.toNode = toNode;
-			this.route = route;
-			this.line = line;
-			if(route==null)
-				this.length = CoordUtils.calcEuclideanDistance(this.toNode.stop.getStopFacility().getCoord(), this.fromNode.stop.getStopFacility().getCoord());
-			else {
-				this.length = 0;
-				for(Id<Link> linkId:route.getRoute().getSubRoute(fromNode.stop.getStopFacility().getLinkId(), toNode.stop.getStopFacility().getLinkId()).getLinkIds())
-					this.length += network.getLinks().get(linkId).getLength();
-				this.length += network.getLinks().get(toNode.stop.getStopFacility().getLinkId()).getLength();
-			}
+			this.length = CoordUtils.calcEuclideanDistance(this.toNode.stop.getCoord(), this.fromNode.stop.getCoord());
 		}
 
 		@Override
@@ -260,14 +237,6 @@ public final class TransitRouterNetworkWW implements Network {
 			throw new UnsupportedOperationException();
 		}
 
-		public TransitRoute getRoute() {
-			return route;
-		}
-
-		public TransitLine getLine() {
-			return line;
-		}
-
 		@Override
 		public double getFlowCapacityPerSec() {
 			// TODO Auto-generated method stub
@@ -285,29 +254,19 @@ public final class TransitRouterNetworkWW implements Network {
 			throw new UnsupportedOperationException();
 		}
 	}
-	public TransitRouterNetworkNode createNode(final TransitRouteStop stop, final TransitRoute route, final TransitLine line) {
+	public TransitRouterNetworkNode createNode(final TransitStopFacility stop, boolean wait) {
 		Id<Node> id = null;
-		if(line==null && route==null)
-			id = Id.createNodeId(stop.getStopFacility().getId().toString());
-		else
-			id = Id.createNodeId("number:"+nextNodeId++);
-		final TransitRouterNetworkNode node = new TransitRouterNetworkNode(id, stop, route, line);
+		id = Id.createNodeId(stop.getId().toString()+(wait?"_W":""));
+		final TransitRouterNetworkNode node = new TransitRouterNetworkNode(id, stop);
 		if(this.nodes.get(node.getId())!=null)
 			throw new RuntimeException();
 		this.nodes.put(node.getId(), node);
 		return node;
 	}
 
-	public TransitRouterNetworkLink createLink(final Network network, final TransitRouterNetworkNode fromNode, final TransitRouterNetworkNode toNode) {
-		final TransitRouterNetworkLink link = new TransitRouterNetworkLink(Id.createLinkId(this.nextLinkId++), fromNode, toNode, null, null, network);
+	public TransitRouterNetworkLink createLink(final TransitRouterNetworkNode fromNode, final TransitRouterNetworkNode toNode) {
+		final TransitRouterNetworkLink link = new TransitRouterNetworkLink(Id.createLinkId(this.nextLinkId++), fromNode, toNode);
 		this.links.put(link.getId(), link);
-		fromNode.outgoingLinks.put(link.getId(), link);
-		toNode.ingoingLinks.put(link.getId(), link);
-		return link;
-	}
-	public TransitRouterNetworkLink createLink(final Network network, final TransitRouterNetworkNode fromNode, final TransitRouterNetworkNode toNode, final TransitRoute route, final TransitLine line) {
-		final TransitRouterNetworkLink link = new TransitRouterNetworkLink(Id.createLinkId(this.nextLinkId++), fromNode, toNode, route, line, network);
-		this.getLinks().put(link.getId(), link);
 		fromNode.outgoingLinks.put(link.getId(), link);
 		toNode.ingoingLinks.put(link.getId(), link);
 		return link;
@@ -325,87 +284,65 @@ public final class TransitRouterNetworkWW implements Network {
 		double minY = Double.POSITIVE_INFINITY;
 		double maxX = Double.NEGATIVE_INFINITY;
 		double maxY = Double.NEGATIVE_INFINITY;
-		for (TransitRouterNetworkNode node : getNodes().values())
-			if(node.line == null) {
-				Coord c = node.stop.getStopFacility().getCoord();
-				if (c.getX() < minX)
-					minX = c.getX();
-				if (c.getY() < minY)
-					minY = c.getY();
-				if (c.getX() > maxX)
-					maxX = c.getX();
-				if (c.getY() > maxY)
-					maxY = c.getY();
-			}
+		for (TransitRouterNetworkNode node : getNodes().values()) {
+			Coord c = node.stop.getCoord();
+			if (c.getX() < minX)
+				minX = c.getX();
+			if (c.getY() < minY)
+				minY = c.getY();
+			if (c.getX() > maxX)
+				maxX = c.getX();
+			if (c.getY() > maxY)
+				maxY = c.getY();
+		}
 		QuadTree<TransitRouterNetworkNode> quadTree = new QuadTree<TransitRouterNetworkNode>(minX, minY, maxX, maxY);
 		for (TransitRouterNetworkNode node : getNodes().values()) {
-			if(node.line == null) {	
-				Coord c = node.stop.getStopFacility().getCoord();
-				quadTree.put(c.getX(), c.getY(), node);
-			}
+			Coord c = node.stop.getCoord();
+			quadTree.put(c.getX(), c.getY(), node);
 		}
 		this.qtNodes = quadTree;
 	}
-	public static TransitRouterNetworkWW createFromSchedule(final Network network, final TransitSchedule schedule, final double maxBeelineWalkConnectionDistance) {
+	public static TransitRouterNetworkWW createFromStops(final TransitSchedule schedule) {
 		log.info("start creating transit network");
 		final TransitRouterNetworkWW transitNetwork = new TransitRouterNetworkWW();
 		final Counter linkCounter = new Counter(" link #");
 		final Counter nodeCounter = new Counter(" node #");
-		int numTravelLinks = 0, numWaitingLinks = 0, numInsideLinks = 0, numTransferLinks = 0;
+		int numTravelLinks = 0, numWaitingLinks = 0;
 		Map<Id<TransitStopFacility>, TransitRouterNetworkNode> stops = new HashMap<Id<TransitStopFacility>, TransitRouterNetworkNode>();
-		TransitRouterNetworkNode nodeSR, nodeS;
+		TransitRouterNetworkNode nodeA, nodeB;
+		log.info("add nodes and waiting links");
 		// build stop nodes
-		for (TransitLine line : schedule.getTransitLines().values())
-			for (TransitRoute route : line.getRoutes().values())
-				for (TransitRouteStop stop : route.getStops()) {
-					nodeS = stops.get(stop.getStopFacility().getId());
-					if(nodeS == null) {
-						nodeS = transitNetwork.createNode(stop, null, null);
-						nodeCounter.incCounter();
-						stops.put(stop.getStopFacility().getId(), nodeS);
-					}
-				}
+		for (TransitStopFacility stop:schedule.getFacilities().values()) {
+			nodeB = transitNetwork.createNode(stop, true);
+			nodeCounter.incCounter();
+			stops.put(Id.create(stop.getId().toString()+"_W",TransitStopFacility.class), nodeB);
+		}
 		transitNetwork.finishInit();
-		// build transfer links
-		log.info("add transfer links");
-		// connect all stops with walking links if they're located less than beelineWalkConnectionDistance from each other
-		for (TransitRouterNetworkNode node : transitNetwork.getNodes().values())
-			for (TransitRouterNetworkNode node2 : transitNetwork.getNearestNodes(node.stop.getStopFacility().getCoord(), maxBeelineWalkConnectionDistance))
-				if (node!=node2) {
-					transitNetwork.createLink(network, node, node2);
-					linkCounter.incCounter();
-					numTransferLinks++;
-				}
-		// build nodes and links connecting the nodes according to the transit routes
-		log.info("add travel, waiting and inside links");
-		for (TransitLine line : schedule.getTransitLines().values())
-			for (TransitRoute route : line.getRoutes().values()) {
-				TransitRouterNetworkNode prevNode = null;
-				for (TransitRouteStop stop : route.getStops()) {
-					nodeS = stops.get(stop.getStopFacility().getId());
-					nodeSR = transitNetwork.createNode(stop, route, line);
-					nodeCounter.incCounter();
-					if (prevNode != null) {
-						transitNetwork.createLink(network, prevNode, nodeSR, route, line);
-						linkCounter.incCounter();
-						numTravelLinks++;
-					}
-					prevNode = nodeSR;
-					transitNetwork.createLink(network, nodeS, nodeSR);
+		for (TransitStopFacility stop:schedule.getFacilities().values()) {
+			nodeA = transitNetwork.createNode(stop, false);
+			nodeCounter.incCounter();
+			stops.put(stop.getId(), nodeA);
+			nodeB = stops.get(Id.create(stop.getId().toString()+"_W",TransitStopFacility.class));
+			transitNetwork.createLink(nodeB, nodeA);
+			linkCounter.incCounter();
+			numWaitingLinks++;
+		}
+		// build travel links
+		log.info("add travel links");
+		for(TransitStopFacility stopA:schedule.getFacilities().values())
+			for(TransitStopFacility stopB:schedule.getFacilities().values())
+				if(stopA!=stopB) {
+					nodeA = stops.get(stopA.getId());
+					nodeB = stops.get(Id.create(stopB.getId().toString()+"_W",TransitStopFacility.class));
+					transitNetwork.createLink(nodeA, nodeB);
 					linkCounter.incCounter();
 					numWaitingLinks++;
-					transitNetwork.createLink(network, nodeSR, nodeS);
-					linkCounter.incCounter();
-					numInsideLinks++;
 				}
-			}
 		log.info("transit router network statistics:");
 		log.info(" # nodes: " + transitNetwork.getNodes().size());
 		log.info(" # links total:     " + transitNetwork.getLinks().size());
 		log.info(" # travel links:  " + numTravelLinks);
 		log.info(" # waiting links:  " + numWaitingLinks);
-		log.info(" # inside links:  " + numInsideLinks);
-		log.info(" # transfer links:  " + numTransferLinks);
 		return transitNetwork;
 	}
 	public Collection<TransitRouterNetworkNode> getNearestNodes(final Coord coord, final double distance) {
