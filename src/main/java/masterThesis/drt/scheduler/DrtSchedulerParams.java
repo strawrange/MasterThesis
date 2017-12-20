@@ -25,13 +25,12 @@ import masterThesis.drt.run.DrtConfigGroup;
  * @author michalm
  */
 public class DrtSchedulerParams {
-	public final double stopDuration;
+	public final double stopDurationConstant;
+	public final double stopDurationBeta;
 
-	public DrtSchedulerParams(DrtConfigGroup drtCfg) {
-		this.stopDuration = drtCfg.getStopDuration();
-	}
 
-	public DrtSchedulerParams(double stopDuration) {
-		this.stopDuration = stopDuration;
+	public DrtSchedulerParams(double stopDurationConstant, double stopDurationBeta) {
+		this.stopDurationConstant = stopDurationConstant;
+		this.stopDurationBeta = stopDurationBeta;
 	}
 }

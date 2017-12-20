@@ -36,8 +36,8 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
     private double lastActivityEndTime = Time.UNDEFINED_TIME ;
     private static Map<Id<Vehicle>, EventLists> boardingTime = new HashMap<>();
     private Id<Person> personId;
-    private ArrayList<AVRecord> table = new ArrayList<>();
-    private int trips = 0;
+    //private ArrayList<AVRecord> table = new ArrayList<>();
+    //private int trips = 0;
     private static int ccc=0 ;
     private static BufferedWriter bw = null;
     private static int iteration = 0;
@@ -69,9 +69,10 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
                 this.nextStartPtLegIsFirstOfTrip = true;
             }
             this.lastActivityEndTime = event.getTime();
+            return;
         }
 
-        if (event instanceof PersonEntersVehicleEvent && currentLegIsDrtLeg) {
+        if (event instanceof PersonEntersVehicleEvent && currentLegIsDrtLeg ) {
 
             EventLists eventLists = new EventLists();
             if (this.boardingTime.containsKey(((PersonEntersVehicleEvent) event).getVehicleId())){
@@ -83,9 +84,10 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
             // add score of waiting, _minus_ score of travelling (since it is added in the legscoring above):
             this.score += (event.getTime() - this.lastActivityEndTime) * (this.params.marginalUtilityOfWaitingPt_s- this.params.modeParams.get(DrtConfigGroup.DRT_MODE).marginalUtilityOfTraveling_s);
             this.personId = ((PersonEntersVehicleEvent) event).getPersonId();
-            AVRecord record = new AVRecord(Id.create(trips,Leg.class), (PersonEntersVehicleEvent) event,this.lastActivityEndTime, this.params.marginalUtilityOfWaitingPt_s);
+            //AVRecord record = new AVRecord(Id.create(trips,Leg.class), (PersonEntersVehicleEvent) event,this.lastActivityEndTime, this.params.marginalUtilityOfWaitingPt_s);
 
-            table.add(record);
+            //table.add(record);
+            return;
         }
 
         if ( event instanceof PersonEntersVehicleEvent && currentLegIsPtLeg ) {
@@ -96,6 +98,7 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
             this.nextEnterPtIsFirstOfTrip = false ;
             // add score of waiting, _minus_ score of travelling (since it is added in the legscoring above):
             this.score += (event.getTime() - this.lastActivityEndTime) * (this.params.marginalUtilityOfWaitingPt_s- this.params.modeParams.get(TransportMode.pt).marginalUtilityOfTraveling_s);
+            return;
         }
 
         if (event instanceof PersonLeavesVehicleEvent && currentLegIsDrtLeg){
@@ -105,10 +108,10 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
             EventLists eventLists = this.boardingTime.get(((PersonLeavesVehicleEvent) event).getVehicleId());
             eventLists.add(event);
             int seats = 0;
-            double sumSeats = 0;
+            //double sumSeats = 0;
             double sumTime = 0;
             double maxSeats = 0;
-            double bonus = 0;
+            //double bonus = 0;
             boolean onBoard = false;
             for(int i = 0; i < eventLists.size(); i++){
                 Event e = eventLists.getEvents().get(i);
@@ -116,7 +119,7 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
                     Event lastEvent = eventLists.getEvents().get(i-1);
                     double duration = e.getTime() - lastEvent.getTime();
                     maxSeats=Double.max(seats,maxSeats);
-                    sumSeats += seats * duration;
+                    //sumSeats += seats * duration;
                     sumTime += duration;
                 }
                 if (e instanceof PersonEntersVehicleEvent){
@@ -132,60 +135,54 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
                     }
                 }
             }
-            this.score -= sumTime * bonusCalculation(maxSeats);
+            this.score += sumTime * bonusCalculation(maxSeats);
 
-            bonus = sumTime * bonusCalculation(maxSeats);
+            //bonus = sumTime * bonusCalculation(maxSeats);
             if (!personId.equals(((PersonLeavesVehicleEvent) event).getPersonId())){
                 throw new RuntimeException("Agent does not enter the vehicle!");
             }
-            AVRecord record = table.get(trips);
-            record.calculatePersonLeavesVehicleEvent(event.getTime(),sumSeats/sumTime,maxSeats,bonus,
-                    this.params.modeParams.get(DrtConfigGroup.DRT_MODE).marginalUtilityOfTraveling_s,  this.score);
-            trips++;
+            //AVRecord record = table.get(trips);
+            //record.calculatePersonLeavesVehicleEvent(event.getTime(),sumSeats/sumTime,maxSeats,bonus,
+            //        this.params.modeParams.get(DrtConfigGroup.DRT_MODE).marginalUtilityOfTraveling_s,  this.score);
+            //trips++;
+            return;
         }
 
         if ( event instanceof PersonDepartureEvent ) {
             this.currentLegIsPtLeg = TransportMode.pt.equals( ((PersonDepartureEvent)event).getLegMode() );
-            if ( currentLegIsPtLeg ) {
-                if ( !this.nextStartPtLegIsFirstOfTrip ) {
-                    this.score -= params.modeParams.get(TransportMode.pt).constant ;
-                    // (yyyy deducting this again, since is it wrongly added above.  should be consolidated; this is so the code
-                    // modification is minimally invasive.  kai, dec'12)
-                }
-                this.nextStartPtLegIsFirstOfTrip = false ;
-            }
+            this.currentLegIsDrtLeg = ((PersonDepartureEvent) event).getLegMode().startsWith(DrtConfigGroup.DRT_MODE);
+            return;
         }
-
 
     }
 
     private double bonusCalculation(double maxSeats){
-        double y = (- Math.exp(maxSeats - 5.36) + 16.013) / 3600;
-        double bonus = - this.params.modeParams.get(DrtConfigGroup.DRT_MODE).marginalUtilityOfTraveling_s - y ;
-        return - bonus;
+        //double y = (- Math.exp(maxSeats - 5.36) + 16.013) / 3600;
+        double bonus =  maxSeats * 2 / 3600 ;
+        return bonus;
     }
 
     @Override
     public void finish() {
-        int i = 0;
-        Id<Vehicle> id = Id.createVehicleId("AV" + i + "__" + this.personId);
-        while (boardingTime.containsKey(id)) {
-            this.score += boardingTime.get(id).getCount();
-            i++;
-            id = Id.createVehicleId("AV" + i + "__" + this.personId);
-        }
-        try {
-            for (AVRecord record: table){
-                bw.newLine();
-                bw.write(iteration + ";" + record.getLegId().toString() + ";" + this.personId.toString() + ";" + record.getVehicleId().toString() + ";" +
-                        record.getLegStartTime() + ";" + record.getLegEndTime() + ";" + record.getAvgOccupancy() + ";" + record.getMaxOccupancy() + ";" +
-                                record.getWaitingScore() + ";" + record.getTravellingScore() + ";" + record.getBonus1() + ";" + record.getBonus2() + ";" +
-                        record.getFinalScore1() + ";" + record.getFinalScore2()
-                );
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        int i = 0;
+//        Id<Vehicle> id = Id.createVehicleId("AV" + i + "__" + this.personId);
+//        while (boardingTime.containsKey(id)) {
+//            this.score += boardingTime.get(id).getCount();
+//            i++;
+//            id = Id.createVehicleId("AV" + i + "__" + this.personId);
+//        }
+//        try {
+//            for (AVRecord record: table){
+//                bw.newLine();
+//                bw.write(iteration + ";" + record.getLegId().toString() + ";" + this.personId.toString() + ";" + record.getVehicleId().toString() + ";" +
+//                        record.getLegStartTime() + ";" + record.getLegEndTime() + ";" + record.getAvgOccupancy() + ";" + record.getMaxOccupancy() + ";" +
+//                                record.getWaitingScore() + ";" + record.getTravellingScore() + ";" + record.getBonus1() + ";" + record.getBonus2() + ";" +
+//                        record.getFinalScore1() + ";" + record.getFinalScore2()
+//                );
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

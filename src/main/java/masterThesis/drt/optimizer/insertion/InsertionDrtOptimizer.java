@@ -84,7 +84,7 @@ public class InsertionDrtOptimizer extends AbstractDrtOptimizer implements Mobsi
 					optimContext.travelDisutility, optimContext.travelTime, preProcessDijkstra, fastRouterFactory,
 					true);
 			singleVehicleInsertionProblems[i] = new SingleVehicleInsertionProblem(router, backwardRouter,
-					optimContext.scheduler.getParams().stopDuration, drtCfg.getMaxWaitTime(), optimContext.qSim.getSimTimer());
+					optimContext.scheduler.getParams().stopDurationConstant + optimContext.scheduler.getParams().stopDurationBeta, drtCfg.getMaxWaitTime(), optimContext.qSim.getSimTimer(), drtCfg.getDetourIdx());
 		}
 
 		insertionProblem = new ParallelMultiVehicleInsertionProblem(singleVehicleInsertionProblems,optimContext.filter);
@@ -108,13 +108,13 @@ public class InsertionDrtOptimizer extends AbstractDrtOptimizer implements Mobsi
 		ArrayList<DrtRequest> newRequests = new ArrayList<>();
 		while (reqIter.hasNext()) {
 			DrtRequest req = reqIter.next();
-			if (req.getUpdateTime() != getOptimContext().qSim.getSimTimer().getTimeOfDay()){
+ 			if (req.getUpdateTime()  != getOptimContext().qSim.getSimTimer().getTimeOfDay()){
                 getUnplannedRequests().addAll(newRequests);
 				return;
 			}
 			BestInsertion best;
 			if(req.getPassenger().getMode().equals(DrtConfigGroup.DRT_CREATION)) {
-				VehicleData singleVData = generator.generateDrtAgent(req);
+ 				VehicleData singleVData = generator.generateDrtAgent(req);
 				best = insertionProblem.insertionSingleVehicleProblem(req, singleVData);
 				vData.addEntry(best.vehicleEntry);
 			}else{

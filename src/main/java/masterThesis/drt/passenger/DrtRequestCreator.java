@@ -28,21 +28,18 @@ import masterThesis.drt.run.DrtConfigGroup;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import masterThesis.dvrp.data.Request;
 import masterThesis.dvrp.passenger.PassengerRequestCreator;
 import masterThesis.dvrp.path.VrpPathWithTravelData;
 import masterThesis.dvrp.path.VrpPaths;
 import masterThesis.dvrp.router.TimeAsTravelDisutility;
 import masterThesis.dvrp.run.DvrpModule;
 import masterThesis.dvrp.trafficmonitoring.VrpTravelTimeModules;
+import org.matsim.contrib.dvrp.data.Request;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 import org.matsim.core.mobsim.framework.MobsimTimer;
 import org.matsim.core.mobsim.qsim.QSim;
-import org.matsim.core.router.ArrayFastRouterDelegateFactory;
-import org.matsim.core.router.FastAStarEuclidean;
 import org.matsim.core.router.FastAStarEuclideanFactory;
-import org.matsim.core.router.FastRouterDelegateFactory;
 import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
 import org.matsim.core.router.util.*;
 
@@ -78,8 +75,8 @@ public class DrtRequestCreator implements PassengerRequestCreator {
 
 	@Override
 	public DrtRequest createRequest(Id<Request> id, MobsimPassengerAgent passenger, Link fromLink, Link toLink,
-                                    double departureTime, double submissionTime) {
-		double latestDepartureTime = departureTime + drtCfg.getMaxWaitTime();
+									double departureTime, double submissionTime) {
+		double latestDepartureTime = timer.getTimeOfDay() + drtCfg.getMaxWaitTime();
 
 		VrpPathWithTravelData unsharedRidePath = VrpPaths.calcAndCreatePath(fromLink, toLink, departureTime, router,
 				travelTime);

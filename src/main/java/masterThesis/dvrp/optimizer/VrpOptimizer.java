@@ -19,9 +19,8 @@
 
 package masterThesis.dvrp.optimizer;
 
-import masterThesis.dvrp.data.Request;
 import masterThesis.dvrp.data.Vehicle;
-import masterThesis.dvrp.vrpagent.VrpAgentSource;
+import org.matsim.contrib.dvrp.data.Request;
 
 /**
  * Minimal functionality of dvrp optimizers in the dvrp contrib. <br>

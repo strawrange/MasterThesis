@@ -41,13 +41,12 @@ public class InsertionCostCalculator {
 	private final double stopDuration;
 	private final double maxWaitTime;
 
-	private DrtConfigGroup drtConfigGroup;
+	private final double detourIdx;
 
-	public InsertionCostCalculator(double stopDuration, double maxWaitTime) {
+	public InsertionCostCalculator(double stopDuration, double maxWaitTime, double detourIdx) {
 		this.stopDuration = stopDuration;
 		this.maxWaitTime = maxWaitTime;
-		Injector inject = Guice.createInjector();
-		drtConfigGroup = inject.getInstance(DrtConfigGroup.class);
+		this.detourIdx = detourIdx;
 	}
 
 	// the main goal - minimise bus operation time
@@ -131,8 +130,8 @@ public class InsertionCostCalculator {
 		for (int s = insertion.pickupIdx; s < insertion.dropoffIdx; s++) {
 			Stop stop = vEntry.stops.get(s);
 			// all stops after pickup are delayed by pickupDetourTimeLoss
-			if (stop.task.getBeginTime() + pickupDetourTimeLoss > stop.maxArrivalTime  * drtConfigGroup.getDetourIdx() //
-					|| stop.task.getEndTime() + pickupDetourTimeLoss > stop.maxDepartureTime * drtConfigGroup.getDetourIdx()) {
+			if (stop.task.getBeginTime() + pickupDetourTimeLoss > stop.maxArrivalTime    //
+					|| stop.task.getEndTime() + pickupDetourTimeLoss > stop.maxDepartureTime  + detourIdx) {
 				return false;
 			}
 		}
@@ -141,8 +140,8 @@ public class InsertionCostCalculator {
 		for (int s = insertion.dropoffIdx; s < vEntry.stops.size(); s++) {
 			Stop stop = vEntry.stops.get(s);
 			// all stops after dropoff are delayed by totalTimeLoss
-			if (stop.task.getBeginTime() + totalTimeLoss > stop.maxArrivalTime * drtConfigGroup.getDetourIdx() //
-					|| stop.task.getEndTime() + totalTimeLoss > stop.maxDepartureTime * drtConfigGroup.getDetourIdx()) {
+			if (stop.task.getBeginTime() + totalTimeLoss > stop.maxArrivalTime //
+					|| stop.task.getEndTime() + totalTimeLoss > stop.maxDepartureTime +  detourIdx) {
 				return false;
 			}
 		}

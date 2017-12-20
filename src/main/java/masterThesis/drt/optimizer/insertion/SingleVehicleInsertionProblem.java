@@ -102,13 +102,13 @@ public class SingleVehicleInsertionProblem {
 	// private boolean[] considerDropoffInsertion;
 
 	public SingleVehicleInsertionProblem(MultiNodePathCalculator router, BackwardMultiNodePathCalculator backwardRouter,
-			double stopDuration, double maxWaitTime, MobsimTimer timer) {
+			double stopDuration, double maxWaitTime, MobsimTimer timer, double detourIdx) {
 		forwardPathSearch = OneToManyPathSearch.createForwardSearch(router);
 		backwardPathSearch = OneToManyPathSearch.createBackwardSearch(backwardRouter);
 
 		this.stopDuration = stopDuration;
 		this.timer = timer;
-		costCalculator = new InsertionCostCalculator(stopDuration, maxWaitTime);
+		costCalculator = new InsertionCostCalculator(stopDuration, maxWaitTime, detourIdx);
 	}
 
 	public BestInsertion findBestInsertion(DrtRequest drtRequest, VehicleData.Entry vEntry) {

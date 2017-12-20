@@ -31,12 +31,15 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	public static final String DRT_MODE = "drt";
 	public static final String DRT_CREATION = "drt creation";
 
+
 	@SuppressWarnings("deprecation")
 	public static DrtConfigGroup get(Config config) {
 		return (DrtConfigGroup)config.getModule(GROUP_NAME);
 	}
 
-	public static final String STOP_DURATION = "stopDuration";
+	public static final String STOP_DURATION_BETA =  "stopDurationBeta";
+	public static final String STOP_DURATION_CONSTANT = "stopDurationConstant";
+
 	public static final String MAX_WAIT_TIME = "maxWaitTime";
 	public static final String MAX_TRAVEL_TIME_ALPHA = "maxTravelTimeAlpha";
 	public static final String MAX_TRAVEL_TIME_BETA = "maxTravelTimeBeta";
@@ -66,11 +69,12 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	private static final String KILLING_TIME = "killingTime";
 	private static final String ABORT_TIME = "abortTime";
 
-	private double stopDuration = Double.NaN;// seconds
+	private double stopDurationBeta = Double.NaN;// seconds
+	private double stopDurationConstant = Double.NaN;//seconds
 	private double maxWaitTime = Double.NaN;// seconds
 
 
-	private double detourIdx = 1;
+	private double detourIdx = 0;
 
 	// max arrival time defined as:
 	// maxTravelTimeAlpha * unshared_ride_travel_time(fromLink, toLink) + maxTravelTimeBeta,
@@ -124,7 +128,8 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 	@Override
 	public Map<String, String> getComments() {
 		Map<String, String> map = super.getComments();
-		map.put(STOP_DURATION, "Bus stop duration.");
+		map.put(STOP_DURATION_BETA, "Bus stop dwell time per passenger.");
+		map.put(STOP_DURATION_CONSTANT, "Bus stop acceleration and deceleration time.");
 		map.put(MAX_WAIT_TIME, "Max wait time for the bus to come (optimisation constraint).");
 		map.put(MAX_TRAVEL_TIME_ALPHA,
 				"Defines the slope of the maxTravelTime estimation function (optimisation constraint), i.e. "
@@ -168,21 +173,31 @@ public class DrtConfigGroup extends ReflectiveConfigGroup {
 				"Prints detailed warnings for DRT customers that cannot be served or routed. Default is false.");
 		map.put(K_NEAREST_VEHICLES, "Filters the k nearest vehicles to the request. Speeds up simulation with big fleets, but could lead to a worse solution. Default: k==0 (no filtering used)");
 		map.put(INITIAL_FLEET_SIZE, "If there is no pre defined vehicle file, the initial fleet size should be defined, the default value is 0");
-		map.put(DETOUR_IDX, "Tolerated detour, 1 means no detour accepted, 1.2 means 20% detour tolerated");
+		map.put(DETOUR_IDX, "Tolerated waiting Time for passenger whose request is accepted. Maximum waiting time for passenger whose request is accepted.");
 		map.put(REQUEST_UPDATE_TIME, "request update time interval");
 		map.put(KILLING_TIME, " If a vehicle is idle for more than killing time, it will disappear from the system-");
 		map.put(ABORT_TIME, "If a passenger waits for more than 2 hours, it will be labeled as abort...");
 		return map;
 	}
 
-	@StringGetter(STOP_DURATION)
-	public double getStopDuration() {
-		return stopDuration;
+	@StringGetter(STOP_DURATION_CONSTANT)
+	public double getStopDurationConstant() {
+		return stopDurationConstant;
 	}
 
-	@StringSetter(STOP_DURATION)
-	public void setStopDuration(double stopDuration) {
-		this.stopDuration = stopDuration;
+	@StringSetter(STOP_DURATION_CONSTANT)
+	public void setStopDurationConstant(double stopDurationConstant) {
+		this.stopDurationConstant = stopDurationConstant;
+	}
+
+	@StringGetter(STOP_DURATION_BETA)
+	public double getStopDurationBeta() {
+		return stopDurationBeta;
+	}
+
+	@StringSetter(STOP_DURATION_BETA)
+	public void setStopDurationBeta(double stopDurationBeta) {
+		this.stopDurationBeta = stopDurationBeta;
 	}
 
 	@StringGetter(MAX_WAIT_TIME)

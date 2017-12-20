@@ -20,21 +20,19 @@
 package masterThesis.drt.optimizer;
 
 import masterThesis.drt.data.DrtRequest;
-import masterThesis.drt.run.DrtConfigGroup;
 import masterThesis.drt.schedule.DrtStopTask;
 import masterThesis.drt.schedule.DrtTask;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.PersonStuckEvent;
 import org.matsim.api.core.v01.network.Link;
-import masterThesis.dvrp.data.Request;
 import masterThesis.dvrp.data.Vehicle;
 import masterThesis.dvrp.schedule.Task;
+import org.matsim.contrib.dvrp.data.Request;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.api.experimental.events.VehicleArrivesAtFacilityEvent;
 import org.matsim.core.mobsim.framework.events.MobsimBeforeSimStepEvent;
 
-import java.util.Collection;
 import java.util.PriorityQueue;
 
 /**

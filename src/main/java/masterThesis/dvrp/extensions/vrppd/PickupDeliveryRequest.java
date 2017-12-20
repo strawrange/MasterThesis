@@ -19,8 +19,8 @@
 
 package masterThesis.dvrp.extensions.vrppd;
 
-import masterThesis.dvrp.data.Request;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.contrib.dvrp.data.Request;
 
 public interface PickupDeliveryRequest extends Request {
 	Link getFromLink();

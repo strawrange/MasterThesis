@@ -43,8 +43,8 @@ public class DrtConfigConsistencyChecker extends DvrpConfigConsistencyChecker {
 		if (drtCfg.getInitialFleetSize() < 0){
 			throw new RuntimeException(DrtConfigGroup.INITIAL_FLEET_SIZE + " is below to 0.0! See comments in the DrtConfigGroup");
 		}
-		if (drtCfg.getDetourIdx() < 1){
-			throw new RuntimeException(DrtConfigGroup.DETOUR_IDX + " is below 1! See comments in the DrtConfigGroup");
+		if (drtCfg.getDetourIdx() < 0){
+			throw new RuntimeException(DrtConfigGroup.DETOUR_IDX + " is below 0! See comments in the DrtConfigGroup");
 		}
 	}
 }

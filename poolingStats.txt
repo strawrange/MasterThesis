@@ -1,1 +1,0 @@
-Iteration;LegID;PersonID;VehicleID;LegStartTime;LegEndTime;AvgOccupancy;MaxOccupancy;WaitScore;TravelScore;Bonus1;Bonus2;FinalScore1;FinalScore2

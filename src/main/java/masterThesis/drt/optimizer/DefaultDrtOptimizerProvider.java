@@ -74,7 +74,7 @@ public class DefaultDrtOptimizerProvider implements Provider<DrtOptimizer> {
 
 	@Override
 	public DrtOptimizer get() {
-		DrtSchedulerParams schedulerParams = new DrtSchedulerParams(drtCfg.getStopDuration());
+		DrtSchedulerParams schedulerParams = new DrtSchedulerParams(drtCfg.getStopDurationConstant(),drtCfg.getStopDurationBeta());
 		DrtScheduler scheduler = new DrtScheduler(drtCfg, fleet, qSim.getSimTimer(), schedulerParams, travelTime);
 
 //		DrtVehicleFilter filter = new DistanceFilter(drtCfg.getEstimatedDrtSpeed()*drtCfg.getMaxWaitTime()*drtCfg.getEstimatedBeelineDistanceFactor());

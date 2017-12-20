@@ -21,6 +21,7 @@
 package masterThesis.drt.eventsrouting;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import masterThesis.drt.closerouting.DrtStageActivityType;
 import masterThesis.drt.run.DrtConfigGroup;
@@ -60,23 +61,26 @@ import java.util.*;
 
 public class TransitRouterVariableImpl implements RoutingModule {
 
-    @Inject
 	private final TransitRouterNetworkWW transitNetwork;
-	private final DrtTransitRouterConfig config;
-	private final TransitRouterNetworkTravelTimeAndDisutility ttCalculator;
+	private TransitRouterConfig config;
+	private TransitRouterNetworkTravelTimeAndDisutilityWS ttCalculator;
 
     private final MultiNodeDijkstra dijkstra;
     private final String mode;
 
 
 
-	public TransitRouterVariableImpl(TransitRouterConfig config, final TransitRouterNetworkTravelTimeAndDisutility ttCalculator,
-									 final TransitRouterNetworkWW routerNetwork, String mode, PlanCalcScoreConfigGroup scoreConfigGroup) {
-		this.config = (DrtTransitRouterConfig) config;
-	    this.transitNetwork = routerNetwork;
-		this.ttCalculator = ttCalculator;
-		this.dijkstra = new MultiNodeDijkstra(this.transitNetwork, this.ttCalculator, this.ttCalculator);
+	public TransitRouterVariableImpl(DrtTransitRouterConfig config, final TransitRouterNetworkWW routerNetwork, String mode,TransitRouterCommonDisutility delegate) {
+		this.transitNetwork = routerNetwork;
 		this.mode = mode;
+		if(this.mode.equals(DrtConfigGroup.DRT_MODE)) {
+			this.ttCalculator = new TransitRouterNetworkTravelTimeAndDisutilityWS(delegate,config);
+		}
+		else {
+			this.ttCalculator = new TransitRouterNetworkTravelTimeAndDisutilityWSCreation(delegate,config);
+		}
+		this.dijkstra = new MultiNodeDijkstra(this.transitNetwork, this.ttCalculator, this.ttCalculator);
+		this.config = config;
 	}
 	
 	private Map<Node, InitialNode> locateWrappedNearestTransitNodes(Person person, Coord coord, double departureTime){

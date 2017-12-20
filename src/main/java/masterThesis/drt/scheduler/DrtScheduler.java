@@ -178,7 +178,7 @@ public class DrtScheduler implements ScheduleInquiry {
 
 			case STOP: {
 				// TODO does not consider prebooking!!!
-				double duration = params.stopDuration;
+				int duration = (int) (task.getEndTime() - task.getBeginTime());
 				return newBeginTime + duration;
 			}
 
@@ -237,6 +237,7 @@ public class DrtScheduler implements ScheduleInquiry {
 
 			if (stopTask != null && request.getFromLink() == stopTask.getLink()) { // no detour; no new stop task
 				// add pickup request to stop task
+				stopTask.setEndTime(stopTask.getEndTime() + params.stopDurationBeta);
 				stopTask.addPickupRequest(request);
 				request.setPickupTask(stopTask);
 
@@ -270,7 +271,10 @@ public class DrtScheduler implements ScheduleInquiry {
 					updateTimelineStartingFromTaskIdx(vehicleEntry.vehicle, stopTask.getTaskIdx() + 2,
 							driveFromPickupTask.getEndTime());
 					///////
-				}
+				}else{
+                    updateTimelineStartingFromTaskIdx(vehicleEntry.vehicle, stopTask.getTaskIdx() + 1,
+                            stopTask.getEndTime());
+                }
 
 				return;
 			} else {
@@ -308,7 +312,7 @@ public class DrtScheduler implements ScheduleInquiry {
 		// insert pickup stop task
 		double startTime = beforePickupTask.getEndTime();
 		int taskIdx = beforePickupTask.getTaskIdx() + 1;
-		DrtStopTask pickupStopTask = new DrtStopTask(startTime, startTime + params.stopDuration, request.getFromLink(), request.getFromStop());
+		DrtStopTask pickupStopTask = new DrtStopTask(startTime, startTime + params.stopDurationConstant + params.stopDurationBeta, request.getFromLink(), request.getFromStop());
 		schedule.addTask(taskIdx, pickupStopTask);
 		pickupStopTask.addPickupRequest(request);
 		request.setPickupTask(pickupStopTask);
@@ -318,7 +322,7 @@ public class DrtScheduler implements ScheduleInquiry {
 				: stops.get(insertion.pickupIdx).task.getLink(); // pickup->i+1
 
 		VrpPathWithTravelData vrpPath = VrpPaths.createPath(request.getFromLink(), toLink,
-				startTime + params.stopDuration, insertion.pathFromPickup.path, travelTime);
+				pickupStopTask.getEndTime(), insertion.pathFromPickup.path, travelTime);
 		Task driveFromPickupTask = new DrtDriveTask(vrpPath);
 		schedule.addTask(taskIdx + 1, driveFromPickupTask);
 
@@ -330,17 +334,22 @@ public class DrtScheduler implements ScheduleInquiry {
 	private void insertDropoff(VehicleData.Entry vehicleEntry, DrtRequest request, Insertion insertion) {
 		Schedule schedule = vehicleEntry.vehicle.getSchedule();
 		List<Stop> stops = vehicleEntry.stops;
-
+		DrtStopTask dropoffStopTask;
 		Task driveToDropoffTask;
+		double startTime;
 		if (insertion.pickupIdx == insertion.dropoffIdx) { // no drive to dropoff
 			int pickupTaskIdx = request.getPickupTask().getTaskIdx();
 			driveToDropoffTask = schedule.getTasks().get(pickupTaskIdx + 1);
+			startTime = driveToDropoffTask.getEndTime();
+			dropoffStopTask = new DrtStopTask(startTime, startTime + params.stopDurationConstant +  params.stopDurationBeta, request.getToLink(), request.getToStop());
 		} else {
 			DrtStopTask stopTask = stops.get(insertion.dropoffIdx - 1).task;
 			if (request.getToLink() == stopTask.getLink()) { // no detour; no new stop task
 				// add dropoff request to stop task
+				stopTask.setEndTime(stopTask.getEndTime() + params.stopDurationBeta);
 				stopTask.addDropoffRequest(request);
 				request.setDropoffTask(stopTask);
+                updateTimelineStartingFromTaskIdx(vehicleEntry.vehicle, stopTask.getTaskIdx() + 1, stopTask.getEndTime());
 				return;
 			} else { // add drive task to dropoff location
 
@@ -359,13 +368,13 @@ public class DrtScheduler implements ScheduleInquiry {
 						stopTask.getEndTime(), insertion.pathToDropoff.path, travelTime);
 				driveToDropoffTask = new DrtDriveTask(vrpPath);
 				schedule.addTask(stopTask.getTaskIdx() + 1, driveToDropoffTask);
+				startTime = driveToDropoffTask.getEndTime();
+				dropoffStopTask = new DrtStopTask(startTime, startTime + params.stopDurationBeta + params.stopDurationConstant, request.getToLink(), request.getToStop());
 			}
 		}
 
 		// insert dropoff stop task
-		double startTime = driveToDropoffTask.getEndTime();
 		int taskIdx = driveToDropoffTask.getTaskIdx() + 1;
-		DrtStopTask dropoffStopTask = new DrtStopTask(startTime, startTime + params.stopDuration, request.getToLink(), request.getToStop());
 		schedule.addTask(taskIdx, dropoffStopTask);
 		dropoffStopTask.addDropoffRequest(request);
 		request.setDropoffTask(dropoffStopTask);
@@ -387,7 +396,7 @@ public class DrtScheduler implements ScheduleInquiry {
 			Link toLink = stops.get(insertion.dropoffIdx).task.getLink(); // dropoff->j+1
 
 			VrpPathWithTravelData vrpPath = VrpPaths.createPath(request.getToLink(), toLink,
-					startTime + params.stopDuration, insertion.pathFromDropoff.path, travelTime);
+                    schedule.getTasks().get(taskIdx).getEndTime(), insertion.pathFromDropoff.path, travelTime);
 			Task driveFromDropoffTask = new DrtDriveTask(vrpPath);
 			schedule.addTask(taskIdx + 1, driveFromDropoffTask);
 

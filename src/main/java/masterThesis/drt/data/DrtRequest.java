@@ -23,10 +23,10 @@ import masterThesis.drt.run.DrtConfigGroup;
 import masterThesis.drt.schedule.DrtStopTask;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import masterThesis.dvrp.data.Request;
-import masterThesis.dvrp.data.RequestImpl;
 import masterThesis.dvrp.passenger.PassengerRequest;
 import masterThesis.dvrp.path.VrpPathWithTravelData;
+import org.matsim.contrib.dvrp.data.Request;
+import org.matsim.contrib.dvrp.data.RequestImpl;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 import org.matsim.core.router.ActivityWrapperFacility;
 import org.matsim.pt.transitSchedule.TransitStopFacilityImpl;
@@ -58,18 +58,24 @@ public class DrtRequest extends RequestImpl implements PassengerRequest {
 	private DrtStopTask dropoffTask = null;
 	private final double latestArrivalTime;
 	private final VrpPathWithTravelData unsharedRidePath;
+	private double updateTime;
+	private final double maxWaitTime;
+	private double modifiableLatestStartTime;
 
 
 
 	public DrtRequest(Id<Request> id, MobsimPassengerAgent passenger, Link fromLink, Link toLink,
-			double earliestStartTime, double latestStartTime, double latestArrivalTime, double submissionTime,
-			VrpPathWithTravelData unsharedRidePath) {
+					  double earliestStartTime, double latestStartTime, double latestArrivalTime, double submissionTime,
+					  VrpPathWithTravelData unsharedRidePath) {
 		super(id, 1, earliestStartTime, latestStartTime, submissionTime);
 		this.passenger = passenger;
 		this.fromLink = fromLink;
 		this.toLink = toLink;
 		this.latestArrivalTime = latestArrivalTime;
 		this.unsharedRidePath = unsharedRidePath;
+		this.maxWaitTime = latestStartTime -submissionTime;
+		this.updateTime = submissionTime + 1;
+		this.modifiableLatestStartTime = latestStartTime;
 		if (passenger.getCurrentFacility() instanceof ActivityWrapperFacility){
 			this.fromStop = Id.create(passenger.getCurrentFacility().getId(),TransitStopFacility.class);
 		}else{
@@ -158,6 +164,21 @@ public class DrtRequest extends RequestImpl implements PassengerRequest {
 		}
 
 		throw new IllegalStateException("Unreachable code");
+	}
+
+
+	public void setUpdateTime(double time) {
+		this.updateTime=time;
+		this.modifiableLatestStartTime = time + maxWaitTime;
+	}
+
+	@Override
+	public double getLatestStartTime() {
+		return this.modifiableLatestStartTime;
+	}
+
+	public double getUpdateTime(){
+		return this.updateTime;
 	}
 
 }

@@ -3,6 +3,8 @@ package masterThesis.dvrp.data;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
+import masterThesis.drt.data.DrtRequest;
+import org.matsim.contrib.dvrp.data.Request;
 
 import java.util.Comparator;
 
@@ -30,7 +32,11 @@ public class Requests {
 
 	public static final Comparator<Request> UPDATE_TIME_COMPARATOR = new Comparator<Request>() {
 		public int compare(Request r1, Request r2) {
-			return Double.compare(r1.getUpdateTime(), r2.getUpdateTime());
+			if (r1 instanceof DrtRequest && r2 instanceof DrtRequest) {
+				return Double.compare(((DrtRequest) r1).getUpdateTime(),((DrtRequest) r2).getUpdateTime());
+			}else{
+				throw new RuntimeException("Only Drt Request can use this comparator");
+			}
 		}
 	};
 

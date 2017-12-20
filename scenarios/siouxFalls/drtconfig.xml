@@ -26,7 +26,7 @@
 		<!-- Defines the shift of the maxTravelTime estimation function (optimisation constraint), i.e. maxTravelTimeAlpha * estimated_drt_travel_time + maxTravelTimeBeta. Beta should not be smaller than 0. -->
 		<param name="maxTravelTimeBeta" value="600.0" />
 
-		<!-- Max wait time for the bus to come (optimisation constraint). -->
+		<!-- Max travel time from vehicle to drt passenger (optimisation constraint). -->
 		<param name="maxWaitTime" value="600.0" />
 
 		<!-- Maximum walk distance to next stop location in stationbased system. -->
@@ -37,9 +37,12 @@
 
 		<!-- Operational Scheme, either door2door or stationbased. door2door by default -->
 		<param name="operationalScheme" value="stationbased" />
+		<!-- Bus stop dwell time per passenger. -->
+		<param name="stopDurationBeta" value="2.0" />
 
-		<!-- Bus stop duration. -->
-		<param name="stopDuration" value="60.0" />
+		<!-- Bus stop acceleration and deceleration time. -->
+		<param name="stopDurationConstant" value="10.0" />
+
 
 		<!-- Stop locations file (transit schedule format, but without lines) for DRT stops. Used only for the stationbased mode -->
 		<param name="transitStopFile" value="schedule.xml" />
@@ -60,8 +63,8 @@
 		<param name="writeDetailedVehicleStats" value="false" />
 
 		<param name="initialFleetSize" value="0"/>
-		<!-- Tolerated detour, 1 means no detour accepted, 1.2 means 20% detour tolerated, the value must be larger or equals to 1 -->
-		<param name="detourIdx" value="1.2"/>
+		<!-- Maximum extra waiting time for passenger whose request is accepted. Max waiting time equals detouIdx + maxWaitTime-->
+		<param name="detourIdx" value="300"/>
 		<!-- request update time interval-->
 		<param name="requestUpdateTime" value="600"/>
 		<!-- If a vehicle is idle for more than killing time, it will disappear from the system-->
@@ -84,7 +87,7 @@
 	</module>
 	
 	<module name="controler">
-		<param name="outputDirectory" value="output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abort_abortTime_transitRouter_waitTimeCalculator_expWalkScore_100" />
+		<param name="outputDirectory" value="output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abort_abortTime_transitRouter_waitTimeCalculator_expWalkScore_100_DisutilityCreation_WaitTimeDebug_update30_noExpRideShareBonus" />
 		<param name="firstIteration" value="0" />
 		<param name="lastIteration" value="100" />
 		<param name="eventsFileFormat" value="xml" />
@@ -96,7 +99,7 @@
 	</module>
 
 	<module name="plans" >
-		<param name="inputPlansFile" value="population_10prct_drt_new.xml.gz" />
+		<param name="inputPlansFile" value="population_10prct_90drt_new.xml.gz" />
 	</module>
 	<module name="network" >
 		<param name="inputNetworkFile" value="network.xml" />
@@ -189,7 +192,7 @@
 
     <module name="strategy">
         <param name="maxAgentPlanMemorySize" value="4" /> <!-- 0 means unlimited -->
-		<param name="fractionOfIterationsToDisableInnovation" value="0.8"/>
+		<param name="fractionOfIterationsToDisableInnovation" value="0.6"/>
 
 		<param name="ModuleProbability_1" value="0.9" />
 		<param name="Module_1" value="SelectExpBeta"/>

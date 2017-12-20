@@ -19,6 +19,7 @@
 
 package masterThesis.dvrp.passenger;
 
+import masterThesis.drt.schedule.DrtStopTask;
 import masterThesis.dvrp.schedule.StayTask;
 import masterThesis.dynagent.AbstractDynActivity;
 import masterThesis.dynagent.DynAgent;
@@ -43,9 +44,9 @@ public class BusStopActivity extends AbstractDynActivity implements PassengerPic
 
 	private int passengersAboard;
 	private double endTime = END_ACTIVITY_LATER;
-	private double departureTime;
+	private final DrtStopTask stopTask;
 
-	public BusStopActivity(PassengerEngine passengerEngine, DynAgent driver, StayTask task,
+	public BusStopActivity(PassengerEngine passengerEngine, DynAgent driver, DrtStopTask task,
 						   Set<? extends PassengerRequest> dropoffRequests, Set<? extends PassengerRequest> pickupRequests,
 						   Id<TransitStopFacility> transitStopFacilityId, String activityType) {
 		super(activityType);
@@ -54,7 +55,7 @@ public class BusStopActivity extends AbstractDynActivity implements PassengerPic
 		this.driver = driver;
 		this.dropoffRequests = dropoffRequests;
 		this.pickupRequests = pickupRequests;
-		this.departureTime = task.getEndTime();
+		this.stopTask = task;
 		this.stopFacilityId = transitStopFacilityId;
 
 		double now = task.getBeginTime();
@@ -75,6 +76,7 @@ public class BusStopActivity extends AbstractDynActivity implements PassengerPic
 
 	@Override
 	public void doSimStep(double now) {
+		double departureTime = stopTask.getEndTime();
 		if (now < departureTime) {
 			return;
 		}

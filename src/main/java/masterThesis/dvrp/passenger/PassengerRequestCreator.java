@@ -19,9 +19,9 @@
 
 package masterThesis.dvrp.passenger;
 
-import masterThesis.dvrp.data.Request;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.contrib.dvrp.data.Request;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 /**
@@ -29,5 +29,5 @@ import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
  */
 public interface PassengerRequestCreator {
 	PassengerRequest createRequest(Id<Request> id, MobsimPassengerAgent passenger, Link fromLink, Link toLink,
-                                   double departureTime, double submissionTime);
+								   double departureTime, double submissionTime);
 }
