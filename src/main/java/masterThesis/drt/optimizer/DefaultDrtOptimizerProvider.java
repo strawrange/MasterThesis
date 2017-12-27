@@ -30,13 +30,12 @@ import masterThesis.drt.optimizer.insertion.filter.NoFilter;
 import masterThesis.drt.run.DrtConfigGroup;
 import masterThesis.drt.scheduler.DrtScheduler;
 import masterThesis.drt.scheduler.DrtSchedulerParams;
-import masterThesis.dvrp.vrpagent.VrpAgentSource;
+import masterThesis.dvrp.data.FleetImpl;
 import org.matsim.api.core.v01.network.Network;
-import masterThesis.dvrp.data.Fleet;
-import masterThesis.dvrp.router.TimeAsTravelDisutility;
+import org.matsim.contrib.dvrp.data.Fleet;
+import org.matsim.contrib.dvrp.router.TimeAsTravelDisutility;
 import masterThesis.dvrp.run.DvrpModule;
-import masterThesis.dvrp.trafficmonitoring.VrpTravelTimeModules;
-import org.matsim.core.mobsim.framework.AgentSource;
+import org.matsim.contrib.dvrp.trafficmonitoring.VrpTravelTimeModules;
 import org.matsim.core.mobsim.qsim.QSim;
 import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
 import org.matsim.core.router.util.TravelDisutility;
@@ -50,7 +49,7 @@ public class DefaultDrtOptimizerProvider implements Provider<DrtOptimizer> {
 
 	private final DrtConfigGroup drtCfg;
 	private final Network network;
-	private final Fleet fleet;
+	private final FleetImpl fleet;
 	private final TravelTime travelTime;
 	private final QSim qSim;
 
@@ -64,7 +63,7 @@ public class DefaultDrtOptimizerProvider implements Provider<DrtOptimizer> {
 									   Fleet fleet, @Named(VrpTravelTimeModules.DVRP_ESTIMATED) TravelTime travelTime, QSim qSim) {
 		this.drtCfg = drtCfg;
 		this.network = network;
-		this.fleet = fleet;
+		this.fleet = (FleetImpl) fleet;
 		this.travelTime = travelTime;
 		this.qSim = qSim;
 		if (!this.fleet.getVehicles().isEmpty()){

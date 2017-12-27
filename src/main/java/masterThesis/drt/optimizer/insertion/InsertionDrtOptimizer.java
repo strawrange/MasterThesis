@@ -29,10 +29,10 @@ import masterThesis.drt.optimizer.VehicleData;
 import masterThesis.drt.passenger.events.DrtRequestRejectedEvent;
 import masterThesis.drt.passenger.events.DrtRequestScheduledEvent;
 import masterThesis.drt.run.DrtConfigGroup;
+import masterThesis.dvrp.data.DrtRequests;
 import masterThesis.dvrp.vrpagent.VrpAgentSource;
 import org.apache.log4j.Logger;
 import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestInsertion;
-import masterThesis.dvrp.data.*;
 import masterThesis.router.BackwardFastMultiNodeDijkstra;
 import masterThesis.router.InverseArrayRoutingNetworkFactory;
 import org.matsim.api.core.v01.events.PersonStuckEvent;
@@ -56,12 +56,11 @@ public class InsertionDrtOptimizer extends AbstractDrtOptimizer implements Mobsi
 	private final ParallelMultiVehicleInsertionProblem insertionProblem;
 	private final EventsManager eventsManager;
 	private final boolean printWarnings;
-	private VrpAgentSource vrpAgentSource;
 	private DrtGenerator generator;
 	private OnDemandDrtKiller killer = new OnDemandDrtKiller(getOptimContext());
 
 	public InsertionDrtOptimizer(DrtOptimizerContext optimContext, DrtConfigGroup drtCfg) {
-		super(optimContext, new PriorityQueue<DrtRequest>(Requests.UPDATE_TIME_COMPARATOR));
+		super(optimContext, new PriorityQueue<DrtRequest>(DrtRequests.UPDATE_TIME_COMPARATOR));
 		this.eventsManager = optimContext.qSim.getEventsManager();
 		printWarnings = drtCfg.isPrintDetailedWarnings();
 
@@ -148,7 +147,6 @@ public class InsertionDrtOptimizer extends AbstractDrtOptimizer implements Mobsi
 	}
 
 	public void getVrp(VrpAgentSource vrpAgentSource) {
-		this.vrpAgentSource = vrpAgentSource;
 		this.generator = new OnDemandDrtGenerator(getOptimContext(),vrpAgentSource);
 	}
 }

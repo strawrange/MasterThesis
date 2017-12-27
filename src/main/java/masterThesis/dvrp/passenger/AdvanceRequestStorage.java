@@ -19,10 +19,11 @@
 
 package masterThesis.dvrp.passenger;
 
-import masterThesis.dvrp.data.Requests;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.Person;
+import org.matsim.contrib.dvrp.data.Requests;
+import org.matsim.contrib.dvrp.passenger.PassengerRequest;
 import org.matsim.core.mobsim.framework.MobsimAgent;
 
 import java.util.HashMap;
@@ -46,7 +47,7 @@ class AdvanceRequestStorage {
 	}
 
 	public PassengerRequest retrieveAdvanceRequest(MobsimAgent passenger, Id<Link> fromLinkId, Id<Link> toLinkId,
-                                                   double now) {
+			double now) {
 		Queue<PassengerRequest> passengerAdvReqs = advanceRequests.get(passenger.getId());
 
 		if (passengerAdvReqs != null) {

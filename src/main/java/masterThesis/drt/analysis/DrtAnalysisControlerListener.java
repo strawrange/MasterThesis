@@ -24,7 +24,6 @@ package masterThesis.drt.analysis;
 
 import com.google.inject.Inject;
 import masterThesis.drt.run.DrtConfigGroup;
-import masterThesis.dvrp.data.FleetImpl;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.config.Config;
 import org.matsim.core.controler.MatsimServices;
@@ -45,13 +44,13 @@ public class DrtAnalysisControlerListener implements IterationEndsListener {
 	@Inject
     DrtVehicleOccupancyEvaluator vehicleOccupancyEvaluator;
 	@Inject
-    DynModePassengerStats drtPassengerStats;
+	DynModePassengerStats drtPassengerStats;
 	@Inject
 	MatsimServices matsimServices;
 	@Inject
 	Network network;
 	@Inject
-    DrtRequestAnalyzer drtRequestAnalyzer;
+	DrtRequestAnalyzer drtRequestAnalyzer;
 	@Inject
 	DrtStopEvaluator drtStopEvaluator;
 

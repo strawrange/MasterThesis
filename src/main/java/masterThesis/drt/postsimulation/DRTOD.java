@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class DRTOD {
     private static int ITER = 100;
-    private static String FOLDER = "/home/biyu/IdeaProjects/MasterThesis/output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abort_abortTime_transitRouter_waitTimeCalculator_expWalkScore_100_DisutilityCreation_WaitTimeDebug/ITERS/it." + ITER + "/";
+    private static String FOLDER = "/home/biyu/IdeaProjects/MasterThesis/output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abortTime_transitRouter_expWalkScore_creationRoutingWait0_annealing_drtDisutility4/ITERS/it." + ITER + "/";
     private static String PLANFILE =  FOLDER + ITER + ".experienced_plans.xml.gz";
     private static String FACILITYFILE = "/home/biyu/IdeaProjects/MasterThesis/scenarios/siouxFalls/Siouxfalls_facilities.xml";
 

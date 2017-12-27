@@ -1,13 +1,9 @@
 package masterThesis.drt.data;
 
-import masterThesis.drt.optimizer.DrtOptimizerContext;
 import masterThesis.drt.optimizer.VehicleData;
-import masterThesis.dvrp.vrpagent.VrpAgentSource;
-import masterThesis.dynagent.DynAgent;
-import sun.security.jca.GetInstance;
+import org.matsim.contrib.dynagent.DynAgent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static masterThesis.drt.data.OnDemandDrtGenerator.newDynAgents;
 

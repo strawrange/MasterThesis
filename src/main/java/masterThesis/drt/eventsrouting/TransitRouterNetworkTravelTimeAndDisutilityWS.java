@@ -91,7 +91,7 @@ public class TransitRouterNetworkTravelTimeAndDisutilityWS implements TransitTra
 	@Override
     public double getWalkTravelDisutility(Person person, Coord coord, Coord toCoord) {
         //  getMarginalUtilityOfTravelTimeWalk INCLUDES the opportunity cost of time.  kai, dec'12
-        double timeCost = Math.exp(getWalkTravelTime(person, coord, toCoord) * config.getMarginalUtilityOfTravelTimeWalk_utl_s()) - 1 ;
+        double timeCost = - getWalkTravelTime(person, coord, toCoord) * config.getMarginalUtilityOfTravelTimeWalk_utl_s() ;
         // (sign: margUtl is negative; overall it should be positive because it is a cost.)
 
         double distanceCost = - CoordUtils.calcEuclideanDistance(coord,toCoord) *

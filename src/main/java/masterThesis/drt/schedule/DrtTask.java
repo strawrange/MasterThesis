@@ -19,7 +19,7 @@
 
 package masterThesis.drt.schedule;
 
-import masterThesis.dvrp.schedule.Task;
+import org.matsim.contrib.dvrp.schedule.Task;
 
 /**
  * @author michalm

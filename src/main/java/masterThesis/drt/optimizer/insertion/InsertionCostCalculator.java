@@ -30,7 +30,7 @@ import masterThesis.drt.schedule.DrtTask;
 import masterThesis.drt.optimizer.VehicleData.Stop;
 import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.Insertion;
 import masterThesis.drt.schedule.DrtTask.DrtTaskType;
-import masterThesis.dvrp.schedule.Schedules;
+import org.matsim.contrib.dvrp.schedule.Schedules;
 
 /**
  * @author michalm
@@ -125,7 +125,7 @@ public class InsertionCostCalculator {
 	//I think the algorithm should be improved later...
 	private boolean areConstraintsSatisfied(DrtRequest drtRequest, VehicleData.Entry vEntry, Insertion insertion,
                                             double pickupDetourTimeLoss, double totalTimeLoss, double currentTime) {
-		// this is what we cannot violate
+				// this is what we cannot violate
         //Biyu changes, all stops after pickup will delay by more than 20%, then false...
 		for (int s = insertion.pickupIdx; s < insertion.dropoffIdx; s++) {
 			Stop stop = vEntry.stops.get(s);

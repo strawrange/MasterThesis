@@ -19,8 +19,7 @@
 
 package masterThesis.drt.run;
 
-import masterThesis.drt.scoring.AVScoringFunction;
-import masterThesis.dvrp.run.DvrpConfigGroup;
+import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.vis.otfvis.OTFVisConfigGroup;

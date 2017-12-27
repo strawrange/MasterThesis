@@ -25,7 +25,7 @@ package masterThesis.drt.optimizer.insertion.filter;
 import masterThesis.drt.data.DrtRequest;
 import masterThesis.drt.optimizer.VehicleData;
 import masterThesis.drt.optimizer.VehicleData.Entry;
-import masterThesis.util.distance.DistanceUtils;
+import org.matsim.contrib.util.distance.DistanceUtils;
 
 import java.util.ArrayList;
 import java.util.List;

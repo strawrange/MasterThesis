@@ -22,7 +22,6 @@ package masterThesis.drt.optimizer.insertion;
 import masterThesis.drt.data.DrtRequest;
 import masterThesis.drt.optimizer.VehicleData;
 import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestInsertion;
-import masterThesis.dvrp.data.Vehicle;
 
 /**
  * @author michalm

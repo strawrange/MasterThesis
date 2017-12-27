@@ -20,7 +20,7 @@
 package masterThesis.drt.run;
 
 import org.apache.log4j.Logger;
-import masterThesis.dvrp.run.DvrpConfigConsistencyChecker;
+import org.matsim.contrib.dvrp.run.DvrpConfigConsistencyChecker;
 import org.matsim.core.config.Config;
 
 public class DrtConfigConsistencyChecker extends DvrpConfigConsistencyChecker {

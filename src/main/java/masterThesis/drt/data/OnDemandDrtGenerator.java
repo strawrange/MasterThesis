@@ -4,15 +4,16 @@ import masterThesis.drt.optimizer.DrtOptimizerContext;
 import masterThesis.drt.optimizer.VehicleData;
 import masterThesis.drt.schedule.DrtStayTask;
 import masterThesis.dvrp.data.FleetImpl;
-import masterThesis.dvrp.data.Vehicle;
-import masterThesis.dvrp.data.VehicleImpl;
+import org.matsim.contrib.dvrp.data.Vehicle;
+import org.matsim.contrib.dvrp.data.VehicleImpl;
 import masterThesis.dvrp.vrpagent.VrpAgentSource;
-import masterThesis.dynagent.DynAgent;
+import org.matsim.contrib.dynagent.DynAgent;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class OnDemandDrtGenerator implements DrtGenerator {
@@ -52,10 +53,10 @@ public class OnDemandDrtGenerator implements DrtGenerator {
                 .addTask(new DrtStayTask(veh.getServiceBeginTime(), veh.getServiceEndTime(), veh.getStartLink()));
         optimContext.fleet.addVehicle(veh);
         newDynAgents.add(agent);
-        FleetImpl newFleet = new FleetImpl(optimContext.fleet.getServiceEndTime());
-        newFleet.addVehicle(veh);
+        Collection<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(veh);
         agent.endActivityAndComputeNextState(optimContext.qSim.getSimTimer().getTimeOfDay());
-        VehicleData singleVData = new VehicleData(optimContext, newFleet.getVehicles().values());
+        VehicleData singleVData = new VehicleData(optimContext, vehicles);
         return singleVData;
     }
 

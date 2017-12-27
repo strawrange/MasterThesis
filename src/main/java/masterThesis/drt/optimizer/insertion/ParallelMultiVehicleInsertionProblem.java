@@ -23,7 +23,6 @@ import masterThesis.drt.data.DrtRequest;
 import masterThesis.drt.optimizer.VehicleData;
 import masterThesis.drt.optimizer.insertion.filter.DrtVehicleFilter;
 import masterThesis.drt.optimizer.insertion.SingleVehicleInsertionProblem.BestInsertion;
-import masterThesis.dvrp.data.Vehicle;
 
 import java.util.ArrayList;
 import java.util.Iterator;

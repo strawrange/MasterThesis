@@ -157,9 +157,9 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
     }
 
     private double bonusCalculation(double maxSeats){
-        //double y = (- Math.exp(maxSeats - 5.36) + 16.013) / 3600;
+        //double bonus = ( Math.exp(maxSeats - 5.36) - 0.013) / 3600;
         double bonus =  maxSeats * 2 / 3600 ;
-        return bonus;
+        return bonus*0;
     }
 
     @Override
@@ -209,13 +209,13 @@ public class AVScoringFunction implements  SumScoringFunction.ArbitraryEventScor
                 throw new RuntimeException("just encountered mode for which no scoring parameters are defined: " + leg.getMode().toString() ) ;
             }
         }
-        if (leg.getMode().equals(TransportMode.transit_walk) || leg.getMode().equals(TransportMode.access_walk)
-                || leg.getMode().equals(TransportMode.egress_walk) || leg.getMode().equals(TransportMode.walk) ){
-            tmpScore += - Math.exp(travelTime * modeParams.marginalUtilityOfTraveling_s) + 1;
-        }else{
-            tmpScore += travelTime * modeParams.marginalUtilityOfTraveling_s;
-        }
-
+//        if (leg.getMode().equals(TransportMode.transit_walk) || leg.getMode().equals(TransportMode.access_walk)
+//                || leg.getMode().equals(TransportMode.egress_walk) || leg.getMode().equals(TransportMode.walk) ){
+//            tmpScore += - Math.exp(travelTime * modeParams.marginalUtilityOfTraveling_s) + 1;
+//        }else{
+//            tmpScore += travelTime * modeParams.marginalUtilityOfTraveling_s;
+//        }
+        tmpScore += travelTime * modeParams.marginalUtilityOfTraveling_s;
         if (modeParams.marginalUtilityOfDistance_m != 0.0
                 || modeParams.monetaryDistanceCostRate != 0.0) {
             Route route = leg.getRoute();

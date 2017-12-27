@@ -18,44 +18,13 @@
  * *********************************************************************** */
 package org.matsim.example;
 
-import static org.junit.Assert.*;
-
-import masterThesis.drt.run.DrtConfigGroup;
-import masterThesis.drt.scoring.AVScoringFunctionFactory;
-import org.apache.commons.lang.mutable.MutableDouble;
-import org.junit.Assert;
 import org.junit.Test;
 import org.matsim.api.core.v01.Coord;
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.events.*;
-import org.matsim.api.core.v01.events.handler.PersonMoneyEventHandler;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.network.Node;
-import org.matsim.api.core.v01.population.Activity;
-import org.matsim.api.core.v01.population.Person;
-import org.matsim.api.core.v01.population.PlanElement;
-import org.matsim.api.core.v01.population.Population;
-import masterThesis.dvrp.run.DvrpConfigGroup;
-import org.matsim.contrib.taxi.run.*;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.config.Config;
-import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.events.EventsManagerImpl;
-import org.matsim.core.events.EventsUtils;
 import org.matsim.core.events.MatsimEventsReader;
-import org.matsim.core.network.NetworkUtils;
-import org.matsim.core.router.ActivityWrapperFacility;
-import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.core.scoring.SumScoringFunction;
-import org.matsim.facilities.ActivityFacilities;
-import org.matsim.facilities.ActivityFacility;
 import org.matsim.facilities.Facility;
-import org.matsim.vehicles.Vehicle;
-import org.matsim.vis.otfvis.OTFVisConfigGroup;
-
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author nagel

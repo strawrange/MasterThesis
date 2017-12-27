@@ -23,16 +23,16 @@ import com.google.inject.Inject;
 import masterThesis.drt.schedule.DrtStayTask;
 import masterThesis.drt.schedule.DrtStopTask;
 import masterThesis.drt.schedule.DrtTask;
-import masterThesis.dvrp.data.Vehicle;
-import masterThesis.dvrp.optimizer.VrpOptimizer;
-import masterThesis.dvrp.optimizer.VrpOptimizerWithOnlineTracking;
+import org.matsim.contrib.dvrp.data.Vehicle;
+import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
+import org.matsim.contrib.dvrp.optimizer.VrpOptimizerWithOnlineTracking;
 import masterThesis.dvrp.passenger.BusStopActivity;
 import masterThesis.dvrp.passenger.PassengerEngine;
-import masterThesis.dvrp.vrpagent.VrpActivity;
-import masterThesis.dvrp.vrpagent.VrpAgentLogic;
-import masterThesis.dvrp.vrpagent.VrpLegs;
-import masterThesis.dynagent.DynAction;
-import masterThesis.dynagent.DynAgent;
+import org.matsim.contrib.dvrp.vrpagent.VrpActivity;
+import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic;
+import org.matsim.contrib.dvrp.vrpagent.VrpLegs;
+import org.matsim.contrib.dynagent.DynAction;
+import org.matsim.contrib.dynagent.DynAgent;
 import org.matsim.core.mobsim.qsim.QSim;
 import org.matsim.core.router.RoutingModule;
 
@@ -61,7 +61,7 @@ public class DrtActionCreator implements VrpAgentLogic.DynActionCreator {
 
 			case STOP:
 				DrtStopTask t = (DrtStopTask)task;
-				return new BusStopActivity(passengerEngine, dynAgent, t, t.getDropoffRequests(), t.getPickupRequests(), t.getTransitStopFacilityId(),
+				return new BusStopActivity(passengerEngine, dynAgent, t, t.getDropoffRequests(), t.getPickupRequests(),
 						DRT_STOP_NAME);
 
 			case STAY:

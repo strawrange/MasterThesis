@@ -19,8 +19,10 @@
 
 package masterThesis.dvrp.data;
 
-import com.google.inject.Inject;
+
 import org.matsim.api.core.v01.Id;
+import org.matsim.contrib.dvrp.data.Fleet;
+import org.matsim.contrib.dvrp.data.Vehicle;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -59,7 +61,6 @@ public class FleetImpl implements Fleet {
         return this.serviceEndTime;
     }
 
-    @Override
     public void initialize() {
         vehicles.clear();
     }

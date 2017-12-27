@@ -18,7 +18,7 @@
  * *********************************************************************** */
 
 /**
- * 
+ *
  */
 package masterThesis.drt.analysis;
 
@@ -29,143 +29,143 @@ import org.matsim.api.core.v01.population.Person;
 import org.matsim.vehicles.Vehicle;
 
 public class DynModeTrip implements Comparable<DynModeTrip> {
-	private final double departureTime;
-	private final Id<Person> person;
-	private final Id<Vehicle> vehicle;
-	private final Id<Link> fromLinkId;
-	private final double waitTime;
-	private double travelTime = Double.NaN;
-	private double travelDistance_m = Double.NaN;
-	private double travelDistanceEstimate_m = Double.NaN;
-	private Id<Link> toLink = null;
-	private double arrivalTime = Double.NaN;
-	private final Coord fromCoord;
-	private Coord toCoord = null;
+    private final double departureTime;
+    private final Id<Person> person;
+    private final Id<Vehicle> vehicle;
+    private final Id<Link> fromLinkId;
+    private final double waitTime;
+    private double travelTime = Double.NaN;
+    private double travelDistance_m = Double.NaN;
+    private double travelDistanceEstimate_m = Double.NaN;
+    private Id<Link> toLink = null;
+    private double arrivalTime = Double.NaN;
+    private final Coord fromCoord;
+    private Coord toCoord = null;
 
-	static final String demitter = ";";
-	public static final String HEADER = "departureTime" + demitter + "personId" + demitter + "vehicleId" + demitter
-			+ "fromLinkId" + demitter + "fromX" + demitter + "fromY" + demitter + "toLinkId" + demitter + "toX"
-			+ demitter + "toY" + demitter + "waitTime" + demitter + "arrivalTime" + demitter + "travelTime" + demitter
-			+ "travelDistance_m"+demitter+"direcTravelDistance_m";
+    static final String demitter = ";";
+    public static final String HEADER = "departureTime" + demitter + "personId" + demitter + "vehicleId" + demitter
+            + "fromLinkId" + demitter + "fromX" + demitter + "fromY" + demitter + "toLinkId" + demitter + "toX"
+            + demitter + "toY" + demitter + "waitTime" + demitter + "arrivalTime" + demitter + "travelTime" + demitter
+            + "travelDistance_m"+demitter+"direcTravelDistance_m";
 
-	DynModeTrip(double departureTime, Id<Person> person, Id<Vehicle> vehicle, Id<Link> fromLinkId, Coord fromCoord,
-			double waitTime) {
-		this.departureTime = departureTime;
-		this.person = person;
-		this.vehicle = vehicle;
-		this.fromLinkId = fromLinkId;
-		this.fromCoord = fromCoord;
-		this.waitTime = waitTime;
-	}
+    DynModeTrip(double departureTime, Id<Person> person, Id<Vehicle> vehicle, Id<Link> fromLinkId, Coord fromCoord,
+                double waitTime) {
+        this.departureTime = departureTime;
+        this.person = person;
+        this.vehicle = vehicle;
+        this.fromLinkId = fromLinkId;
+        this.fromCoord = fromCoord;
+        this.waitTime = waitTime;
+    }
 
-	public Double getDepartureTime() {
-		return departureTime;
-	}
+    public Double getDepartureTime() {
+        return departureTime;
+    }
 
-	public Id<Person> getPerson() {
-		return person;
-	}
-	
+    public Id<Person> getPerson() {
+        return person;
+    }
 
-	public void setTravelDistanceEstimate_m(double travelDistanceEstimate_m) {
-		this.travelDistanceEstimate_m = travelDistanceEstimate_m;
-	}
 
-	public Id<Vehicle> getVehicle() {
-		return vehicle;
-	}
+    public void setTravelDistanceEstimate_m(double travelDistanceEstimate_m) {
+        this.travelDistanceEstimate_m = travelDistanceEstimate_m;
+    }
 
-	public Id<Link> getFromLinkId() {
-		return fromLinkId;
-	}
+    public Id<Vehicle> getVehicle() {
+        return vehicle;
+    }
 
-	public double getWaitTime() {
-		return waitTime;
-	}
+    public Id<Link> getFromLinkId() {
+        return fromLinkId;
+    }
 
-	public double getInVehicleTravelTime() {
-		return travelTime;
-	}
+    public double getWaitTime() {
+        return waitTime;
+    }
 
-	public void setInVehicleTravelTime(double travelTime) {
-		this.travelTime = travelTime;
-	}
+    public double getInVehicleTravelTime() {
+        return travelTime;
+    }
 
-	public double getTravelDistance() {
-		return travelDistance_m;
-	}
-	
+    public void setInVehicleTravelTime(double travelTime) {
+        this.travelTime = travelTime;
+    }
 
-	public double getTravelDistanceEstimate_m() {
-		return travelDistanceEstimate_m;
-	}
+    public double getTravelDistance() {
+        return travelDistance_m;
+    }
 
-	public void setTravelDistance(double travelDistance_m) {
-		this.travelDistance_m = travelDistance_m;
-	}
 
-	public Id<Link> getToLinkId() {
-		return toLink;
-	}
+    public double getTravelDistanceEstimate_m() {
+        return travelDistanceEstimate_m;
+    }
 
-	public void setToLink(Id<Link> toLink) {
-		this.toLink = toLink;
-	}
+    public void setTravelDistance(double travelDistance_m) {
+        this.travelDistance_m = travelDistance_m;
+    }
 
-	public double getArrivalTime() {
-		return arrivalTime;
-	}
+    public Id<Link> getToLinkId() {
+        return toLink;
+    }
 
-	public void setArrivalTime(double arrivalTime) {
-		this.arrivalTime = arrivalTime;
-	}
+    public void setToLink(Id<Link> toLink) {
+        this.toLink = toLink;
+    }
 
-	public Coord getToCoord() {
-		return toCoord;
-	}
+    public double getArrivalTime() {
+        return arrivalTime;
+    }
 
-	public void setToCoord(Coord toCoord) {
-		this.toCoord = toCoord;
-	}
+    public void setArrivalTime(double arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
 
-	public Coord getFromCoord() {
-		return fromCoord;
-	}
+    public Coord getToCoord() {
+        return toCoord;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(DynModeTrip o) {
-		return getDepartureTime().compareTo(o.getDepartureTime());
-	}
+    public void setToCoord(Coord toCoord) {
+        this.toCoord = toCoord;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		double fromCoordX = Double.NaN;
-		double fromCoordY = Double.NaN;
+    public Coord getFromCoord() {
+        return fromCoord;
+    }
 
-		double toCoordX = Double.NaN;
-		double toCoordY = Double.NaN;
-		if (toCoord != null) {
-			toCoordX = toCoord.getX();
-			toCoordY = toCoord.getY();
-		}
-		if (fromCoord != null) {
-			fromCoordX = fromCoord.getX();
-			fromCoordY = fromCoord.getY();
-		}
-		return getDepartureTime() + demitter + getPerson() + demitter + getVehicle() + demitter + getFromLinkId()
-				+ demitter + fromCoordX + demitter + fromCoordY + demitter + getToLinkId() + demitter + toCoordX
-				+ demitter + toCoordY + demitter + getWaitTime() + demitter + getArrivalTime() + demitter
-				+ getInVehicleTravelTime() + demitter + getTravelDistance()+ demitter+ travelDistanceEstimate_m;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(DynModeTrip o) {
+        return getDepartureTime().compareTo(o.getDepartureTime());
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        double fromCoordX = Double.NaN;
+        double fromCoordY = Double.NaN;
+
+        double toCoordX = Double.NaN;
+        double toCoordY = Double.NaN;
+        if (toCoord != null) {
+            toCoordX = toCoord.getX();
+            toCoordY = toCoord.getY();
+        }
+        if (fromCoord != null) {
+            fromCoordX = fromCoord.getX();
+            fromCoordY = fromCoord.getY();
+        }
+        return getDepartureTime() + demitter + getPerson() + demitter + getVehicle() + demitter + getFromLinkId()
+                + demitter + fromCoordX + demitter + fromCoordY + demitter + getToLinkId() + demitter + toCoordX
+                + demitter + toCoordY + demitter + getWaitTime() + demitter + getArrivalTime() + demitter
+                + getInVehicleTravelTime() + demitter + getTravelDistance()+ demitter+ travelDistanceEstimate_m;
+    }
 
 }

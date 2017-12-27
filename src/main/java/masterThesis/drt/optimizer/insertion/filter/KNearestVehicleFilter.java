@@ -26,8 +26,8 @@ import masterThesis.drt.data.DrtRequest;
 import masterThesis.drt.optimizer.VehicleData;
 import org.matsim.api.core.v01.network.Link;
 import masterThesis.drt.optimizer.VehicleData.Entry;
-import masterThesis.util.PartialSort;
-import masterThesis.util.distance.DistanceUtils;
+import org.matsim.contrib.util.PartialSort;
+import org.matsim.contrib.util.distance.DistanceUtils;
 
 import java.util.List;
 

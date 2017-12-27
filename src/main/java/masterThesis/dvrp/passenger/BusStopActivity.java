@@ -20,9 +20,11 @@
 package masterThesis.dvrp.passenger;
 
 import masterThesis.drt.schedule.DrtStopTask;
-import masterThesis.dvrp.schedule.StayTask;
-import masterThesis.dynagent.AbstractDynActivity;
-import masterThesis.dynagent.DynAgent;
+
+import org.matsim.contrib.dvrp.passenger.PassengerPickupActivity;
+import org.matsim.contrib.dynagent.AbstractDynActivity;
+import org.matsim.contrib.dynagent.DynAgent;
+import org.matsim.contrib.dvrp.passenger.PassengerRequest;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
@@ -40,7 +42,6 @@ public class BusStopActivity extends AbstractDynActivity implements PassengerPic
 	private final DynAgent driver;
 	private final Set<? extends PassengerRequest> dropoffRequests;
 	private final Set<? extends PassengerRequest> pickupRequests;
-	private final Id<TransitStopFacility> stopFacilityId;
 
 	private int passengersAboard;
 	private double endTime = END_ACTIVITY_LATER;
@@ -48,7 +49,7 @@ public class BusStopActivity extends AbstractDynActivity implements PassengerPic
 
 	public BusStopActivity(PassengerEngine passengerEngine, DynAgent driver, DrtStopTask task,
 						   Set<? extends PassengerRequest> dropoffRequests, Set<? extends PassengerRequest> pickupRequests,
-						   Id<TransitStopFacility> transitStopFacilityId, String activityType) {
+						   String activityType) {
 		super(activityType);
 
 		this.passengerEngine = passengerEngine;
@@ -56,7 +57,6 @@ public class BusStopActivity extends AbstractDynActivity implements PassengerPic
 		this.dropoffRequests = dropoffRequests;
 		this.pickupRequests = pickupRequests;
 		this.stopTask = task;
-		this.stopFacilityId = transitStopFacilityId;
 
 		double now = task.getBeginTime();
 		dropoffPassengers(now);

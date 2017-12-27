@@ -11,33 +11,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class DynActivityEnginePlugin extends AbstractQSimPlugin {
-	public DynActivityEnginePlugin(Config config) {
-		super(config);
-	}
+    public DynActivityEnginePlugin(Config config) {
+        super(config);
+    }
 
-	@Override
-	public Collection<? extends Module> modules() {
-		Collection<Module> result = new ArrayList<>();
-		result.add(new AbstractModule() {
-			@Override
-			public void configure() {
-				bind(DynActivityEngine.class).asEagerSingleton();
-			}
-		});
-		return result;
-	}
+    @Override
+    public Collection<? extends Module> modules() {
+        Collection<Module> result = new ArrayList<>();
+        result.add(new AbstractModule() {
+            @Override
+            public void configure() {
+                bind(DynActivityEngine.class).asEagerSingleton();
+            }
+        });
+        return result;
+    }
 
-	@Override
-	public Collection<Class<? extends ActivityHandler>> activityHandlers() {
-		Collection<Class<? extends ActivityHandler>> result = new ArrayList<>();
-		result.add(DynActivityEngine.class);
-		return result;
-	}
+    @Override
+    public Collection<Class<? extends ActivityHandler>> activityHandlers() {
+        Collection<Class<? extends ActivityHandler>> result = new ArrayList<>();
+        result.add(DynActivityEngine.class);
+        return result;
+    }
 
-	@Override
-	public Collection<Class<? extends MobsimEngine>> engines() {
-		Collection<Class<? extends MobsimEngine>> result = new ArrayList<>();
-		result.add(DynActivityEngine.class);
-		return result;
-	}
+    @Override
+    public Collection<Class<? extends MobsimEngine>> engines() {
+        Collection<Class<? extends MobsimEngine>> result = new ArrayList<>();
+        result.add(DynActivityEngine.class);
+        return result;
+    }
 }

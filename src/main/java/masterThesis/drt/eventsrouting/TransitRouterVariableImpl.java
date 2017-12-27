@@ -121,13 +121,14 @@ public class TransitRouterVariableImpl implements RoutingModule {
 			return null;
 		}
 
-		double directWalkCost =  Math.exp(CoordUtils.calcEuclideanDistance(fromFacility.getCoord(), toFacility.getCoord()) / this.config.getBeelineWalkSpeed() *
-                this.config.getMarginalUtilityOfTravelTimeWalk_utl_s()) - 1;
+		double directWalkCost =  CoordUtils.calcEuclideanDistance(fromFacility.getCoord(), toFacility.getCoord()) < 800 ?
+				-CoordUtils.calcEuclideanDistance(fromFacility.getCoord(), toFacility.getCoord()) / this.config.getBeelineWalkSpeed() *
+                this.config.getMarginalUtilityOfTravelTimeWalk_utl_s(): Double.MAX_VALUE;
 		double pathCost = Double.MAX_VALUE;
 		if (p.travelTime != 0){
 			pathCost = p.travelCost + wrappedFromNodes.get(p.nodes.get(0)).initialCost + wrappedToNodes.get(p.nodes.get(p.nodes.size() - 1)).initialCost;
 		}
-		if (directWalkCost < pathCost) {
+		if (directWalkCost < pathCost || p.travelTime == 0) {
 			List<Leg> legs = new ArrayList<Leg>();
 			Leg leg = PopulationUtils.createLeg(TransportMode.walk);
 			double walkDistance = CoordUtils.calcEuclideanDistance(fromFacility.getCoord(), toFacility.getCoord());

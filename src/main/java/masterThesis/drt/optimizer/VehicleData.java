@@ -25,11 +25,11 @@ import masterThesis.drt.schedule.DrtStayTask;
 import masterThesis.drt.schedule.DrtStopTask;
 import masterThesis.drt.schedule.DrtTask;
 import masterThesis.drt.schedule.DrtTask.DrtTaskType;
-import masterThesis.dvrp.data.Vehicle;
-import masterThesis.dvrp.schedule.Schedule;
-import masterThesis.dvrp.schedule.Schedule.ScheduleStatus;
-import masterThesis.dvrp.tracker.OnlineDriveTaskTracker;
-import masterThesis.dvrp.util.LinkTimePair;
+import org.matsim.contrib.dvrp.data.Vehicle;
+import org.matsim.contrib.dvrp.schedule.Schedule;
+import org.matsim.contrib.dvrp.schedule.Schedule.ScheduleStatus;
+import org.matsim.contrib.dvrp.tracker.OnlineDriveTaskTracker;
+import org.matsim.contrib.dvrp.util.LinkTimePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class VehicleData {
 		private double calcMaxArrivalTime() {
 			double maxTime = Double.MAX_VALUE;
 			for (DrtRequest r : task.getDropoffRequests()) {
-				double reqMaxArrivalTime = r.getLatestArrivalTime();
+				double reqMaxArrivalTime = r.	getLatestArrivalTime();
 				if (reqMaxArrivalTime < maxTime) {
 					maxTime = reqMaxArrivalTime;
 				}

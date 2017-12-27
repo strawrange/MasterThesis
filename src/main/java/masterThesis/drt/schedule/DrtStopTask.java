@@ -22,7 +22,7 @@ package masterThesis.drt.schedule;
 import masterThesis.drt.data.DrtRequest;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import masterThesis.dvrp.schedule.StayTaskImpl;
+import org.matsim.contrib.dvrp.schedule.StayTaskImpl;
 import org.matsim.pt.transitSchedule.api.TransitStopFacility;
 
 import java.util.Collections;

@@ -22,19 +22,20 @@ package masterThesis.dvrp.vrpagent;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import masterThesis.drt.optimizer.insertion.InsertionDrtOptimizer;
-import masterThesis.dvrp.data.Fleet;
-import masterThesis.dvrp.data.Vehicle;
-import masterThesis.dvrp.optimizer.VrpOptimizer;
+import org.matsim.contrib.dvrp.optimizer.VrpOptimizer;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import masterThesis.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
-import masterThesis.dynagent.DynAgent;
+import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic.DynActionCreator;
+import org.matsim.contrib.dvrp.data.Vehicle;
+import org.matsim.contrib.dynagent.DynAgent;
+import org.matsim.contrib.dvrp.data.Fleet;
 import org.matsim.core.mobsim.framework.AgentSource;
 import org.matsim.core.mobsim.qsim.QSim;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
 import org.matsim.vehicles.VehicleType;
 import org.matsim.vehicles.VehicleUtils;
 import org.matsim.vehicles.VehiclesFactory;
+import org.matsim.contrib.dvrp.vrpagent.VrpAgentLogic;
 
 public class VrpAgentSource implements AgentSource {
 	public static final String DVRP_VEHICLE_TYPE = "dvrp_vehicle_type";
@@ -69,8 +70,8 @@ public class VrpAgentSource implements AgentSource {
 			vehicleType = VehicleUtils.getDefaultVehicleType();
 		}
 
-		for (masterThesis.dvrp.data.Vehicle vrpVeh : fleet.getVehicles().values()) {
-			Id<masterThesis.dvrp.data.Vehicle> id = vrpVeh.getId();
+		for (Vehicle vrpVeh : fleet.getVehicles().values()) {
+			Id<Vehicle> id = vrpVeh.getId();
 			Id<Link> startLinkId = vrpVeh.getStartLink().getId();
 
 			VrpAgentLogic vrpAgentLogic = new VrpAgentLogic(optimizer, nextActionCreator, vrpVeh);

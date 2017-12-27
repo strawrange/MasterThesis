@@ -19,8 +19,8 @@
 
 package masterThesis.drt.schedule;
 
-import masterThesis.dvrp.path.VrpPathWithTravelData;
-import masterThesis.dvrp.schedule.DriveTaskImpl;
+import org.matsim.contrib.dvrp.path.VrpPathWithTravelData;
+import org.matsim.contrib.dvrp.schedule.DriveTaskImpl;
 
 /**
  * @author michalm

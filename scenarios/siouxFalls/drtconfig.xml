@@ -87,19 +87,19 @@
 	</module>
 	
 	<module name="controler">
-		<param name="outputDirectory" value="output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abort_abortTime_transitRouter_waitTimeCalculator_expWalkScore_100_DisutilityCreation_WaitTimeDebug_update30_noExpRideShareBonus" />
+		<param name="outputDirectory" value="output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abortTime_transitRouter_linearWalkScore_creationRoutingWait0_annealing10_drtDisutility4" />
 		<param name="firstIteration" value="0" />
 		<param name="lastIteration" value="100" />
 		<param name="eventsFileFormat" value="xml" />
 		<param name="mobsim" value="qsim" />
 		<param name="overwriteFiles" value="deleteDirectoryIfExists" />
-		<param name="writeEventsInterval" value="5" />
-		<param name="writePlansInterval" value="5" />
+		<param name="writeEventsInterval" value="10" />
+		<param name="writePlansInterval" value="10" />
 
 	</module>
 
 	<module name="plans" >
-		<param name="inputPlansFile" value="population_10prct_90drt_new.xml.gz" />
+		<param name="inputPlansFile" value="80.plans.xml.gz" />
 	</module>
 	<module name="network" >
 		<param name="inputNetworkFile" value="network.xml" />
@@ -119,13 +119,11 @@
 	<module name="planCalcScore">
 		<param name="writeExperiencedPlans" value="true"></param>
 		<parameterset type="scoringParameters" >
-			<param name="earlyDeparture" value="-12.0" />
-			<param name="lateArrival" value="-24.0" />
 			<param name="marginalUtilityOfMoney" value="1.0" />
 			<param name="performing" value="6.0" />
 			<param name="utilityOfLineSwitch" value="-1.0" />
-			<param name="waiting" value="0" />
-			<param name="waitingPt" value="-7.0" />
+			<param name="waiting" value="-6.0" />
+			<param name="waitingPt" value="-6.0" />
 
 			<parameterset type="activityParams" >
 				<param name="activityType" value="home" />
@@ -141,12 +139,11 @@
 			<param name="activityType" value="secondary" />
 			<param name="typicalDuration" value="01:00:00" />
 		</parameterset>
-		
 			<parameterset type="modeParams" >
-				<param name="constant" value="-3.5" />
+				<param name="constant" value="-1.0" />
 				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<param name="marginalUtilityOfTraveling_util_hr" value="-8.0" />
-				<param name="mode" value="car" />
+				<param name="marginalUtilityOfTraveling_util_hr" value="-4.0" />
+				<param name="mode" value="drt" />
 				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>
 			<parameterset type="modeParams" >
@@ -156,33 +153,25 @@
 				<param name="mode" value="pt" />
 				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>
-				<parameterset type="modeParams" >
+			<parameterset type="modeParams" >
 				<param name="constant" value="-1.0" />
 				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<param name="marginalUtilityOfTraveling_util_hr" value="-16.0" />
-				<param name="mode" value="drt" />
+				<param name="marginalUtilityOfTraveling_util_hr" value="-4.0" />
+				<param name="mode" value="car" />
 				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>
 			<parameterset type="modeParams" >
 				<param name="constant" value="-30.0" />
 				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<param name="marginalUtilityOfTraveling_util_hr" value="-16.0" />
+				<param name="marginalUtilityOfTraveling_util_hr" value="-4.0" />
 				<param name="mode" value="drt creation" />
 				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>
 			<parameterset type="modeParams" >
 				<param name="constant" value="-1.0" />
 				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<!-- now it is not marginal utility, it is exponential beta parameter.-->
-				<param name="marginalUtilityOfTraveling_util_hr" value="4.796" />
+				<param name="marginalUtilityOfTraveling_util_hr" value="-5.8" />
 				<param name="mode" value="walk" />
-				<param name="monetaryDistanceRate" value="0.0" />
-			</parameterset>
-			<parameterset type="modeParams" >
-				<param name="constant" value="-1.0" />
-				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<param name="marginalUtilityOfTraveling_util_hr" value="-6.0" />
-				<param name="mode" value="bike" />
 				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>
 		</parameterset>
@@ -192,13 +181,48 @@
 
     <module name="strategy">
         <param name="maxAgentPlanMemorySize" value="4" /> <!-- 0 means unlimited -->
-		<param name="fractionOfIterationsToDisableInnovation" value="0.6"/>
+		<param name="fractionOfIterationsToDisableInnovation" value="1"/>
 
-		<param name="ModuleProbability_1" value="0.9" />
-		<param name="Module_1" value="SelectExpBeta"/>
-
-		<param name="ModuleProbability_3" value="0.1" />
-        <param name="Module_3" value="ChangeSingleTripMode"/>
+		<parameterset type="strategysettings" >
+			<!-- iteration after which strategy will be disabled.  most useful for ``innovative'' strategies (new routes, new times, ...). Normally, better use fractionOfIterationsToDisableInnovation -->
+			<param name="disableAfterIteration" value="-1" />
+			<!-- strategyName of strategy.  Possible default names: SelectRandomBestScoreKeepLastSelectedChangeExpBetaSelectExpBetaSelectPathSizeLogit (selectors), ReRoute TimeAllocationMutator ChangeLegMode TimeAllocationMutator_ReRoute ChangeSingleLegMode ChangeSingleTripMode SubtourModeChoice ChangeTripMode TripSubtourModeChoice  (innovative strategies). -->
+			<param name="strategyName" value="SelectExpBeta" />
+			<!-- weight of a strategy: for each agent, a strategy will be selected with a probability proportional to its weight -->
+			<param name="weight" value="0.9" />
+		</parameterset>
+		<parameterset type="strategysettings" >
+			<!-- iteration after which strategy will be disabled.  most useful for ``innovative'' strategies (new routes, new times, ...). Normally, better use fractionOfIterationsToDisableInnovation -->
+			<param name="disableAfterIteration" value="60" />
+			<!-- strategyName of strategy.  Possible default names: SelectRandomBestScoreKeepLastSelectedChangeExpBetaSelectExpBetaSelectPathSizeLogit (selectors), ReRoute TimeAllocationMutator ChangeLegMode TimeAllocationMutator_ReRoute ChangeSingleLegMode ChangeSingleTripMode SubtourModeChoice ChangeTripMode TripSubtourModeChoice  (innovative strategies). -->
+			<param name="strategyName" value="ChangeSingleTripMode" />
+			<!-- weight of a strategy: for each agent, a strategy will be selected with a probability proportional to its weight -->
+			<param name="weight" value="0.027" />
+		</parameterset>
+		<parameterset type="strategysettings" >
+			<!-- iteration after which strategy will be disabled.  most useful for ``innovative'' strategies (new routes, new times, ...). Normally, better use fractionOfIterationsToDisableInnovation -->
+			<param name="disableAfterIteration" value="70" />
+			<!-- strategyName of strategy.  Possible default names: SelectRandomBestScoreKeepLastSelectedChangeExpBetaSelectExpBetaSelectPathSizeLogit (selectors), ReRoute TimeAllocationMutator ChangeLegMode TimeAllocationMutator_ReRoute ChangeSingleLegMode ChangeSingleTripMode SubtourModeChoice ChangeTripMode TripSubtourModeChoice  (innovative strategies). -->
+			<param name="strategyName" value="ChangeSingleTripMode" />
+			<!-- weight of a strategy: for each agent, a strategy will be selected with a probability proportional to its weight -->
+			<param name="weight" value="0.026" />
+		</parameterset>
+		<parameterset type="strategysettings" >
+			<!-- iteration after which strategy will be disabled.  most useful for ``innovative'' strategies (new routes, new times, ...). Normally, better use fractionOfIterationsToDisableInnovation -->
+			<param name="disableAfterIteration" value="80" />
+			<!-- strategyName of strategy.  Possible default names: SelectRandomBestScoreKeepLastSelectedChangeExpBetaSelectExpBetaSelectPathSizeLogit (selectors), ReRoute TimeAllocationMutator ChangeLegMode TimeAllocationMutator_ReRoute ChangeSingleLegMode ChangeSingleTripMode SubtourModeChoice ChangeTripMode TripSubtourModeChoice  (innovative strategies). -->
+			<param name="strategyName" value="ChangeSingleTripMode" />
+			<!-- weight of a strategy: for each agent, a strategy will be selected with a probability proportional to its weight -->
+			<param name="weight" value="0.024" />
+		</parameterset>
+		<parameterset type="strategysettings" >
+			<!-- iteration after which strategy will be disabled.  most useful for ``innovative'' strategies (new routes, new times, ...). Normally, better use fractionOfIterationsToDisableInnovation -->
+			<param name="disableAfterIteration" value="90" />
+			<!-- strategyName of strategy.  Possible default names: SelectRandomBestScoreKeepLastSelectedChangeExpBetaSelectExpBetaSelectPathSizeLogit (selectors), ReRoute TimeAllocationMutator ChangeLegMode TimeAllocationMutator_ReRoute ChangeSingleLegMode ChangeSingleTripMode SubtourModeChoice ChangeTripMode TripSubtourModeChoice  (innovative strategies). -->
+			<param name="strategyName" value="ChangeSingleTripMode" />
+			<!-- weight of a strategy: for each agent, a strategy will be selected with a probability proportional to its weight -->
+			<param name="weight" value="0.023" />
+		</parameterset>
     </module>
 	<module name="facilities" >
 		<param name="inputFacilitiesFile" value="Siouxfalls_facilities.xml" />

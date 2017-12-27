@@ -21,7 +21,7 @@ package masterThesis.drt.passenger.events;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.Event;
-import masterThesis.dvrp.data.Vehicle;
+import org.matsim.contrib.dvrp.data.Vehicle;
 import org.matsim.contrib.dvrp.data.Request;
 
 import java.util.Map;
