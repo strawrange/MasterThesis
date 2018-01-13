@@ -25,9 +25,9 @@ import java.util.Map;
 
 public class DRTOD {
     private static int ITER = 100;
-    private static String FOLDER = "/home/biyu/IdeaProjects/MasterThesis/output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abortTime_transitRouter_expWalkScore_creationRoutingWait0_annealing_drtDisutility4/ITERS/it." + ITER + "/";
+    private static String FOLDER = "C:/Users/wangb/git/MasterThesis/output/walkScoreLinear800_withAnnealing_requestUpdate600_noRideSharingBonus_detourAlpha1.5_detourBeta600_newDRTConstant30_2/ITERS/it." + ITER + "/";
     private static String PLANFILE =  FOLDER + ITER + ".experienced_plans.xml.gz";
-    private static String FACILITYFILE = "/home/biyu/IdeaProjects/MasterThesis/scenarios/siouxFalls/Siouxfalls_facilities.xml";
+    private static String FACILITYFILE = "C:/Users/wangb/git/MasterThesis/scenarios/siouxFalls/Siouxfalls_facilities.xml";
 
     public static void main(String[] args) throws IOException {
         Scenario scenario = ScenarioUtils.createScenario(ConfigUtils.createConfig());

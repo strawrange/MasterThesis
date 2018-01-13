@@ -1,8 +1,11 @@
 package masterThesis.drt.postsimulation;
 
+import masterThesis.drt.passenger.events.DrtRequestScheduledEvent;
+import masterThesis.drt.passenger.events.DrtRequestScheduledEventHandler;
 import masterThesis.drt.run.DrtConfigGroup;
 import masterThesis.drt.scoring.AVRecord;
 import masterThesis.drt.scoring.EventLists;
+
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.*;
@@ -15,9 +18,11 @@ import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.contrib.eventsBasedPTRouter.vehicleOccupancy.VehicleOccupancy;
 import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.events.EventsManagerModule;
 import org.matsim.core.events.EventsUtils;
 import org.matsim.core.events.MatsimEventsReader;
+import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.io.NetworkReaderMatsimV2;
 import org.matsim.core.utils.io.IOUtils;
@@ -35,9 +40,9 @@ import static masterThesis.drt.postsimulation.EventHandlerForDrtTrips.drtTrips;
 
 public class PostSimulationDrtTripAnalyser {
     private static int ITER = 100;
-    private static String FOLDER = "/home/biyu/IdeaProjects/MasterThesis/output/drt_10_10prct_two_modes_creation_penalty30_changeSingleTripMode_alwaysCreate_0.1modeChange_vehicleKill_abortTime_transitRouter_expWalkScore_creationRoutingWait0_annealing_drtDisutility4_80/ITERS/it." + ITER + "/";
+    private static String FOLDER = "C:/Users/wangb/git/MasterThesis/output/walkScoreLinear800_withAnnealing_requestUpdate300_noRideSharingBonus_detourAlpha1.5_detourBeta600_newDRTConstant30_2/ITERS/it." + ITER + "/";
     private static String EVENTSFILE =  FOLDER + ITER + ".events.xml.gz";
-    private static String NETWORKSFILE = "/home/biyu/IdeaProjects/MasterThesis/scenarios/siouxFalls/network.xml";
+    private static String NETWORKSFILE = "C:/Users/wangb/git/MasterThesis/scenarios/siouxFalls/network.xml";
 
     public static void main(String[] args) throws IOException {
         EventsManager manager = EventsUtils.createEventsManager();
@@ -45,13 +50,14 @@ public class PostSimulationDrtTripAnalyser {
         new NetworkReaderMatsimV2(network).readFile(NETWORKSFILE);
         EventHandlerForDrtTrips eventHandlerForDrtTrips = new EventHandlerForDrtTrips();
         manager.addHandler(eventHandlerForDrtTrips);
+        
         new MatsimEventsReader(manager).readFile(EVENTSFILE);
         writeDrtTripFile(network);
     }
 
     public static void writeDrtTripFile(Network network) throws IOException {
         BufferedWriter bw = IOUtils.getBufferedWriter(FOLDER + "drtTripsAnalysis.csv");
-        bw.write("ID;personId;vehicleId;fromLinkId;toLinkId;fromX;fromY;toX;toY;fromAng;toAng;departureTime;arrivalTime;waitTime;travelTime;maxPax");
+        bw.write("ID;personId;vehicleId;fromLinkId;toLinkId;fromX;fromY;toX;toY;fromAng;toAng;departureTime;arrivalTime;waitTime;waitTimeAfterAccept;travelTime;maxPax");
         int i = 0;
         for (DrtTrip drtTrip: drtTrips.values()){
             bw.newLine();
@@ -67,13 +73,13 @@ public class PostSimulationDrtTripAnalyser {
             double toAng = Math.atan2(totoCoord.getY()-tofromCoord.getY(),totoCoord.getX()-tofromCoord.getX());
             bw.write(i++ + ";" + drtTrip.personId.toString() + ";" +drtTrip.vehicleId.toString() + ";" +drtTrip.fromLinkId.toString() + ";" +
                     drtTrip.toLinkId.toString() + ";" + fromCoord.getX() + ";" +fromCoord.getY()  + ";" + fromAng + ";" + toAng + ";" + toCoord.getX() + ";" + toCoord.getY()  + ";" +
-            drtTrip.departureTime + ";" + drtTrip.arrivalTime + ";" + drtTrip.waitTime + ";" + drtTrip.travelTime + ";" + drtTrip.maxPax);
+            drtTrip.departureTime + ";" + drtTrip.arrivalTime + ";" + drtTrip.waitTime + ";" + drtTrip.waitTimeAfterAccept+ ";" + drtTrip.travelTime + ";" + drtTrip.maxPax);
         }
         bw.close();
     }
 }
 
-class EventHandlerForDrtTrips implements PersonEntersVehicleEventHandler, PersonLeavesVehicleEventHandler,  PersonDepartureEventHandler, PersonArrivalEventHandler, PersonStuckEventHandler{
+class EventHandlerForDrtTrips implements PersonEntersVehicleEventHandler, PersonLeavesVehicleEventHandler,  PersonDepartureEventHandler, PersonArrivalEventHandler, PersonStuckEventHandler, DrtRequestScheduledEventHandler{
     static public Map<Id<DrtTrip>,DrtTrip> drtTrips = new HashMap<>();
     static public Map<Id<Vehicle>, EventLists> vehicles = new HashMap<>();
 
@@ -89,6 +95,7 @@ class EventHandlerForDrtTrips implements PersonEntersVehicleEventHandler, Person
             drtTrip = drtTrips.get(Id.create(event.getPersonId().toString() + "_" + 0, DrtTrip.class));
         }
         drtTrip.waitTime = event.getTime() - drtTrip.departureTime;
+        drtTrip.waitTimeAfterAccept = event.getTime() - drtTrip.requestAcceptedTime;
         drtTrip.vehicleId = event.getVehicleId();
         EventLists eventLists = new EventLists();
         if (this.vehicles.containsKey(event.getVehicleId())){
@@ -183,6 +190,24 @@ class EventHandlerForDrtTrips implements PersonEntersVehicleEventHandler, Person
         }
         drtTrip.maxPax = maxSeats;
     }
+
+
+	@Override
+	public void handleEvent(DrtRequestScheduledEvent event) {
+		// TODO Auto-generated method stub
+		DrtTrip drtTrip;
+        if (drtTrips.containsKey(Id.create(event.getPersonId().toString() + "_" + 1, DrtTrip.class))) {
+            drtTrip = drtTrips.get(Id.create(event.getPersonId().toString() + "_" + 1, DrtTrip.class));
+        }else{
+            drtTrip = drtTrips.get(Id.create(event.getPersonId().toString() + "_" + 0, DrtTrip.class));
+        }
+        if (!this.vehicles.containsKey( event.getVehicleId())){
+            throw new RuntimeException("vehicles do not register in the list!");
+        }
+		drtTrip.requestAcceptedTime = event.getTime();
+	}
+
+
 }
 
 class DrtTrip{
@@ -192,6 +217,8 @@ class DrtTrip{
     Id<Link> toLinkId;
 
     double departureTime;
+    double requestAcceptedTime;
+    double waitTimeAfterAccept;
     double arrivalTime;
     double waitTime;
     double travelTime;

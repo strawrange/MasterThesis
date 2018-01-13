@@ -125,9 +125,9 @@ public class InsertionDrtOptimizer extends AbstractDrtOptimizer implements Mobsi
 						Logger.getLogger(getClass()).warn("No vehicle found for drt request from passenger \t"
 								+ req.getPassenger().getId() + "\tat\t" + Time.writeTime(req.getSubmissionTime()));
 					}
+					double nextUpdatedTime = getOptimContext().qSim.getSimTimer().getTimeOfDay() + getOptimContext().drtConfig.getRequestUpdateTime();
+                    req.setUpdateTime(nextUpdatedTime);
 					if (getOptimContext().qSim.getSimTimer().getTimeOfDay() - req.getSubmissionTime() <= getOptimContext().drtConfig.getAbortTime()) {
-						double nextUpdatedTime = getOptimContext().qSim.getSimTimer().getTimeOfDay() + getOptimContext().drtConfig.getRequestUpdateTime();
-                        req.setUpdateTime(nextUpdatedTime);
                         newRequests.add(req);
                     }else{
 					    eventsManager.processEvent(new PersonStuckEvent(getOptimContext().qSim.getSimTimer().getTimeOfDay(),req.getPassenger().getId(),req.getFromLink().getId(),req.getPassenger().getMode()));
@@ -137,7 +137,7 @@ public class InsertionDrtOptimizer extends AbstractDrtOptimizer implements Mobsi
 			if (best != null) {
                 getOptimContext().scheduler.insertRequest(best.vehicleEntry, req, best.insertion);
                 vData.updateEntry(best.vehicleEntry);
-                eventsManager.processEvent(new DrtRequestScheduledEvent(getOptimContext().qSim.getSimTimer().getTimeOfDay(),
+                eventsManager.processEvent(new DrtRequestScheduledEvent(req.getPassenger().getId(),getOptimContext().qSim.getSimTimer().getTimeOfDay(),
                         req.getId(), best.vehicleEntry.vehicle.getId(), req.getPickupTask().getEndTime(),
                         req.getDropoffTask().getBeginTime()));
 			}

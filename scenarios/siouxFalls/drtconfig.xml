@@ -70,7 +70,7 @@
 		<!-- If a vehicle is idle for more than killing time, it will disappear from the system-->
 		<param name="killingTime" value="1800"/>
         <!-- If a passenger waits for more than 2 hours, it will be labeled as abort...-->
-        <param name="abortTime" value="7200"/>
+        <param name="abortTime" value="3600"/>
 	</module>
 	
 	
@@ -87,7 +87,7 @@
 	</module>
 	
 	<module name="controler">
-		<param name="outputDirectory" value="output/walkScoreLinear800_withAnnealing_requestUpdate30_noRideSharingBonus_detourAlpha1.5_detourBeta600_newDRTConstant30" />
+		<param name="outputDirectory" value="output/walkScoreLinear800_withAnnealing_requestUpdate30_noRideSharingBonus_detourAlpha1.5_detourBeta600_newDRTConstant30_2" />
 		<param name="firstIteration" value="0" />
 		<param name="lastIteration" value="100" />
 		<param name="eventsFileFormat" value="xml" />
@@ -107,7 +107,7 @@
 	</module>
 	
 	<module name= "global" >
-	<param name= "numberOfThreads" value= "8" />
+	<param name= "numberOfThreads" value= "15" />
 	</module >
 	
 	<module name="qsim">

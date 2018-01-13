@@ -21,6 +21,7 @@ package masterThesis.drt.passenger.events;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.Event;
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.contrib.dvrp.data.Vehicle;
 import org.matsim.contrib.dvrp.data.Request;
 
@@ -39,17 +40,23 @@ public class DrtRequestScheduledEvent extends Event {
 	public static final String ATTRIBUTE_DROPOFF_TIME = "dropoffTime";
 
 	private final Id<Request> requestId;
+	private final Id<Person> personId;
 	private final Id<Vehicle> vehicleId;
 	private final double pickupTime;
 	private final double dropoffTime;
 
-	public DrtRequestScheduledEvent(double time, Id<Request> requestId, Id<Vehicle> vehicleId, double pickupTime,
+	public DrtRequestScheduledEvent(Id<Person> personId,double time, Id<Request> requestId, Id<Vehicle> vehicleId, double pickupTime,
 			double dropoffTime) {
 		super(time);
+		this.personId = personId;
 		this.requestId = requestId;
 		this.vehicleId = vehicleId;
 		this.pickupTime = pickupTime;
 		this.dropoffTime = dropoffTime;
+	}
+	
+	public Id<Person> getPersonId(){
+		return personId;
 	}
 
 	@Override
